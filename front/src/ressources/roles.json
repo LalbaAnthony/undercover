@@ -1,0 +1,19 @@
+{
+    "roles": [
+        {
+            "name": "Civil",
+            "description": "Le Civil est un joueur ordinaire qui ne connaît pas les identités des autres. Son objectif principal est de démasquer les Undercover sans se tromper. Les civils doivent utiliser leur intuition et les indices donnés par les réponses des autres joueurs pour identifier les imposteurs tout en évitant de se faire éliminer.",
+            "goal": "Trouver les Undercovers et les Mr.White"
+        },
+        {
+            "name": "Undercover",
+            "description": "L'Undercover est un imposteur qui connaît son rôle et celui des autres Undercover. Son but est de semer la confusion parmi les civils et de rester caché le plus longtemps possible tout en éliminant les civils un par un. L'Undercover doit être malin dans ses réponses pour ne pas éveiller les soupçons.",
+            "goal": "Faire en sorte que les civils s'éliminent entre eux tout en restant incognito."
+        },
+        {
+            "name": "Mr.White",
+            "description": "Mr. White est un rôle spécial. Contrairement aux civils et aux Undercover, il ne reçoit aucun mot à deviner (dans la version classique du jeu). Il doit improviser et essayer de se fondre parmi les civils en bluffant. Si Mr. White est découvert, il peut encore gagner en tentant de deviner le mot secret exact.",
+            "goal": "Ne pas se faire démasquer, et si c'est le cas, deviner correctement le mot secret pour remporter la partie."
+        }
+    ]
+}

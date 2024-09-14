@@ -1,0 +1,44 @@
+{
+    "words": [
+        {
+            "first": "pomme",
+            "second": "poire"
+        },
+        {
+            "first": "chien",
+            "second": "loup"
+        },
+        {
+            "first": "chaise",
+            "second": "fauteuil"
+        },
+        {
+            "first": "maison",
+            "second": "appartement"
+        },
+        {
+            "first": "voiture",
+            "second": "camion"
+        },
+        {
+            "first": "télévision",
+            "second": "écran"
+        },
+        {
+            "first": "ordinateur",
+            "second": "tablette"
+        },
+        {
+            "first": "stylo",
+            "second": "crayon"
+        },
+        {
+            "first": "plage",
+            "second": "désert"
+        },
+        {
+            "first": "soleil",
+            "second": "lune"
+        }
+    ]
+}
