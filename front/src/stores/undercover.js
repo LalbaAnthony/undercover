@@ -14,6 +14,15 @@ export const useUndercoverStore = defineStore('undercover', {
         }
       )
     },
+  
+    async fetchRolesList () {
+      fetch('src/ressources/roles.json')
+        .then((response) => response.json())
+        .then((data) => {
+          this.roles = data.roles
+        }
+      )
+    },
 
     pickRandomWord () {
       const randomIndex = Math.floor(Math.random() * this.words.length)

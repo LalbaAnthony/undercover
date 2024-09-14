@@ -6,7 +6,7 @@
     --primary: #565676;
     --secondary: #a76571;
     --secondary-light: #c38d94;
-    
+
     --gray: #aeadf0;
     --light-gray: #d8dcff;
     --light: #ffffff;
@@ -25,7 +25,7 @@
 /* Overload vue-toastification stuff */
 .Vue-Toastification__toast {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2) !important;
-    font-family: "Poppins", "Roboto", sans-serif !important;
+    font-family: "Roboto", sans-serif !important;
     border: solid 2px transparent !important;
     border-radius: 1rem !important;
 }
@@ -64,7 +64,7 @@ body {
     min-height: 100vh;
     transition: color 0.5s, background-color 0.5s;
     line-height: 1.6;
-    font-family: "Poppins", "Roboto", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 15px;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;

@@ -9,7 +9,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title ? `${to.meta.title} - ${VITE_SITE_NAME}` : VITE_SITE_NAME;
+  document.title = VITE_SITE_NAME;
   next();
 });
 
