@@ -40,8 +40,8 @@ export const useUndercoverStore = defineStore('undercover', {
         .then((response) => response.json())
         .then((data) => {
           this.allWords = data.words
+          console.log('Words fetched')
         })
-      console.log('Words fetched')
     },
 
     async fetchRolesList() {
@@ -49,8 +49,8 @@ export const useUndercoverStore = defineStore('undercover', {
         .then((response) => response.json())
         .then((data) => {
           this.allRoles = data.roles
+          console.log('Roles fetched')
         })
-      console.log('Roles fetched')
     },
 
     async fetchDistributionsList() {
@@ -58,8 +58,8 @@ export const useUndercoverStore = defineStore('undercover', {
         .then((response) => response.json())
         .then((data) => {
           this.allDistributions = data.distributions
+          console.log('Distributions fetched')
         })
-      console.log('Distributions fetched')
     },
 
     initGame() {
@@ -152,7 +152,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     suggestedNumberOfCivilians() {
-      if (this.allDistributions) {
+      if (this.allDistributions && this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS) {
         this.allDistributions[String(this.numberOfPlayers)].civilians
       } else {
         return 2
@@ -160,14 +160,14 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     suggestedNumberOfUndercovers() {
-      if (this.allDistributions) {
+      if (this.allDistributions && this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS) {
         this.allDistributions[String(this.numberOfPlayers)].undercovers
       } else {
         return 1
       }
     },
     suggestedNumberOfMrWhite() {
-      if (this.allDistributions) {
+      if (this.allDistributions && this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS) {
         this.allDistributions[String(this.numberOfPlayers)].mrWhite
       } else {
         return 0

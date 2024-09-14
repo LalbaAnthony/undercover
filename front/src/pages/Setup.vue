@@ -1,8 +1,9 @@
 <template>
   <div>
-    {{ undercoverStore.allWords }}
-    {{ undercoverStore.allRoles }}
-    etet
+    {{ undercoverStore.allWords }}<br>
+    {{ undercoverStore.allRoles }}<br>
+    {{ undercoverStore.allDistributions}}<br>
+    {{ undercoverStore.suggestedNumberOfUndercovers}}<br>
   </div>
 </template>
 
@@ -11,9 +12,7 @@ import { useUndercoverStore } from '@/stores/undercover'
 
 const undercoverStore = useUndercoverStore()
 
-// undercoverStore.initGame()
-undercoverStore.startGame()
-
+undercoverStore.initGame()
 
 </script>
 
