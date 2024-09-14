@@ -1,11 +1,20 @@
 const routes = [
-  // ==================== UNDERCOVER ====================
+  // ==================== GAME ====================
   {
     path: '/',
-    name: 'hame',
-    component: () => import('../pages/Undercover.vue'),
+    name: 'setup',
+    component: () => import('../pages/Setup.vue'),
     meta: {
-      title: 'Undercover',
+      title: 'Setup',
+      private: false,
+    },
+  },
+  {
+    path: '/game',
+    name: 'game',
+    component: () => import('../pages/Game.vue'),
+    meta: {
+      title: 'game',
       private: false,
     },
   },
@@ -16,7 +25,6 @@ const routes = [
     component: () => import('../pages/error/ErrorPage.vue'),
     meta: {
       title: 'Error',
-      displayInSearch: false,
     },
   },
 ]

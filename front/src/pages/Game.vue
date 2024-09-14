@@ -1,7 +1,6 @@
 <template>
   <div>
-    {{ undercoverStore.words }}
-    {{ undercoverStore.roles }}
+    test
   </div>
 </template>
 
@@ -9,9 +8,6 @@
 import { useUndercoverStore } from '@/stores/undercover'
 
 const undercoverStore = useUndercoverStore()
-
-undercoverStore.fetchWordsList()
-undercoverStore.fetchRolesList()
 
 </script>
 

@@ -1,66 +1,81 @@
 import { defineStore } from 'pinia'
+import { notify } from '@/helpers/notif.js'
+import router from '@/router'
 
 export const useUndercoverStore = defineStore('undercover', {
   state: () => ({
-    persist: true,
-    words: [],
-    roles: [],
+    // persist: true,
 
-    // Game state
-    players: [],
-    currentPlayer: null,
-    currentRound: 1,
-    isGameStarted: false,
-    isGameFinished: false,
-    numberOfPlayers: 3,
+    // * Constants
+    NUMBER_MIN_OF_PLAYERS: 3,
+    NUMBER_MAX_OF_PLAYERS: 20,
 
-    // Game settings
+    // * Game data
+    allWords: [],
+    allRoles: {},
+    allDistributions: {},
+    playerTemplate: {
+      name: '',
+      role: null,
+      eliminated: false,
+    },
+
+    // * Game settings
     numberOfCivilians: 3,
     numberOfUndercovers: 1,
     numberOfMrWhite: 1,
+
+    // * Game state
+    players: [],
+    currentPlayer: null,
+    currentRound: 1,
+    isGameRunning: false,
     undercoversWord: '',
     civilianWord: '',
   }),
 
   actions: {
-    async fetchWordsList () {
+    async fetchWordsList() {
       fetch('src/ressources/words.json')
         .then((response) => response.json())
         .then((data) => {
-          this.words = data.words
-        }
-      )
+          this.allWords = data.words
+        })
+      console.log('Words fetched')
     },
-  
-    async fetchRolesList () {
+
+    async fetchRolesList() {
       fetch('src/ressources/roles.json')
         .then((response) => response.json())
         .then((data) => {
-          this.roles = data.roles
-        }
-      )
+          this.allRoles = data.roles
+        })
+      console.log('Roles fetched')
     },
 
-    addAPlayer (name) {
-      this.players.push({ name: name, role: null })
+    async fetchDistributionsList() {
+      fetch('src/ressources/distributions.json')
+        .then((response) => response.json())
+        .then((data) => {
+          this.allDistributions = data.distributions
+        })
+      console.log('Distributions fetched')
     },
 
-    async assignRoles () {
-      if (this.players.length !== this.numberOfPlayers) {
-        console.error('Number of players does not match the number of players selected')
-        return
-      }
+    initGame() {
+      this.fetchWordsList()
+      this.fetchRolesList()
+      this.fetchDistributionsList()
+      this.numberOfCivilians = this.suggestedNumberOfCivilians
+      this.numberOfUndercovers = this.suggestedNumberOfUndercovers
+      this.numberOfMrWhite = this.suggestedNumberOfMrWhite
+    },
 
-      if (this.numberOfPlayers < 3) {
-        console.error('Not enough players')
-        return
-      }
+    addAPlayer(name) {
+      this.players.push({ ...this.playerTemplate, name })
+    },
 
-      if (this.numberOfPlayers > 20) {
-        console.error('Too many players')
-        return
-      }
-
+    async assignRoles() {
       if (this.numberOfCivilians + this.numberOfUndercovers + this.numberOfMrWhite !== this.numberOfPlayers) {
         console.error('Number of roles does not match the number of players')
         return
@@ -69,20 +84,98 @@ export const useUndercoverStore = defineStore('undercover', {
       // ...
     },
 
-    async startGame () {
-      this.isGameStarted = true
+    startGame() {
+      if (this.numberOfPlayers < this.NUMBER_MIN_OF_PLAYERS) {
+        notify(`Il faut au moins ${this.NUMBER_MIN_OF_PLAYERS} joueurs pour commencer une partie`, 'error')
+        console.error('Not enough players')
+        return false
+      }
+
+      if (this.numberOfPlayers > this.NUMBER_MAX_OF_PLAYERS) {
+        notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
+        console.error('Too many players')
+        return false
+      }
+
+      this.isGameRunning = true
       this.currentPlayer = this.players[0]
+      router.push({ path: '/game' })
     },
 
-    pickRandomWordDuo () {
+    pickRandomWordDuo() {
       const randomIndex = Math.floor(Math.random() * this.words.length)
       return this.words[randomIndex]
     },
 
-    assignateWords () {
+    assignateWords() {
       const words = this.pickRandomWordDuo()
-      this.undercoversWord = words[0]
-      this.civilianWord = words[1]
+      if (Math.random() > 0.5) {
+        this.undercoversWord = words[0]
+        this.civilianWord = words[1]
+      } else {
+        this.undercoversWord = words[1]
+        this.civilianWord = words[0]
+      }
+    },
+
+    clearPalyersRoles() {
+      for (const player of this.players) {
+        player.role = null
+      }
+    },
+
+    endGame() {
+      this.clearPalyersRoles()
+      this.currentPlayer = null
+      this.currentRound = 1
+      this.isGameRunning = false
+      this.undercoversWord = ''
+      this.civilianWord = ''
+      router.push({ path: '/' })
+    },
+  },
+  getters: {
+    numberOfPlayers() {
+      return this.players.length
+    },
+
+    numberOfPlayersCivilians() {
+      return this.players.filter((player) => player.role === 'civilian').length
+    },
+
+    numberOfPlayersUndercovers() {
+      return this.players.filter((player) => player.role === 'undercover').length
+    },
+
+    numberOfPlayersMrWhite() {
+      return this.players.filter((player) => player.role === 'mrWhite').length
+    },
+
+    suggestedNumberOfCivilians() {
+      if (this.allDistributions) {
+        this.allDistributions[String(this.numberOfPlayers)].civilians
+      } else {
+        return 2
+      }
+    },
+
+    suggestedNumberOfUndercovers() {
+      if (this.allDistributions) {
+        this.allDistributions[String(this.numberOfPlayers)].undercovers
+      } else {
+        return 1
+      }
+    },
+    suggestedNumberOfMrWhite() {
+      if (this.allDistributions) {
+        this.allDistributions[String(this.numberOfPlayers)].mrWhite
+      } else {
+        return 0
+      }
+    },
+
+    isGameOver() {
+      return this.numberOfPlayersUndercovers === 0 || this.numberOfPlayersCivilians === 0
     },
   },
 })

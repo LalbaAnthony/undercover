@@ -2,6 +2,7 @@
 
     /* from https://coolors.co/d8dcff-aeadf0-c38d94-a76571-565676 */
 
+    --dark: #1f1f2c;
     --primary-dark: #2c2c3d;
     --primary: #565676;
     --secondary: #a76571;
@@ -31,7 +32,7 @@
 }
 
 .Vue-Toastification__toast--info {
-    background-color: var(--gray) !important;
+    background-color: var(--primary-dark) !important;
     color: var(--light) !important;
 }
 
