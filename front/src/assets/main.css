@@ -99,6 +99,10 @@ input[type="checkbox"] {
   width: 1rem;
 }
 
+input[type="range"] {
+  accent-color: var(--primary);
+}
+
 select {
   background-color: var(--dark-gray);
   color: var(--light);

@@ -3,7 +3,7 @@ const routes = [
   {
     path: '/',
     name: 'setup',
-    component: () => import('../pages/Setup.vue'),
+    component: () => import('../pages/SetupPage.vue'),
     meta: {
       title: 'Setup',
       private: false,
@@ -12,7 +12,7 @@ const routes = [
   {
     path: '/game',
     name: 'game',
-    component: () => import('../pages/Game.vue'),
+    component: () => import('../pages/GamePage.vue'),
     meta: {
       title: 'game',
       private: false,

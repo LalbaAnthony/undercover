@@ -62,6 +62,18 @@ export const useUndercoverStore = defineStore('undercover', {
         })
     },
 
+    clearPlayers() {
+      this.players = []
+    },
+
+    resetGame() {
+      this.currentPlayer = null
+      this.currentRound = 1
+      this.isGameRunning = false
+      this.undercoversWord = ''
+      this.civilianWord = ''
+    },
+
     initGame() {
       this.fetchWordsList()
       this.fetchRolesList()
@@ -71,7 +83,7 @@ export const useUndercoverStore = defineStore('undercover', {
       this.numberOfMrWhite = this.suggestedNumberOfMrWhite
     },
 
-    addAPlayer(name) {
+    addPlayer(name) {
       this.players.push({ ...this.playerTemplate, name })
     },
 
@@ -85,6 +97,8 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     startGame() {
+      this.resetGame()
+
       if (this.numberOfPlayers < this.NUMBER_MIN_OF_PLAYERS) {
         notify(`Il faut au moins ${this.NUMBER_MIN_OF_PLAYERS} joueurs pour commencer une partie`, 'error')
         console.error('Not enough players')
@@ -126,11 +140,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     endGame() {
       this.clearPalyersRoles()
-      this.currentPlayer = null
-      this.currentRound = 1
-      this.isGameRunning = false
-      this.undercoversWord = ''
-      this.civilianWord = ''
+      this.resetGame()
       router.push({ path: '/' })
     },
   },
