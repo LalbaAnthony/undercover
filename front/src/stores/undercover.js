@@ -62,8 +62,54 @@ export const useUndercoverStore = defineStore('undercover', {
         })
     },
 
+    checkNumberMinOfPlayers() {
+      if (this.numberOfPlayers < this.NUMBER_MIN_OF_PLAYERS) {
+        notify(`Il faut au moins ${this.NUMBER_MIN_OF_PLAYERS} joueurs pour commencer une partie`, 'error')
+        console.error('Not enough players')
+        return false
+      }
+
+      return true
+    },
+
+    checkNumberMaxOfPlayers() {
+      if (this.numberOfPlayers > this.NUMBER_MAX_OF_PLAYERS) {
+        notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
+        console.error('Too many players')
+        return false
+      }
+
+      return true
+    },
+
+    checkNumberOfPlayers() {
+      if (!this.checkNumberMinOfPlayers()) return false
+      if (!this.checkNumberMaxOfPlayers()) return false
+
+      return true
+    },
+
+    checkIfNameAlreadyExists(name) {
+      if (!name) return false
+      if (this.players.length === 0) return false
+
+      if (this.players.some((player) => player.name === name)) {
+        notify('Ce nom de joueur est déjà pris', 'error')
+        console.error('Name already exists')
+        return true
+      }
+
+      return false
+    },
+
     clearPlayers() {
       this.players = []
+    },
+
+    clearPalyersRoles() {
+      for (const player of this.players) {
+        player.role = null
+      }
     },
 
     resetGame() {
@@ -74,7 +120,18 @@ export const useUndercoverStore = defineStore('undercover', {
       this.civilianWord = ''
     },
 
-    initGame() {
+    resetAll() {
+      this.clearPlayers()
+      this.resetGame()
+    },
+
+    endGame() {
+      this.clearPalyersRoles()
+      this.resetGame()
+      router.push({ path: '/' })
+    },
+
+    initSetup() {
       this.fetchWordsList()
       this.fetchRolesList()
       this.fetchDistributionsList()
@@ -90,26 +147,18 @@ export const useUndercoverStore = defineStore('undercover', {
     async assignRoles() {
       if (this.numberOfCivilians + this.numberOfUndercovers + this.numberOfMrWhite !== this.numberOfPlayers) {
         console.error('Number of roles does not match the number of players')
-        return
+        return false
       }
 
       // ...
+
+      return true
     },
 
     startGame() {
       this.resetGame()
 
-      if (this.numberOfPlayers < this.NUMBER_MIN_OF_PLAYERS) {
-        notify(`Il faut au moins ${this.NUMBER_MIN_OF_PLAYERS} joueurs pour commencer une partie`, 'error')
-        console.error('Not enough players')
-        return false
-      }
-
-      if (this.numberOfPlayers > this.NUMBER_MAX_OF_PLAYERS) {
-        notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
-        console.error('Too many players')
-        return false
-      }
+      if (!this.checkNumberOfPlayers()) return false
 
       this.isGameRunning = true
       this.currentPlayer = this.players[0]
@@ -130,18 +179,6 @@ export const useUndercoverStore = defineStore('undercover', {
         this.undercoversWord = words[1]
         this.civilianWord = words[0]
       }
-    },
-
-    clearPalyersRoles() {
-      for (const player of this.players) {
-        player.role = null
-      }
-    },
-
-    endGame() {
-      this.clearPalyersRoles()
-      this.resetGame()
-      router.push({ path: '/' })
     },
   },
   getters: {

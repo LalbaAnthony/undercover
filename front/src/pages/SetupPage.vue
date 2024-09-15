@@ -77,21 +77,34 @@ const newPlayerName = ref('')
 function addPlayer() {
   if (newPlayerName.value.length === 0) {
     notify('Le nom du joueur ne peut pas être vide', 'error')
-    return
+    console.error('The player name cannot be empty')
+    return false
   }
 
   if (undercoverStore.numberOfPlayers >= numberOfPlayer.value) {
-    notify('Le nombre maximum de joueurs est atteint', 'error')
-    return
+    notify('Le nombre maximum de joueurs est atteint pour votre sélection', 'error')
+    console.error('The maximum number of players is reached for your selection')
+    return false
+  }
+
+  if (undercoverStore.checkIfNameAlreadyExists(newPlayerName.value)) {
+    return false
+  }
+
+  if (!undercoverStore.checkNumberMaxOfPlayers()) {
+    return false
   }
 
   undercoverStore.addPlayer(newPlayerName.value)
   newPlayerName.value = ''
 }
 
-
 function resetAll() {
-  undercoverStore.resetGame()
+  if (confirm('Es-tu sûûûûûr de vouloir réinitialiser la partie ?')) {
+    undercoverStore.clearPlayers()
+    undercoverStore.resetGame()
+    undercoverStore.initSetup()
+  }
 }
 
 function startGame() {
@@ -99,11 +112,9 @@ function startGame() {
   // undercoverStore.startGame()
 }
 
-
 onMounted(() => {
-  undercoverStore.initGame()
+  undercoverStore.initSetup()
 })
-
 
 </script>
 
