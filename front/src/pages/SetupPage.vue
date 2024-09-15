@@ -91,7 +91,7 @@ function addPlayer() {
     return false
   }
 
-  if (!undercoverStore.checkNumberMaxOfPlayers()) {
+  if (undercoverStore.numberMaxOfPlayersReached()) {
     return false
   }
 

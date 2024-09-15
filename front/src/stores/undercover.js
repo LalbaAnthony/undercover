@@ -27,7 +27,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     // * Game state
     players: [],
-    currentPlayer: null,
+    currentPlayer: 0,
     currentRound: 1,
     isGameRunning: false,
     undercoversWord: '',
@@ -62,31 +62,31 @@ export const useUndercoverStore = defineStore('undercover', {
         })
     },
 
-    checkNumberMinOfPlayers() {
+    numberMinOfPlayersReached() {
       if (this.numberOfPlayers < this.NUMBER_MIN_OF_PLAYERS) {
         notify(`Il faut au moins ${this.NUMBER_MIN_OF_PLAYERS} joueurs pour commencer une partie`, 'error')
         console.error('Not enough players')
-        return false
+        return true
       }
 
-      return true
+      return false
     },
 
-    checkNumberMaxOfPlayers() {
+    numberMaxOfPlayersReached() {
       if (this.numberOfPlayers > this.NUMBER_MAX_OF_PLAYERS) {
         notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
         console.error('Too many players')
-        return false
+        return true
       }
 
-      return true
+      return false
     },
 
-    checkNumberOfPlayers() {
-      if (!this.checkNumberMinOfPlayers()) return false
-      if (!this.checkNumberMaxOfPlayers()) return false
+    numberOfPlayersReached() {
+      if (!this.numberMinOfPlayersReached()) return true
+      if (!this.numberMaxOfPlayersReached()) return true
 
-      return true
+      return false
     },
 
     checkIfNameAlreadyExists(name) {
@@ -113,7 +113,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     resetGame() {
-      this.currentPlayer = null
+      this.currentPlayer = 0
       this.currentRound = 1
       this.isGameRunning = false
       this.undercoversWord = ''
@@ -158,10 +158,10 @@ export const useUndercoverStore = defineStore('undercover', {
     startGame() {
       this.resetGame()
 
-      if (!this.checkNumberOfPlayers()) return false
+      if (this.numberOfPlayersReached()) return false
 
       this.isGameRunning = true
-      this.currentPlayer = this.players[0]
+      this.currentPlayer = 0
       router.push({ path: '/game' })
     },
 
