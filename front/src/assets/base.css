@@ -2,15 +2,17 @@
 
     /* from https://coolors.co/d8dcff-aeadf0-c38d94-a76571-565676 */
 
-    --dark: #1f1f2c;
-    --primary-dark: #2c2c3d;
-    --primary: #565676;
-    --secondary: #a76571;
-    --secondary-light: #c38d94;
+    --primary: #FE2E6B;
+    --secondary: #1F85E1;
+    --secondary-light: #03F6FA;
+    --terciary: #FB4813;
+    --terciary-light: #FEA81E;
 
-    --gray: #aeadf0;
-    --light-gray: #d8dcff;
-    --light: #ffffff;
+    --light: #EAEDF1;
+    --gray: #9CA3AF;
+
+    --light-dark: #171E4C;
+    --dark: #0E133C;
 
     --light-success: #34d399;
     --success: #10b981;
@@ -26,13 +28,13 @@
 /* Overload vue-toastification stuff */
 .Vue-Toastification__toast {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2) !important;
-    font-family: "Roboto", sans-serif !important;
+    font-family: "Lato", sans-serif !important;
     border: solid 2px transparent !important;
     border-radius: 1rem !important;
 }
 
 .Vue-Toastification__toast--info {
-    background-color: var(--primary-dark) !important;
+    background-color: var(--dark) !important;
     color: var(--light) !important;
 }
 
@@ -65,11 +67,11 @@ body {
     min-height: 100vh;
     transition: color 0.5s, background-color 0.5s;
     line-height: 1.6;
-    font-family: "Roboto", sans-serif;
-    font-size: 15px;
+    font-family: "Lato", sans-serif;
+    font-size: 17px;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: var(--dark);
-    background: var(--d8dcff);
+    color: var(--light);
+    background: var(--dark);
 }

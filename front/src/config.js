@@ -5,6 +5,7 @@
 
 export const VITE_SITE_NAME = import.meta.env.VITE_SITE_NAME;
 export const VITE_COMPANY_NAME = import.meta.env.VITE_COMPANY_NAME;
+export const VITE_AUTHOR_NAME = import.meta.env.VITE_AUTHOR_NAME;
 export const VITE_APP_VERSION = import.meta.env.VITE_APP_VERSION;
 export const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 export const VITE_API_URL = import.meta.env.VITE_API_URL;

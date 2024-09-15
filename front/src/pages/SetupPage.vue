@@ -26,7 +26,6 @@
       <section>
         <h2 class="text-center text-2xl my-4">Répartition</h2>
         <div class="flex justify-center items-center gap-2">
-
         </div>
       </section>
     </div>
@@ -37,7 +36,7 @@
 
       <!-- Add -->
       <div class="flex justify-center items-center gap-2">
-        <input type="text" placeholder="Nom du joueur" v-model="newPlayerName">
+        <input class="rounded-lg py-1 px-2 text-dark" type="text" placeholder="Nom du joueur" v-model="newPlayerName">
         <button @click="addPlayer()">Ajouter un joueur</button>
       </div>
 
@@ -54,8 +53,8 @@
     <!-- Action -->
     <section>
       <div class="flex justify-center items-center gap-4">
-        <button @click="resetAll()">Réinitialiser</button>
-        <button @click="startGame()">Commencer</button>
+        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 hover:bg-light-dark" @click="resetAll()">Réinitialiser</button>
+        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 bg-primary " @click="startGame()">Commencer</button>
       </div>
     </section>
 

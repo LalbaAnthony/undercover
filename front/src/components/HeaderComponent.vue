@@ -1,7 +1,10 @@
 <template>
-  <header class="bg-primary text-light p-4">
-    Undercover
+  <header>
+    <h1 class="text-center text-4xl my-4">{{ VITE_SITE_NAME }}</h1>
   </header>
 </template>
 
-<script setup></script>
+<script setup>
+import { VITE_SITE_NAME } from '@/config';
+
+</script>

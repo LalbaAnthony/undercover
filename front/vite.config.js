@@ -25,6 +25,7 @@ export default defineConfig({
     'process.env': {
       VITE_SITE_NAME: process.env.VITE_SITE_NAME,
       VITE_COMPANY_NAME: process.env.VITE_COMPANY_NAME,
+      VITE_AUTHOR_NAME: process.env.VITE_AUTHOR_NAME,
       VITE_APP_VERSION: process.env.VITE_APP_VERSION,
       VITE_BACKEND_API_URL: process.env.VITE_BACKEND_API_URL,
       VITE_FRONT_URL: process.env.VITE_FRONT_URL,

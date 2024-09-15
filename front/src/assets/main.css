@@ -48,6 +48,9 @@
 
 main {
   min-height: 100vh;
+  /* background-color: red; */
+  border-radius: 25px;
+  box-shadow: inset 10px 10px 40px 0px rgba(0, 0, 0, 0.7);
 }
 
 section {
@@ -59,7 +62,7 @@ section {
 ::-moz-selection,
 ::selection {
   color: var(--light);
-  background: var(--primary);
+  background: var(--terciary);
 }
 
 ul,
@@ -73,7 +76,7 @@ a {
 
 input:focus,
 textarea:focus {
-  outline: var(--light) auto 1px;
+  outline: var(--primary) auto 2px;
 }
 
 textarea:disabled,
@@ -104,14 +107,14 @@ input[type="range"] {
 }
 
 select {
-  background-color: var(--dark-gray);
+  background-color: var(--gray);
   color: var(--light);
   appearance: none;
   border: none;
 }
 
 select:focus {
-  border-color: var(--secondary);
+  border-color: var(--primary);
   outline: var(--light) auto 1px;
 }
 
@@ -126,7 +129,7 @@ hr {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--light-gray);
+  background: var(--light);
 }
 
 ::-webkit-scrollbar-thumb {
