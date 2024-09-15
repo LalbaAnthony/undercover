@@ -14,6 +14,7 @@ export default {
       'terciary-light': '#FEA81E',
       light: '#EAEDF1',
       gray: '#9CA3AF',
+      'dark-gray': '#2A2F55',
       'light-dark': '#171E4C',
       dark: '#0E133C',
       'light-success': '#34d399',

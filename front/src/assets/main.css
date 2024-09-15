@@ -48,9 +48,12 @@
 
 main {
   min-height: 100vh;
-  /* background-color: red; */
   border-radius: 25px;
-  box-shadow: inset 10px 10px 40px 0px rgba(0, 0, 0, 0.7);
+  box-shadow: inset 10px 10px 50px 0px rgba(0, 0, 0, 0.5);
+}
+
+.custom-shadow {
+  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.5);
 }
 
 section {

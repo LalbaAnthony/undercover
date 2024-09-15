@@ -18,7 +18,7 @@
           <span class="text-lg">{{ undercoverStore.NUMBER_MAX_OF_PLAYERS }}</span>
         </div>
         <div class="text-center">
-          <p> <span class="text-lg text-primary"> {{ numberOfPlayer }}</span> joueurs</p>
+          <p> <span class="text-xl text-primary"> {{ numberOfPlayer }}</span> joueurs</p>
         </div>
       </section>
 
@@ -35,13 +35,15 @@
       <h2 class="text-center text-2xl my-4">Joueurs</h2>
 
       <!-- Add -->
-      <div class="flex justify-center items-center gap-2">
-        <input class="rounded-lg py-1 px-2 text-dark" type="text" placeholder="Nom du joueur" v-model="newPlayerName">
-        <button @click="addPlayer()">Ajouter un joueur</button>
+      <div class="flex justify-center items-center gap-2 my-4">
+        <input class="rounded-lg py-1.5 px-2 text-dark" type="text" placeholder="Nom du joueur" v-model="newPlayerName"
+          @keyup.enter="addPlayer()">
+        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 bg-primary"
+          @click="addPlayer()">Ajouter un joueur</button>
       </div>
 
       <!-- List -->
-      <div class="my-4">
+      <div class="m-4">
         <Grid :items="undercoverStore.players">
           <template #item="{ item }">
             <Player :player="item" />
@@ -53,8 +55,11 @@
     <!-- Action -->
     <section>
       <div class="flex justify-center items-center gap-4">
-        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 hover:bg-light-dark" @click="resetAll()">Réinitialiser</button>
-        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 bg-primary " @click="startGame()">Commencer</button>
+        <button
+          class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 hover:bg-light-dark"
+          @click="resetAll()">Réinitialiser</button>
+        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 bg-primary"
+          @click="startGame()">Commencer</button>
       </div>
     </section>
 
