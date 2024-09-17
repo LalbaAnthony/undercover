@@ -147,8 +147,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     removePlayer(timestamp) {
-      console.log('Removing player with timestamp', timestamp)
-      this.players = this.players.filter((player) => player.timestamp !== timestamp)
+      this.players = this.players.filter((player) => player.timestamp !== timestamp);
     },
 
     async assignRoles() {

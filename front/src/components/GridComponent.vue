@@ -61,7 +61,7 @@ const props = defineProps({
 
 @media (max-width: 639px) {
   .grid {
-    grid-gap: 2.5rem;
+    grid-gap: 1rem;
   }
 }
 </style>

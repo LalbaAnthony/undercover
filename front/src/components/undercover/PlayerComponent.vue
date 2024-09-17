@@ -4,7 +4,7 @@
     <div v-if="props.displayRole">{{ props.player.role }}</div>
     <div
       class="cursor-pointer rounded-full bg-primary text-white p-0.5 hover:scale-105 transition-transform duration-200"
-      @click="undercoverStore.removePlayer(props.timestamp)">
+      @click="undercoverStore.removePlayer(props.player.timestamp)">
       <MinusIcon class="size-5 text-light" />
     </div>
   </div>

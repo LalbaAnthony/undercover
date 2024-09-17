@@ -35,11 +35,16 @@
       <h2 class="text-center text-2xl my-4">Joueurs</h2>
 
       <!-- Add -->
-      <div class="flex justify-center items-center gap-2 my-4">
+      <div class="flex justify-center items-center gap-2 my-8">
         <input class="rounded-lg py-1.5 px-2 text-dark" type="text" placeholder="Nom du joueur" v-model="newPlayerName"
           @keyup.enter="addPlayer()">
-        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 bg-primary"
-          @click="addPlayer()">Ajouter un joueur</button>
+        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer hover:scale-105 transition-transform ease-in-out transform duration-200 bg-primary"
+          @click="addPlayer()">
+          <span class="block sm:hidden">
+            <PlusIcon class="size-6 text-light" />
+          </span>
+          <span class="hidden sm:block">Ajouter un joueur</span>
+        </button>
       </div>
 
       <!-- List -->
@@ -67,8 +72,9 @@
 </template>
 
 <script setup>
-import Player from '@/components/undercover/PLayerComponent.vue'
+import Player from '@/components/undercover/PlayerComponent.vue'
 import Grid from '@/components/GridComponent.vue'
+import { PlusIcon } from '@heroicons/vue/24/solid'
 import { notify } from '@/helpers/notif.js'
 import { onMounted, ref } from 'vue'
 import { useUndercoverStore } from '@/stores/undercover'
@@ -82,6 +88,12 @@ function addPlayer() {
   if (newPlayerName.value.length === 0) {
     notify('Le nom du joueur ne peut pas être vide', 'error')
     console.error('The player name cannot be empty')
+    return false
+  }
+
+  if (newPlayerName.value.length > 40) {
+    notify('La t\'abuse sur la longueur du nom du joueur', 'error')
+    console.error('The player name cannot be longer than 40 characters')
     return false
   }
 
