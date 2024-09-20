@@ -16,7 +16,7 @@ export const useUndercoverStore = defineStore('undercover', {
     allDistributions: {},
 
     // * Game state
-    distribution: { civilian: 2, undercover: 1, mrWhite: 0, },
+    distribution: { civilian: 0, undercover: 0, mrWhite: 0, },
     players: [],
     currentPlayer: 0,
     currentRound: 1,
@@ -129,17 +129,17 @@ export const useUndercoverStore = defineStore('undercover', {
         console.error('The player name cannot be empty')
         return false
       }
-    
+
       if (name.length > 40) {
         notify('La t\'abuse sur la longueur du nom du joueur', 'error')
         console.error('The player name cannot be longer than 40 characters')
         return false
       }
-    
+
       if (this.checkIfNameAlreadyExists(name)) {
         return false
       }
-    
+
       if (this.numberMaxOfPlayersReached()) {
         return false
       }
@@ -164,10 +164,12 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     incrementDistribution(role) {
-      if (this.distribution.civilians + this.distribution.undercovers + this.distribution.mrWhite <= (this.numberOfPlayers - 1)) {
-        this.distribution[role]++
-      } else {
+      if (this.numberOfPlayers === 0) {
+        notify('Il n\'y a pas de joueur', 'error')
+      } else if (this.distribution.civilians + this.distribution.undercovers + this.distribution.mrWhite + 1 > this.numberOfPlayers ) {
         notify('Il y a déjà le maximum de joueurs pour ce rôle', 'error')
+      } else {
+        this.distribution[role]++
       }
     },
 
