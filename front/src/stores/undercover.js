@@ -123,6 +123,27 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     addPlayer(name) {
+
+      if (name.length === 0) {
+        notify('Le nom du joueur ne peut pas être vide', 'error')
+        console.error('The player name cannot be empty')
+        return false
+      }
+    
+      if (name.length > 40) {
+        notify('La t\'abuse sur la longueur du nom du joueur', 'error')
+        console.error('The player name cannot be longer than 40 characters')
+        return false
+      }
+    
+      if (this.checkIfNameAlreadyExists(name)) {
+        return false
+      }
+    
+      if (this.numberMaxOfPlayersReached()) {
+        return false
+      }
+
       const timestamp = new Date().getTime()
       this.players.push({
         timestamp,
@@ -136,17 +157,27 @@ export const useUndercoverStore = defineStore('undercover', {
       this.players = this.players.filter((player) => player.timestamp !== timestamp);
     },
 
-    decrementNumberOf(role) {
-      if (this.distribution[role] > 0) {
+    decrementDistribution(role) {
+      if (this.distribution.civilians + this.distribution.undercovers + this.distribution.mrWhite <= (this.numberOfPlayers - 1)) {
         this.distribution[role]--
       }
     },
 
-    incrementNumberOf(role) {
-      if (this.distribution[role] < this.NUMBER_MAX_OF_PLAYERS) {
+    incrementDistribution(role) {
+      if (this.distribution.civilians + this.distribution.undercovers + this.distribution.mrWhite <= (this.numberOfPlayers - 1)) {
         this.distribution[role]++
       } else {
         notify('Il y a déjà le maximum de joueurs pour ce rôle', 'error')
+      }
+    },
+
+    fillDistributionWithSuggestion() {
+      if (this.numberOfPlayers > this.NUMBER_MIN_OF_PLAYERS) {
+        this.distribution = {
+          civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
+          undercover: this.allDistributions[String(this.numberOfPlayers)].undercover,
+          mrWhite: this.allDistributions[String(this.numberOfPlayers)].mrWhite
+        }
       }
     },
 
@@ -200,14 +231,6 @@ export const useUndercoverStore = defineStore('undercover', {
 
     numberOfPlayersMrWhite() {
       return this.players.filter((player) => player.role === 'mrWhite').length
-    },
-
-    fillDistributionWithSuggestion() {
-      this.distribution = {
-        civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
-        undercover: this.allDistributions[String(this.numberOfPlayers)].undercover,
-        mrWhite: this.allDistributions[String(this.numberOfPlayers)].mrWhite
-      }
     },
 
     isGameOver() {
