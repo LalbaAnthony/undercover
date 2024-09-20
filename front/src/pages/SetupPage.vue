@@ -1,10 +1,8 @@
 <template>
   <div>
     <section>
-      <!-- {{ undercoverStore.allWords }}<br>
-    {{ undercoverStore.allRoles }}<br>
-    {{ undercoverStore.allDistributions }}<br>
-    {{ undercoverStore.suggestedNumberOfUndercovers }}<br> -->
+      <!-- {{ undercoverStore.allRoles }}<br><br><br> -->
+      <!-- {{ undercoverStore.suggestedNumberOfUndercovers }}<br><br><br> -->
     </section>
 
     <div class="md:grid md:grid-cols-2 md:gap-4">
@@ -25,7 +23,24 @@
       <!-- Distribution -->
       <section>
         <h2 class="text-center text-2xl my-4">Répartition</h2>
-        <div class="flex justify-center items-center gap-2">
+        <div>
+          <div v-for="(role, slug) in undercoverStore.allRoles" :key="slug"
+            class="flex justify-center items-center gap-4">
+            <div
+              class="cursor-pointer rounded-full bg-primary text-white p-0.5 hover:scale-105 transition-transform duration-200"
+              @click="undercoverStore.decrementNumberOf(slug)">
+              <MinusIcon class="size-5 text-light" />
+            </div>
+            <div>
+              {{ undercoverStore.distribution[slug] }}&nbsp;
+              <span class="text-xl">{{ role.name }}</span>
+            </div>
+            <div
+              class="cursor-pointer rounded-full bg-primary text-white p-0.5 hover:scale-105 transition-transform duration-200"
+              @click="undercoverStore.incrementNumberOf(slug)">
+              <PlusIcon class="size-5 text-light" />
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -38,7 +53,8 @@
       <div class="flex justify-center items-center gap-2 my-8">
         <input class="rounded-lg py-1.5 px-2 text-dark" type="text" placeholder="Nom du joueur" v-model="newPlayerName"
           @keyup.enter="addPlayer()">
-        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer hover:scale-105 transition-transform ease-in-out transform duration-200 bg-primary"
+        <button
+          class="text-light py-1.5 px-3 rounded-lg cursor-pointer hover:scale-105 transition-transform ease-in-out transform duration-200 bg-primary"
           @click="addPlayer()">
           <span class="block sm:hidden">
             <PlusIcon class="size-6 text-light" />
@@ -74,6 +90,7 @@
 <script setup>
 import Player from '@/components/undercover/PlayerComponent.vue'
 import Grid from '@/components/GridComponent.vue'
+import { MinusIcon } from '@heroicons/vue/24/solid'
 import { PlusIcon } from '@heroicons/vue/24/solid'
 import { notify } from '@/helpers/notif.js'
 import { onMounted, ref } from 'vue'

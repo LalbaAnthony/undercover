@@ -14,19 +14,9 @@ export const useUndercoverStore = defineStore('undercover', {
     allWords: [],
     allRoles: {},
     allDistributions: {},
-    playerTemplate: {
-      timestamp: null,
-      name: '',
-      role: null,
-      eliminated: false,
-    },
-
-    // * Game settings
-    numberOfCivilians: 3,
-    numberOfUndercovers: 1,
-    numberOfMrWhite: 1,
 
     // * Game state
+    distribution: { civilian: 2, undercover: 1, mrWhite: 0, },
     players: [],
     currentPlayer: 0,
     currentRound: 1,
@@ -83,13 +73,6 @@ export const useUndercoverStore = defineStore('undercover', {
       return false
     },
 
-    numberOfPlayersReached() {
-      if (!this.numberMinOfPlayersReached()) return true
-      if (!this.numberMaxOfPlayersReached()) return true
-
-      return false
-    },
-
     checkIfNameAlreadyExists(name) {
       if (!name) return false
       if (this.players.length === 0) return false
@@ -136,22 +119,39 @@ export const useUndercoverStore = defineStore('undercover', {
       this.fetchWordsList()
       this.fetchRolesList()
       this.fetchDistributionsList()
-      this.numberOfCivilians = this.suggestedNumberOfCivilians
-      this.numberOfUndercovers = this.suggestedNumberOfUndercovers
-      this.numberOfMrWhite = this.suggestedNumberOfMrWhite
+      this.fillDistributionWithSuggestion()
     },
 
     addPlayer(name) {
       const timestamp = new Date().getTime()
-      this.players.push({ ...this.playerTemplate, name, timestamp })
+      this.players.push({
+        timestamp,
+        name,
+        role: null,
+        eliminated: false,
+      })
     },
 
     removePlayer(timestamp) {
       this.players = this.players.filter((player) => player.timestamp !== timestamp);
     },
 
+    decrementNumberOf(role) {
+      if (this.distribution[role] > 0) {
+        this.distribution[role]--
+      }
+    },
+
+    incrementNumberOf(role) {
+      if (this.distribution[role] < this.NUMBER_MAX_OF_PLAYERS) {
+        this.distribution[role]++
+      } else {
+        notify('Il y a déjà le maximum de joueurs pour ce rôle', 'error')
+      }
+    },
+
     async assignRoles() {
-      if (this.numberOfCivilians + this.numberOfUndercovers + this.numberOfMrWhite !== this.numberOfPlayers) {
+      if (this.distribution.civilians + this.distribution.undercovers + this.distribution.mrWhite !== this.numberOfPlayers) {
         console.error('Number of roles does not match the number of players')
         return false
       }
@@ -163,8 +163,6 @@ export const useUndercoverStore = defineStore('undercover', {
 
     startGame() {
       this.resetGame()
-
-      if (this.numberOfPlayersReached()) return false
 
       this.isGameRunning = true
       this.currentPlayer = 0
@@ -204,26 +202,11 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.players.filter((player) => player.role === 'mrWhite').length
     },
 
-    suggestedNumberOfCivilians() {
-      if (this.allDistributions && this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS) {
-        this.allDistributions[String(this.numberOfPlayers)].civilians
-      } else {
-        return 2
-      }
-    },
-
-    suggestedNumberOfUndercovers() {
-      if (this.allDistributions && this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS) {
-        this.allDistributions[String(this.numberOfPlayers)].undercovers
-      } else {
-        return 1
-      }
-    },
-    suggestedNumberOfMrWhite() {
-      if (this.allDistributions && this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS) {
-        this.allDistributions[String(this.numberOfPlayers)].mrWhite
-      } else {
-        return 0
+    fillDistributionWithSuggestion() {
+      this.distribution = {
+        civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
+        undercover: this.allDistributions[String(this.numberOfPlayers)].undercover,
+        mrWhite: this.allDistributions[String(this.numberOfPlayers)].mrWhite
       }
     },
 
