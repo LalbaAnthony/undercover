@@ -31,7 +31,7 @@ export const useUndercoverStore = defineStore('undercover', {
         .then((response) => response.json())
         .then((data) => {
           this.allWords = data.words
-          console.log('Words fetched')
+          // console.log('Words fetched')
         })
     },
 
@@ -40,7 +40,7 @@ export const useUndercoverStore = defineStore('undercover', {
         .then((response) => response.json())
         .then((data) => {
           this.allRoles = data.roles
-          console.log('Roles fetched')
+          // console.log('Roles fetched')
         })
     },
 
@@ -49,7 +49,7 @@ export const useUndercoverStore = defineStore('undercover', {
         .then((response) => response.json())
         .then((data) => {
           this.allDistributions = data.distributions
-          console.log('Distributions fetched')
+          // console.log('Distributions fetched')
         })
     },
 
@@ -154,19 +154,22 @@ export const useUndercoverStore = defineStore('undercover', {
         role: null,
         eliminated: false,
       })
+
+      this.fillDistributionWithSuggestion()
     },
 
     removePlayer(timestamp) {
       this.players = this.players.filter((player) => player.timestamp !== timestamp);
-      this.checkDistributionIsWrong()
+      this.fillDistributionWithSuggestion()
     },
 
     decrementDistribution(role) {
       if (this.distribution[role] > 0) {
         this.distribution[role]--
       }
+      this.checkDistributionNumbersAreWrong()
     },
-
+    
     incrementDistribution(role) {
       if (this.numberOfPlayers === 0) {
         notify('Ajoutez d\'abord des joueurs', 'error')
@@ -175,6 +178,7 @@ export const useUndercoverStore = defineStore('undercover', {
       } else {
         this.distribution[role]++
       }
+      this.checkDistributionNumbersAreWrong()
     },
 
     fillDistributionWithSuggestion() {
@@ -187,7 +191,7 @@ export const useUndercoverStore = defineStore('undercover', {
       }
     },
 
-    checkDistributionIsWrong() {
+    checkDistributionNumbersAreWrong() {
       if (this.distribution.civilian + this.distribution.undercover + this.distribution.mrWhite !== this.numberOfPlayers) {
         notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
         console.error('Number of roles does not match the number of players')
@@ -210,7 +214,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     startGame() {
       const t1 = this.numberOfPlayersReached()
-      const t2 = this.checkDistributionIsWrong()
+      const t2 = this.checkDistributionNumbersAreWrong()
 
       if (!t1 && !t2) {
         this.resetGame()
