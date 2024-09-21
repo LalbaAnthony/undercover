@@ -97,8 +97,7 @@ function resetAll() {
 }
 
 function startGame() {
-  console.log('startGame')
-  // undercoverStore.startGame()
+  undercoverStore.startGame()
 }
 
 onMounted(() => {

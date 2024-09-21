@@ -73,6 +73,10 @@ export const useUndercoverStore = defineStore('undercover', {
       return false
     },
 
+    numberOfPlayersReached() {
+      return this.numberMinOfPlayersReached() && this.numberMaxOfPlayersReached()
+    },
+
     checkIfNameAlreadyExists(name) {
       if (!name) return false
       if (this.players.length === 0) return false
@@ -123,7 +127,6 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     addPlayer(name) {
-
       if (name.length === 0) {
         notify('Le nom du joueur ne peut pas être vide', 'error')
         console.error('The player name cannot be empty')
@@ -155,19 +158,20 @@ export const useUndercoverStore = defineStore('undercover', {
 
     removePlayer(timestamp) {
       this.players = this.players.filter((player) => player.timestamp !== timestamp);
+      this.checkDistributionIsWrong()
     },
 
     decrementDistribution(role) {
-      if (this.distribution.civilians + this.distribution.undercovers + this.distribution.mrWhite <= (this.numberOfPlayers - 1)) {
+      if (this.distribution[role] > 0) {
         this.distribution[role]--
       }
     },
 
     incrementDistribution(role) {
       if (this.numberOfPlayers === 0) {
-        notify('Il n\'y a pas de joueur', 'error')
-      } else if (this.distribution.civilians + this.distribution.undercovers + this.distribution.mrWhite + 1 > this.numberOfPlayers ) {
-        notify('Il y a déjà le maximum de joueurs pour ce rôle', 'error')
+        notify('Ajoutez d\'abord des joueurs', 'error')
+      } else if (this.distribution.civilian + this.distribution.undercover + this.distribution.mrWhite + 1 > this.numberOfPlayers) {
+        notify('Tout le monde a déjà un rôle', 'error')
       } else {
         this.distribution[role]++
       }
@@ -183,8 +187,18 @@ export const useUndercoverStore = defineStore('undercover', {
       }
     },
 
+    checkDistributionIsWrong() {
+      if (this.distribution.civilian + this.distribution.undercover + this.distribution.mrWhite !== this.numberOfPlayers) {
+        notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
+        console.error('Number of roles does not match the number of players')
+        return true
+      }
+
+      return false
+    },
+
     async assignRoles() {
-      if (this.distribution.civilians + this.distribution.undercovers + this.distribution.mrWhite !== this.numberOfPlayers) {
+      if (this.distribution.civilian + this.distribution.undercover + this.distribution.mrWhite !== this.numberOfPlayers) {
         console.error('Number of roles does not match the number of players')
         return false
       }
@@ -195,11 +209,15 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     startGame() {
-      this.resetGame()
+      const t1 = this.numberOfPlayersReached()
+      const t2 = this.checkDistributionIsWrong()
 
-      this.isGameRunning = true
-      this.currentPlayer = 0
-      router.push({ path: '/game' })
+      if (!t1 && !t2) {
+        this.resetGame()
+        this.isGameRunning = true
+
+        router.push({ path: '/game' })
+      }
     },
 
     pickRandomWordDuo() {

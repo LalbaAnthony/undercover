@@ -5,7 +5,16 @@ const routes = [
     name: 'setup',
     component: () => import('../pages/SetupPage.vue'),
     meta: {
-      title: 'Setup',
+      title: 'Initialisation du jeu',
+      private: false,
+    },
+  },
+  {
+    path: '/rules',
+    name: 'rules',
+    component: () => import('../pages/RulesPage.vue'),
+    meta: {
+      title: 'Règles',
       private: false,
     },
   },
@@ -14,7 +23,7 @@ const routes = [
     name: 'game',
     component: () => import('../pages/GamePage.vue'),
     meta: {
-      title: 'game',
+      title: 'Jeu',
       private: false,
     },
   },
