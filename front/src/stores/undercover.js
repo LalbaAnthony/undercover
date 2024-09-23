@@ -53,6 +53,14 @@ export const useUndercoverStore = defineStore('undercover', {
         })
     },
 
+    getRole(role) {
+      if (!this.allRoles[role]) {
+        console.error('Role does not exist')
+        return {}
+      }
+      return this.allRoles[role]
+    },
+
     numberMinOfPlayersReached() {
       if (this.numberOfPlayers < this.NUMBER_MIN_OF_PLAYERS) {
         notify(`Il faut au moins ${this.NUMBER_MIN_OF_PLAYERS} joueurs pour commencer une partie`, 'error')
@@ -106,15 +114,15 @@ export const useUndercoverStore = defineStore('undercover', {
       this.isGameRunning = false
       this.undercoversWord = ''
       this.civilianWord = ''
+      this.clearPalyersRoles()
     },
 
     resetAll() {
-      this.clearPlayers()
       this.resetGame()
+      this.clearPlayers()
     },
 
     endGame() {
-      this.clearPalyersRoles()
       this.resetGame()
       router.push({ path: '/' })
     },
@@ -182,13 +190,37 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     fillDistributionWithSuggestion() {
-      if (this.numberOfPlayers > this.NUMBER_MIN_OF_PLAYERS) {
+      if (this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS) {
         this.distribution = {
           civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
           undercover: this.allDistributions[String(this.numberOfPlayers)].undercover,
           mrWhite: this.allDistributions[String(this.numberOfPlayers)].mrWhite
         }
       }
+    },
+
+    setRolesFromDistribution() {
+      // Set randomly the roles for each player
+      const roles = []
+      for (let i = 0; i < this.distribution.civilian; i++) {
+        roles.push('civilian')
+      }
+      for (let i = 0; i < this.distribution.undercover; i++) {
+        roles.push('undercover')
+      }
+      for (let i = 0; i < this.distribution.mrWhite; i++) {
+        roles.push('mrWhite')
+      }
+
+      // Shuffle the roles
+      roles.sort(() => Math.random() - 0.5)
+
+      // Assign the roles to the players
+      for (let i = 0; i < this.players.length; i++) {
+        this.players[i].role = roles[i]
+      }
+
+      // Assignate the words to the roles
     },
 
     checkDistributionNumbersAreWrong() {
@@ -221,12 +253,14 @@ export const useUndercoverStore = defineStore('undercover', {
         this.isGameRunning = true
 
         router.push({ path: '/game' })
+        this.setRolesFromDistribution()
+        this.assignateWords()
       }
     },
 
     pickRandomWordDuo() {
-      const randomIndex = Math.floor(Math.random() * this.words.length)
-      return this.words[randomIndex]
+      const randomIndex = Math.floor(Math.random() * this.allWords.length)
+      return this.allWords[randomIndex]
     },
 
     assignateWords() {
@@ -239,6 +273,19 @@ export const useUndercoverStore = defineStore('undercover', {
         this.civilianWord = words[0]
       }
     },
+
+    printGameState () {
+      console.log('='.repeat(40))
+      console.log('Game state:')
+      console.log('  - distribution:', this.distribution)
+      console.log('  - players:', this.players)
+      console.log('  - currentPlayer:', this.currentPlayer)
+      console.log('  - currentRound:', this.currentRound)
+      console.log('  - isGameRunning:', this.isGameRunning)
+      console.log('  - undercoversWord:', this.undercoversWord)
+      console.log('  - civilianWord:', this.civilianWord)
+      console.log('='.repeat(40))
+    }
   },
   getters: {
     numberOfPlayers() {
