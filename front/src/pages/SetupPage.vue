@@ -27,7 +27,7 @@
       <div class="m-4">
         <Grid :items="undercoverStore.players">
           <template #item="{ item }">
-            <Player :player="item" />
+            <Player :player="item" :removeButton="true" />
           </template>
         </Grid>
       </div>
