@@ -167,9 +167,8 @@ export const useUndercoverStore = defineStore('undercover', {
       if (this.distribution[role] > 0) {
         this.distribution[role]--
       }
-      this.checkDistributionNumbersAreWrong()
     },
-    
+
     incrementDistribution(role) {
       if (this.numberOfPlayers === 0) {
         notify('Ajoutez d\'abord des joueurs', 'error')
@@ -178,7 +177,6 @@ export const useUndercoverStore = defineStore('undercover', {
       } else {
         this.distribution[role]++
       }
-      this.checkDistributionNumbersAreWrong()
     },
 
     fillDistributionWithSuggestion() {
@@ -189,6 +187,16 @@ export const useUndercoverStore = defineStore('undercover', {
           mrWhite: this.allDistributions[String(this.numberOfPlayers)].mrWhite
         }
       }
+    },
+
+    checkDistributionNotCoherent() {
+      if (this.distribution.civilian === 0 || this.distribution.undercover === 0) {
+        notify('Il faut au moins un joueur par rôle', 'error')
+        console.error('At least one player per role is required')
+        return true
+      }
+
+      return false
     },
 
     checkDistributionNumbersAreWrong() {
@@ -215,8 +223,9 @@ export const useUndercoverStore = defineStore('undercover', {
     startGame() {
       const t1 = this.numberOfPlayersReached()
       const t2 = this.checkDistributionNumbersAreWrong()
+      const t3 = this.checkDistributionNotCoherent()
 
-      if (!t1 && !t2) {
+      if (!t1 && !t2 && !t3) {
         this.resetGame()
         this.isGameRunning = true
 
