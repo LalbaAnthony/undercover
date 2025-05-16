@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { notify } from '@/helpers/notif.js'
+import { notify } from '@/composables/notif.js'
 import router from '@/router'
 
 export const useUndercoverStore = defineStore('undercover', {
