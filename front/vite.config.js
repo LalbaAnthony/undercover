@@ -6,8 +6,6 @@ import { VitePWA } from 'vite-plugin-pwa';
 import dotenv from 'dotenv';
 import path from 'path';
 
-console.log('VITE_APP_NAME', process.env.VITE_APP_THEME_COLOR);
-
 // Resolve the path to the .env file
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -33,7 +33,6 @@ jobs:
           echo "VITE_PORT=${{ secrets.PROD_VITE_PORT }}" >> .env
           echo "VITE_FRONT_URL=${{ secrets.PROD_VITE_FRONT_URL }}" >> .env
           echo "VITE_GIT_REPO=${{ secrets.PROD_VITE_GIT_REPO }}" >> .env
-          cat .env
 
       - name: Install and Build frontend
         working-directory: ./front
