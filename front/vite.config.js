@@ -18,6 +18,7 @@ const version = require('./package.json')?.version || '0.0.0';
 process.env.VITE_APP_VERSION = version;
 
 console.log('TEEEEEEEEEST', process.env.VITE_APP_BG_COLOR);
+console.log('TEEEEEEEEEST', process.env.VITE_APP_NAME);
 
 // https://vitejs.dev/config/
 export default defineConfig({
