@@ -27,8 +27,8 @@ export default defineConfig({
         name: process.env.VITE_APP_NAME,
         short_name: process.env.VITE_APP_SHORT_NAME,
         description: process.env.VITE_APP_DESCRIPTION,
-        theme_color: '#aaaaaa',
-        background_color: '#aaaaaa',
+        theme_color: process.env.VITE_APP_THEME_COLOR,
+        background_color: process.env.VITE_APP_BG_COLOR,
         icons: [
           {
             src: 'android-chrome-192x192.png',
