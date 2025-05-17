@@ -17,8 +17,16 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const version = require('./package.json')?.version || '0.0.0';
 process.env.VITE_APP_VERSION = version;
 
-console.log('TEEEEEEEEEST', process.env.VITE_APP_BG_COLOR);
-console.log('TEEEEEEEEEST', process.env.VITE_APP_NAME);
+console.log('zeifzeyifz VITE_APP_SHORT_NAME', process.env.VITE_APP_SHORT_NAME);
+console.log('zeifzeyifz VITE_APP_NAME', process.env.VITE_APP_NAME);
+console.log('zeifzeyifz VITE_APP_COMPANY_NAME', process.env.VITE_APP_COMPANY_NAME);
+console.log('zeifzeyifz VITE_APP_AUTHOR_NAME', process.env.VITE_APP_AUTHOR_NAME);
+console.log('zeifzeyifz VITE_APP_DESCRIPTION', process.env.VITE_APP_DESCRIPTION);
+console.log('zeifzeyifz VITE_APP_THEME_COLOR', process.env.VITE_APP_THEME_COLOR);
+console.log('zeifzeyifz VITE_APP_BG_COLOR', process.env.VITE_APP_BG_COLOR);
+console.log('zeifzeyifz VITE_PORT', process.env.VITE_PORT);
+console.log('zeifzeyifz VITE_FRONT_URL', process.env.VITE_FRONT_URL);
+console.log('zeifzeyifz VITE_GIT_REPO', process.env.VITE_GIT_REPO);
 
 // https://vitejs.dev/config/
 export default defineConfig({
