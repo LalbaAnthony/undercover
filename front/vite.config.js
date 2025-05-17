@@ -37,8 +37,8 @@ export default defineConfig({
       manifest: {
         name: process.env.VITE_APP_NAME,
         short_name: process.env.VITE_APP_SHORT_NAME,
-        description: process.env.VITE_APP_DESCRIPTION,
-        theme_color: process.env.VITE_APP_THEME_COLOR,
+        description: `#${process.env.VITE_APP_DESCRIPTION}`,
+        theme_color: `#${process.env.VITE_APP_THEME_COLOR}`,
         background_color: process.env.VITE_APP_BG_COLOR,
         icons: [
           {
