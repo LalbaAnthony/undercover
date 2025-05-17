@@ -10,12 +10,14 @@ import path from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load .env fileVITE_APP_VERSION
+// Load .env file
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Get the version from package.json
-const version = require('./package.json').version || '0.0.0';
+const version = require('./package.json')?.version || '0.0.0';
 process.env.VITE_APP_VERSION = version;
+
+console.log('TEEEEEEEEEST', process.env.VITE_APP_BG_COLOR);
 
 // https://vitejs.dev/config/
 export default defineConfig({
