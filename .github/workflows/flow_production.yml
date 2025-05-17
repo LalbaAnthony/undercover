@@ -23,7 +23,6 @@ jobs:
 
       - name: Set up Environment Variables
         run: |
-          echo ${{ secrets.PROD_VITE_APP_BG_COLOR }}
           echo "VITE_APP_SHORT_NAME=${{ secrets.PROD_VITE_APP_SHORT_NAME }}" >> .env
           echo "VITE_APP_NAME=${{ secrets.PROD_VITE_APP_NAME }}" >> .env
           echo "VITE_APP_COMPANY_NAME=${{ secrets.PROD_VITE_APP_COMPANY_NAME }}" >> .env
