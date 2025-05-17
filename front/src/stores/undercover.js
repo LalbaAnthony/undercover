@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { notify } from '@/composables/notif.js'
+import { notif } from '@/composables/notif.js'
 import router from '@/router'
 
 export const useUndercoverStore = defineStore('undercover', {
@@ -63,7 +63,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     numberMinOfPlayersReached() {
       if (this.numberOfPlayers < this.NUMBER_MIN_OF_PLAYERS) {
-        notify(`Il faut au moins ${this.NUMBER_MIN_OF_PLAYERS} joueurs pour commencer une partie`, 'error')
+        notif.notify(`Il faut au moins ${this.NUMBER_MIN_OF_PLAYERS} joueurs pour commencer une partie`, 'error')
         console.error('Not enough players')
         return true
       }
@@ -73,7 +73,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     numberMaxOfPlayersReached() {
       if (this.numberOfPlayers > this.NUMBER_MAX_OF_PLAYERS) {
-        notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
+        notif.notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
         console.error('Too many players')
         return true
       }
@@ -90,7 +90,7 @@ export const useUndercoverStore = defineStore('undercover', {
       if (this.players.length === 0) return false
 
       if (this.players.some((player) => player.name === name)) {
-        notify('Ce nom de joueur est déjà pris', 'error')
+        notif.notify('Ce nom de joueur est déjà pris', 'error')
         console.error('Name already exists')
         return true
       }
@@ -136,13 +136,13 @@ export const useUndercoverStore = defineStore('undercover', {
 
     addPlayer(name) {
       if (name.length === 0) {
-        notify('Le nom du joueur ne peut pas être vide', 'error')
+        notif.notify('Le nom du joueur ne peut pas être vide', 'error')
         console.error('The player name cannot be empty')
         return false
       }
 
       if (name.length > 40) {
-        notify('La t\'abuse sur la longueur du nom du joueur', 'error')
+        notif.notify('La t\'abuse sur la longueur du nom du joueur', 'error')
         console.error('The player name cannot be longer than 40 characters')
         return false
       }
@@ -179,9 +179,9 @@ export const useUndercoverStore = defineStore('undercover', {
 
     incrementDistribution(role) {
       if (this.numberOfPlayers === 0) {
-        notify('Ajoutez d\'abord des joueurs', 'error')
+        notif.notify('Ajoutez d\'abord des joueurs', 'error')
       } else if (this.distribution.civilian + this.distribution.undercover + this.distribution.mrWhite + 1 > this.numberOfPlayers) {
-        notify('Tout le monde a déjà un rôle', 'error')
+        notif.notify('Tout le monde a déjà un rôle', 'error')
       } else {
         this.distribution[role]++
       }
@@ -199,7 +199,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     checkDistributionNotCoherent() {
       if (this.distribution.civilian === 0 || this.distribution.undercover === 0) {
-        notify('Il faut au moins un joueur par rôle', 'error')
+        notif.notify('Il faut au moins un joueur par rôle', 'error')
         console.error('At least one player per role is required')
         return true
       }
@@ -231,7 +231,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     checkDistributionNumbersAreWrong() {
       if (this.distribution.civilian + this.distribution.undercover + this.distribution.mrWhite !== this.numberOfPlayers) {
-        notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
+        notif.notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
         console.error('Number of roles does not match the number of players')
         return true
       }

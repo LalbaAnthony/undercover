@@ -22,7 +22,7 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
-      registerType: 'autoUpdate', 
+      registerType: 'autoUpdate',
       manifest: {
         name: process.env.VITE_APP_NAME,
         short_name: process.env.VITE_APP_SHORT_NAME,
@@ -31,17 +31,17 @@ export default defineConfig({
         background_color: process.env.VITE_APP_BG_COLOR,
         icons: [
           {
-            src: 'android-chrome-192x192.png', 
+            src: 'android-chrome-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: 'android-chrome-512x512.png', 
+            src: 'android-chrome-512x512.png',
             sizes: '512x512',
             type: 'image/png',
           },
           {
-            src: 'android-chrome-512x512.png', 
+            src: 'android-chrome-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable',
@@ -57,12 +57,16 @@ export default defineConfig({
   },
   define: {
     'process.env': {
+      VITE_APP_SHORT_NAME: process.env.VITE_APP_SHORT_NAME,
       VITE_APP_NAME: process.env.VITE_APP_NAME,
       VITE_APP_COMPANY_NAME: process.env.VITE_APP_COMPANY_NAME,
       VITE_APP_AUTHOR_NAME: process.env.VITE_APP_AUTHOR_NAME,
+      VITE_APP_DESCRIPTION: process.env.VITE_APP_DESCRIPTION,
+      VITE_APP_THEME_COLOR: process.env.VITE_APP_THEME_COLOR,
+      VITE_APP_BG_COLOR: process.env.VITE_APP_BG_COLOR,
+      VITE_PORT: process.env.VITE_PORT,
       VITE_FRONT_URL: process.env.VITE_FRONT_URL,
       VITE_GIT_REPO: process.env.VITE_GIT_REPO,
-      VITE_APP_VERSION: process.env.VITE_APP_VERSION,
     }
   },
   server: {
