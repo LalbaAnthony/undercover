@@ -18,22 +18,22 @@
 
       <Bento title="Répartition des rôles">
         <div>
-          <div v-for="(role, slug) in undercoverStore.allRoles" :key="slug"
+          <div v-for="(role, key) in undercoverStore.allRoles" :key="key"
             class="flex justify-center items-center gap-4">
-            <div
+            <button
               class="cursor-pointer rounded-full bg-primary text-white p-0.5 hover:scale-105 transition-transform duration-200"
-              @click="undercoverStore.decrementDistribution(slug)">
+              @click="undercoverStore.decrementDistribution(key)">
               <MinusIcon class="size-5 text-light" />
-            </div>
+            </button>
             <div>
-              {{ undercoverStore.distribution[slug] }}&nbsp;
+              {{ undercoverStore.distribution[key] }}&nbsp;
               <span class="text-xl">{{ role.name }}</span>
             </div>
-            <div
+            <button
               class="cursor-pointer rounded-full bg-primary text-white p-0.5 hover:scale-105 transition-transform duration-200"
-              @click="undercoverStore.incrementDistribution(slug)">
+              @click="undercoverStore.incrementDistribution(key)">
               <PlusIcon class="size-5 text-light" />
-            </div>
+            </button>
           </div>
         </div>
       </Bento>
@@ -70,7 +70,7 @@ function addPlayer() {
 }
 
 function resetAll() {
-  if (confirm('Es-tu sûûûûûr de vouloir réinitialiser la partie ?')) {
+  if (confirm('Es-tu sûûûr de vouloir réinitialiser la partie ?')) {
     undercoverStore.clearPlayers()
     undercoverStore.resetGame()
     undercoverStore.initSetup()

@@ -5,7 +5,7 @@ import router from '@/router'
 
 export const useUndercoverStore = defineStore('undercover', {
   state: () => ({
-    // persist: true,
+    persist: true,
 
     // * Constants
     NUMBER_MIN_OF_PLAYERS: 3,
@@ -17,7 +17,7 @@ export const useUndercoverStore = defineStore('undercover', {
     allDistributions: {},
 
     // * Game state
-    distribution: { civilian: 0, undercover: 0, mrWhite: 0, },
+    distribution: { civilian: 0, undercover: 0, white: 0, },
     players: [],
     currentPlayer: 0,
     currentRound: 1,
@@ -133,6 +133,8 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     addPlayer(name) {
+      name = ucfirst(name.trim()) || ''
+
       if (name.length === 0) {
         notif.notify('Le nom du joueur ne peut pas être vide', 'error')
         console.error('The player name cannot be empty')
@@ -155,7 +157,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
       this.players.push({
         id: new Date().getTime(),
-        name: ucfirst(name.trim()),
+        name,
         role: null,
         eliminated: false,
       })
@@ -177,7 +179,7 @@ export const useUndercoverStore = defineStore('undercover', {
     incrementDistribution(role) {
       if (this.numberOfPlayers === 0) {
         notif.notify('Ajoutez d\'abord des joueurs', 'error')
-      } else if (this.distribution.civilian + this.distribution.undercover + this.distribution.mrWhite + 1 > this.numberOfPlayers) {
+      } else if (this.distribution.civilian + this.distribution.undercover + this.distribution.white + 1 > this.numberOfPlayers) {
         notif.notify('Tout le monde a déjà un rôle', 'error')
       } else {
         this.distribution[role]++
@@ -189,7 +191,7 @@ export const useUndercoverStore = defineStore('undercover', {
         this.distribution = {
           civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
           undercover: this.allDistributions[String(this.numberOfPlayers)].undercover,
-          mrWhite: this.allDistributions[String(this.numberOfPlayers)].mrWhite
+          white: this.allDistributions[String(this.numberOfPlayers)].white
         }
       }
     },
@@ -211,8 +213,8 @@ export const useUndercoverStore = defineStore('undercover', {
       for (let i = 0; i < this.distribution.undercover; i++) {
         roles.push('undercover')
       }
-      for (let i = 0; i < this.distribution.mrWhite; i++) {
-        roles.push('mrWhite')
+      for (let i = 0; i < this.distribution.white; i++) {
+        roles.push('white')
       }
 
       // Shuffle the roles
@@ -227,7 +229,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     checkDistributionNumbersAreWrong() {
-      if (this.distribution.civilian + this.distribution.undercover + this.distribution.mrWhite !== this.numberOfPlayers) {
+      if (this.distribution.civilian + this.distribution.undercover + this.distribution.white !== this.numberOfPlayers) {
         notif.notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
         console.error('Number of roles does not match the number of players')
         return true
@@ -237,7 +239,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     async assignRoles() {
-      if (this.distribution.civilian + this.distribution.undercover + this.distribution.mrWhite !== this.numberOfPlayers) {
+      if (this.distribution.civilian + this.distribution.undercover + this.distribution.white !== this.numberOfPlayers) {
         console.error('Number of roles does not match the number of players')
         return false
       }
@@ -304,8 +306,8 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.players.filter((player) => player.role === 'undercover').length
     },
 
-    numberOfPlayersMrWhite() {
-      return this.players.filter((player) => player.role === 'mrWhite').length
+    numberOfPlayerswhite() {
+      return this.players.filter((player) => player.role === 'white').length
     },
 
     isGameOver() {

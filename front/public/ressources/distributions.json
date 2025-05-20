@@ -2,106 +2,106 @@
     "0": {
         "civilian": 0,
         "undercover": 0,
-        "mrWhite": 0
+        "white": 0
     },
     "1": {
         "civilian": 1,
         "undercover": 0,
-        "mrWhite": 0
+        "white": 0
     },
     "2": {
         "civilian": 2,
         "undercover": 0,
-        "mrWhite": 0
+        "white": 0
     },
     "3": {
         "civilian": 2,
         "undercover": 1,
-        "mrWhite": 0
+        "white": 0
     },
     "4": {
         "civilian": 3,
         "undercover": 1,
-        "mrWhite": 0
+        "white": 0
     },
     "5": {
         "civilian": 3,
         "undercover": 1,
-        "mrWhite": 1
+        "white": 1
     },
     "6": {
         "civilian": 4,
         "undercover": 1,
-        "mrWhite": 1
+        "white": 1
     },
     "7": {
         "civilian": 4,
         "undercover": 2,
-        "mrWhite": 1
+        "white": 1
     },
     "8": {
         "civilian": 5,
         "undercover": 2,
-        "mrWhite": 1
+        "white": 1
     },
     "9": {
         "civilian": 5,
         "undercover": 3,
-        "mrWhite": 1
+        "white": 1
     },
     "10": {
         "civilian": 6,
         "undercover": 3,
-        "mrWhite": 1
+        "white": 1
     },
     "11": {
         "civilian": 6,
         "undercover": 3,
-        "mrWhite": 2
+        "white": 2
     },
     "12": {
         "civilian": 7,
         "undercover": 3,
-        "mrWhite": 2
+        "white": 2
     },
     "13": {
         "civilian": 7,
         "undercover": 4,
-        "mrWhite": 2
+        "white": 2
     },
     "14": {
         "civilian": 8,
         "undercover": 4,
-        "mrWhite": 2
+        "white": 2
     },
     "15": {
         "civilian": 8,
         "undercover": 5,
-        "mrWhite": 3
+        "white": 3
     },
     "16": {
         "civilian": 9,
         "undercover": 5,
-        "mrWhite": 2
+        "white": 2
     },
     "17": {
         "civilian": 9,
         "undercover": 5,
-        "mrWhite": 3
+        "white": 3
     },
     "18": {
         "civilian": 10,
         "undercover": 5,
-        "mrWhite": 3
+        "white": 3
     },
     "19": {
         "civilian": 10,
         "undercover": 6,
-        "mrWhite": 3
+        "white": 3
     },
     "20": {
         "civilian": 11,
         "undercover": 6,
-        "mrWhite": 3
+        "white": 3
     }
 }

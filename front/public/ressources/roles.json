@@ -11,7 +11,7 @@
         "description": "L'Undercover est un imposteur qui connaît son rôle et celui des autres Undercover. Son but est de semer la confusion parmi les civils et de rester caché le plus longtemps possible tout en éliminant les civils un par un. L'Undercover doit être malin dans ses réponses pour ne pas éveiller les soupçons.",
         "goal": "Faire en sorte que les civils s'éliminent entre eux tout en restant incognito."
     },
-    "mrWhite": {
+    "white": {
         "name": "Mr.White",
         "numberMinOfPlayersRequired": 4,
         "description": "Mr. White est un rôle spécial. Contrairement aux civils et aux Undercover, il ne reçoit aucun mot à deviner (dans la version classique du jeu). Il doit improviser et essayer de se fondre parmi les civils en bluffant. Si Mr. White est découvert, il peut encore gagner en tentant de deviner le mot secret exact.",
