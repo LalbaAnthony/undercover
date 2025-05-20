@@ -6,7 +6,7 @@
           <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :removeButton="true" />
         </div>
 
-        <div class="flex justify-between items-center gap-2 p-2 border-b border-dark-gray">
+        <div class="flex justify-between items-center gap-2 p-2 border-b-2 border-dark-gray">
           <input class="py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
             v-model="name" @keyup.enter="addPlayer()">
           <button class="cursor-pointer rounded-full p-0.5 hover:scale-105 transition-transform duration-200"
