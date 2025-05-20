@@ -5,14 +5,12 @@ import { VITE_APP_NAME } from '@/config';
 
 const router = createRouter({
   history: createWebHistory(),
-  scrollBehavior: () => ({ left: 0, top: 0, behavior: 'smooth' }),
+  scrollBehavior: () => ({ top: 0, behavior: 'smooth' }),
   routes,
 })
 
 router.beforeEach((to, from, next) => {
-
   const undercoverStore = useUndercoverStore()
-  undercoverStore.printGameState()
 
   if (from.name === 'game' && to.name !== 'game') {
     undercoverStore.resetGame()

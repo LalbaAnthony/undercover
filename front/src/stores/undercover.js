@@ -27,7 +27,8 @@ export const useUndercoverStore = defineStore('undercover', {
   }),
 
   actions: {
-    async fetchWordsList() {
+    async fetchAllWords() {
+      if (this.allWords.length > 0) return
       fetch('ressources/words.json')
         .then((response) => response.json())
         .then((data) => {
@@ -35,7 +36,8 @@ export const useUndercoverStore = defineStore('undercover', {
         })
     },
 
-    async fetchRolesList() {
+    async fetchAllRoles() {
+      if (this.allRoles.length > 0) return
       fetch('ressources/roles.json')
         .then((response) => response.json())
         .then((data) => {
@@ -43,12 +45,19 @@ export const useUndercoverStore = defineStore('undercover', {
         })
     },
 
-    async fetchDistributionsList() {
+    async fetchAllDistributions() {
+      if (this.allDistributions.length > 0) return
       fetch('ressources/distributions.json')
         .then((response) => response.json())
         .then((data) => {
           this.allDistributions = data
         })
+    },
+
+    async fetchEverything() {
+      await this.fetchAllWords()
+      await this.fetchAllRoles()
+      await this.fetchAllDistributions()
     },
 
     getRole(role) {
@@ -126,9 +135,9 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     initSetup() {
-      this.fetchWordsList()
-      this.fetchRolesList()
-      this.fetchDistributionsList()
+      this.fetchAllWords()
+      this.fetchAllRoles()
+      this.fetchAllDistributions()
       this.fillDistributionWithSuggestion()
     },
 
