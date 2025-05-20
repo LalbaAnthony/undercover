@@ -1,29 +1,6 @@
 <template>
   <div>
-    <section>
-      <!-- {{ undercoverStore.allRoles }}<br><br><br> -->
-      <!-- {{ undercoverStore.suggestedNumberOfUndercovers }}<br><br><br> -->
-    </section>
-
-    <!-- Players -->
-    <section>
-      <h2 class="text-center text-2xl my-4">Joueurs</h2>
-
-      <!-- Add -->
-      <div class="flex justify-center items-center gap-2 my-8">
-        <input class="rounded-lg py-1.5 px-2 text-dark" type="text" placeholder="Nom du joueur" v-model="newPlayerName"
-          @keyup.enter="addPlayer()">
-        <button
-          class="text-light py-1.5 px-3 rounded-lg cursor-pointer hover:scale-105 transition-transform ease-in-out transform duration-200 bg-primary"
-          @click="addPlayer()">
-          <span class="block sm:hidden">
-            <PlusIcon class="size-6 text-light" />
-          </span>
-          <span class="hidden sm:block">Ajouter un joueur</span>
-        </button>
-      </div>
-
-      <!-- List -->
+    <Bento title="Joueurs">
       <div class="m-4">
         <Grid :items="undercoverStore.players">
           <template #item="{ item }">
@@ -31,11 +8,19 @@
           </template>
         </Grid>
       </div>
-    </section>
+      <div class="grid grid-cols-12 grid-rows-1 gap-4 w-full">
+        <input class="col-span-8 sm:col-span-9 md:col-span-10 py-1.5 px-2 bg-light-dark border-b border-gray text-gray" type="text"
+          placeholder="Nom du joueur" v-model="newPlayerName" @keyup.enter="addPlayer()">
+        <button
+          class="col-span-4 sm:col-span-3 md:col-span-2 text-light py-1.5 px-3 rounded-lg
+          flex justify-center items-center cursor-pointer hover:scale-105 transition-transform ease-in-out transform duration-200 bg-primary"
+          @click="addPlayer()">
+          <PlusIcon class="size-6 text-light" />
+        </button>
+      </div>
+    </Bento>
 
-    <!-- Distribution -->
-    <section>
-      <h2 class="text-center text-2xl my-4">Répartition</h2>
+    <Bento title="Distribution">
       <div>
         <div v-for="(role, slug) in undercoverStore.allRoles" :key="slug"
           class="flex justify-center items-center gap-4">
@@ -55,10 +40,9 @@
           </div>
         </div>
       </div>
-    </section>
+    </Bento>
 
-    <!-- Action -->
-    <section>
+    <Bento>
       <div class="flex justify-center items-center gap-4">
         <button
           class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 hover:bg-light-dark"
@@ -66,14 +50,14 @@
         <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 bg-primary"
           @click="startGame()">Commencer</button>
       </div>
-    </section>
-
+    </Bento>
   </div>
 </template>
 
 <script setup>
 import Player from '@/components/undercover/PlayerComponent.vue'
 import Grid from '@/components/GridComponent.vue'
+import Bento from '@/components/BentoComponent.vue'
 import { MinusIcon } from '@heroicons/vue/24/solid'
 import { PlusIcon } from '@heroicons/vue/24/solid'
 import { onMounted, ref } from 'vue'

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center gap-2 custom-shadow p-4 rounded-xl border border-1 border-dark-gray">
+  <div class="flex justify-between items-center gap-2 p-4 rounded-xl border border-2 border-dark-gray">
     <div>{{ props.player.name }}</div>
     <div v-if="props.displayRole" class="text-gray">{{ undercoverStore.getRole(props.player.role).name }}</div>
     <div
