@@ -31,7 +31,6 @@ export const useUndercoverStore = defineStore('undercover', {
         .then((response) => response.json())
         .then((data) => {
           this.allWords = data.words
-          // console.log('Words fetched')
         })
     },
 
@@ -40,7 +39,6 @@ export const useUndercoverStore = defineStore('undercover', {
         .then((response) => response.json())
         .then((data) => {
           this.allRoles = data.roles
-          // console.log('Roles fetched')
         })
     },
 
@@ -49,7 +47,6 @@ export const useUndercoverStore = defineStore('undercover', {
         .then((response) => response.json())
         .then((data) => {
           this.allDistributions = data.distributions
-          // console.log('Distributions fetched')
         })
     },
 
