@@ -77,3 +77,8 @@ export function missingElementsPassword(password) {
 
     return missingElement;
 }
+
+export function ucfirst(string) {
+    if (string.length === 0) return string;
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}

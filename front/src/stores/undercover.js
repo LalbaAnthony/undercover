@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { notif } from '@/composables/notif.js'
+import { ucfirst } from '@/composables/helpers.js'
 import router from '@/router'
 
 export const useUndercoverStore = defineStore('undercover', {
@@ -154,7 +155,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
       this.players.push({
         id: new Date().getTime(),
-        name,
+        name: ucfirst(name.trim()),
         role: null,
         eliminated: false,
       })
