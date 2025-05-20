@@ -30,7 +30,7 @@ export const useUndercoverStore = defineStore('undercover', {
       fetch('ressources/words.json')
         .then((response) => response.json())
         .then((data) => {
-          this.allWords = data.words
+          this.allWords = data
         })
     },
 
@@ -38,7 +38,7 @@ export const useUndercoverStore = defineStore('undercover', {
       fetch('ressources/roles.json')
         .then((response) => response.json())
         .then((data) => {
-          this.allRoles = data.roles
+          this.allRoles = data
         })
     },
 
@@ -46,7 +46,7 @@ export const useUndercoverStore = defineStore('undercover', {
       fetch('ressources/distributions.json')
         .then((response) => response.json())
         .then((data) => {
-          this.allDistributions = data.distributions
+          this.allDistributions = data
         })
     },
 
@@ -152,9 +152,8 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
-      const timestamp = new Date().getTime()
       this.players.push({
-        timestamp,
+        id: new Date().getTime(),
         name,
         role: null,
         eliminated: false,
@@ -163,8 +162,8 @@ export const useUndercoverStore = defineStore('undercover', {
       this.fillDistributionWithSuggestion()
     },
 
-    removePlayer(timestamp) {
-      this.players = this.players.filter((player) => player.timestamp !== timestamp);
+    removePlayer(id) {
+      this.players = this.players.filter((player) => player.id !== id);
       this.fillDistributionWithSuggestion()
     },
 
@@ -185,7 +184,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     fillDistributionWithSuggestion() {
-      if (this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS) {
+      if (this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS && this.numberOfPlayers <= this.NUMBER_MAX_OF_PLAYERS) {
         this.distribution = {
           civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
           undercover: this.allDistributions[String(this.numberOfPlayers)].undercover,

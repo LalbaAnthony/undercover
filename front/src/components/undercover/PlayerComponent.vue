@@ -5,7 +5,7 @@
     <div
       v-if="props.removeButton"
       class="cursor-pointer rounded-full bg-primary text-white p-0.5 hover:scale-105 transition-transform duration-200"
-      @click="undercoverStore.removePlayer(props.player.timestamp)">
+      @click="undercoverStore.removePlayer(props.player.id)">
       <MinusIcon class="size-5 text-light" />
     </div>
   </div>
