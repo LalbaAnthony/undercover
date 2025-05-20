@@ -27,7 +27,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
   actions: {
     async fetchWordsList() {
-      fetch('src/ressources/words.json')
+      fetch('ressources/words.json')
         .then((response) => response.json())
         .then((data) => {
           this.allWords = data.words
@@ -36,7 +36,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     async fetchRolesList() {
-      fetch('src/ressources/roles.json')
+      fetch('ressources/roles.json')
         .then((response) => response.json())
         .then((data) => {
           this.allRoles = data.roles
@@ -45,7 +45,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     async fetchDistributionsList() {
-      fetch('src/ressources/distributions.json')
+      fetch('ressources/distributions.json')
         .then((response) => response.json())
         .then((data) => {
           this.allDistributions = data.distributions
