@@ -1,5 +1,5 @@
 <template>
-  <div  class="bg-light-dark rounded-2xl p-6 m-4">
+  <div  class="bg-light-dark rounded-2xl p-6 my-4">
     <h2 v-if="props.title" class="text-2xl mb-8 text-left text-gray">
       {{ props.title }}
     </h2>

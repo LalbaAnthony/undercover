@@ -51,6 +51,13 @@ main {
   border-radius: 25px;
 }
 
+/* Prevent text selection on double click */
+* {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 /* Code for Firefox */
 ::-moz-selection,
 ::selection {

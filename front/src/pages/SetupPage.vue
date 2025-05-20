@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="md:grid md:grid-cols-2 md:gap-6">
-      <Bento title="Joueurs">
+      <Bento :title="`Joueurs ${undercoverStore.numberOfPlayers ? `(${undercoverStore.numberOfPlayers})` : ''}`">
         <div class="my-4 custom-grid">
           <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :removeButton="true" />
         </div>
@@ -42,10 +42,10 @@
     <Bento>
       <div class="flex justify-center items-center gap-4">
         <button
-          class="text-light py-1.5 px-3 rounded-full cursor-pointer transition-colors	duration-300 hover:bg-light-dark"
+          class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 hover:bg-light-dark"
           @click="resetAll()">Réinitialiser</button>
-        <button class="text-light py-1.5 px-3 rounded-full cursor-pointer transition-colors	duration-300 bg-primary"
-          @click="startGame()">Commencer la partie</button>
+        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 bg-primary"
+          @click="startGame()">Commencer</button>
       </div>
     </Bento>
   </div>
