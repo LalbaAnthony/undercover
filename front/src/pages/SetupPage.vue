@@ -7,8 +7,8 @@
         </div>
 
         <div class="flex justify-between items-center gap-2 p-2 border-b border-dark-gray">
-          <input class="py-1.5 px-2 bg-light-dark text-white" type="text" placeholder="Nom du joueur"
-            v-model="newPlayerName" @keyup.enter="addPlayer()">
+          <input class="py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
+            v-model="name" @keyup.enter="addPlayer()">
           <button class="cursor-pointer rounded-full p-0.5 hover:scale-105 transition-transform duration-200"
             @click="addPlayer()">
             <PlusIcon class="size-6 text-primary" />
@@ -61,11 +61,12 @@ import { useUndercoverStore } from '@/stores/undercover'
 
 const undercoverStore = useUndercoverStore()
 
-const newPlayerName = ref('')
+const name = ref('')
 
 function addPlayer() {
-  undercoverStore.addPlayer(newPlayerName.value)
-  newPlayerName.value = ''
+  undercoverStore.addPlayer(name.value)
+  name.value = ''
+  document.getElementById('name').focus()
 }
 
 function resetAll() {
