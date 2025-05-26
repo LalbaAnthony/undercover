@@ -12,7 +12,7 @@
         "goal": "Faire en sorte que les civils s'éliminent entre eux tout en restant incognito."
     },
     "white": {
-        "name": "Mr.White",
+        "name": "Mr. White",
         "numberMinOfPlayersRequired": 4,
         "description": "Mr. White est un rôle spécial. Contrairement aux civils et aux Undercover, il ne reçoit aucun mot à deviner (dans la version classique du jeu). Il doit improviser et essayer de se fondre parmi les civils en bluffant. Si Mr. White est découvert, il peut encore gagner en tentant de deviner le mot secret exact.",
         "goal": "Ne pas se faire démasquer, et si c'est le cas, deviner correctement le mot secret pour remporter la partie."
