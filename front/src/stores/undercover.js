@@ -68,37 +68,11 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.allRoles[role]
     },
 
-    numberMinOfPlayersReached() {
-      if (this.numberOfPlayers < this.NUMBER_MIN_OF_PLAYERS) {
-        notif.notify(`Il faut au moins ${this.NUMBER_MIN_OF_PLAYERS} joueurs pour commencer une partie`, 'error')
-        console.error('Not enough players')
-        return true
-      }
-
-      return false
-    },
-
-    numberMaxOfPlayersReached() {
-      if (this.numberOfPlayers > this.NUMBER_MAX_OF_PLAYERS) {
-        notif.notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
-        console.error('Too many players')
-        return true
-      }
-
-      return false
-    },
-
-    numberOfPlayersReached() {
-      return this.numberMinOfPlayersReached() && this.numberMaxOfPlayersReached()
-    },
-
-    checkIfNameAlreadyExists(name) {
-      if (!name) return false
+    nameExistInPlayers(name) {
+      if (!name || name.length === 0) return false
       if (this.players.length === 0) return false
 
       if (this.players.some((player) => player.name === name)) {
-        notif.notify('Ce nom de joueur est déjà pris', 'error')
-        console.error('Name already exists')
         return true
       }
 
@@ -131,14 +105,14 @@ export const useUndercoverStore = defineStore('undercover', {
 
     endGame() {
       this.resetGame()
-      router.push({ path: '/' })
+      router.push({ name: 'setup' })
     },
 
     initSetup() {
       this.fetchAllWords()
       this.fetchAllRoles()
       this.fetchAllDistributions()
-      this.fillDistributionWithSuggestion()
+      this.fillDistribution()
     },
 
     addPlayer(name) {
@@ -150,17 +124,21 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
-      if (name.length > 40) {
+      if (name.length > 20) {
         notif.notify('La t\'abuse sur la longueur du nom du joueur', 'error')
         console.error('The player name cannot be longer than 40 characters')
         return false
       }
 
-      if (this.checkIfNameAlreadyExists(name)) {
+      if (this.nameExistInPlayers(name)) {
+        notif.notify('Ce nom de joueur est déjà pris', 'error')
+        console.error('Name already exists')
         return false
       }
 
-      if (this.numberMaxOfPlayersReached()) {
+      if (this.numberOfPlayers > this.NUMBER_MAX_OF_PLAYERS) {
+        notif.notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
+        console.error('Too many players')
         return false
       }
 
@@ -171,12 +149,12 @@ export const useUndercoverStore = defineStore('undercover', {
         eliminated: false,
       })
 
-      this.fillDistributionWithSuggestion()
+      this.fillDistribution()
     },
 
-    removePlayer(id) {
+    deletePlayer(id) {
       this.players = this.players.filter((player) => player.id !== id);
-      this.fillDistributionWithSuggestion()
+      this.fillDistribution()
     },
 
     canDecrementDistribution(role) {
@@ -204,26 +182,18 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     incrementDistribution(role) {
-      if (this.canIncrementDistribution()) {
+      if (this.canIncrementDistribution) {
         this.distribution[role]++
       }
     },
 
-    fillDistributionWithSuggestion() {
+    fillDistribution() {
       if (this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS && this.numberOfPlayers <= this.NUMBER_MAX_OF_PLAYERS) {
         this.distribution = {
           civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
           undercover: this.allDistributions[String(this.numberOfPlayers)].undercover,
           white: this.allDistributions[String(this.numberOfPlayers)].white
         }
-      }
-    },
-
-    checkDistributionNotCoherent() {
-      if (this.distribution.civilian === 0 || this.distribution.undercover === 0) {
-        notif.notify('Il faut au moins un joueur par rôle', 'error')
-        console.error('At least one player per role is required')
-        return true
       }
     },
 
@@ -251,10 +221,8 @@ export const useUndercoverStore = defineStore('undercover', {
       // Assignate the words to the roles
     },
 
-    checkDistributionNumbersAreWrong() {
+    distributionMatchPlayersNumber() {
       if (this.distribution.civilian + this.distribution.undercover + this.distribution.white !== this.numberOfPlayers) {
-        notif.notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
-        console.error('Number of roles does not match the number of players')
         return true
       }
 
@@ -273,27 +241,51 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     startGame() {
-      const t1 = this.numberOfPlayersReached()
-      const t2 = this.checkDistributionNumbersAreWrong()
-      const t3 = this.checkDistributionNotCoherent()
-
-      if (!t1 && !t2 && !t3) {
-        this.resetGame()
-        this.isGameRunning = true
-
-        router.push({ path: '/game' })
-        this.setRolesFromDistribution()
-        this.assignateWords()
+      if (this.numberOfPlayers < this.NUMBER_MIN_OF_PLAYERS) {
+        notif.notify('Il faut au moins 3 joueurs pour commencer une partie', 'error')
+        console.error('Not enough players to start the game')
+        return false
       }
+
+      if (this.numberOfPlayers > this.NUMBER_MAX_OF_PLAYERS) {
+        notif.notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
+        console.error('Too many players to start the game')
+        return false
+      }
+
+      if (this.distributionMatchPlayersNumber()) {
+        notif.notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
+        console.error('Number of roles does not match the number of players')
+        return false
+      }
+
+      if (this.distribution.civilian < this.getRole('civilian')?.numberMinPlayerRequired) {
+        notif.notify('Il faut au moins un civil pour commencer une partie', 'error')
+        return false
+      }
+
+      console.log(this.distribution.undercover)
+      console.log(this.getRole('undercover')?.numberMinPlayerRequired)
+      if (this.distribution.undercover < this.getRole('undercover')?.numberMinPlayerRequired) {
+        notif.notify('Il faut au moins un undercover pour commencer une partie', 'error')
+        return false
+      }
+
+      this.resetGame()
+      this.isGameRunning = true
+
+      router.push({ name: 'game' })
+      this.setRolesFromDistribution()
+      this.assignateWords()
     },
 
-    pickRandomWordDuo() {
+    getRandomAllWords() {
       const randomIndex = Math.floor(Math.random() * this.allWords.length)
       return this.allWords[randomIndex]
     },
 
     assignateWords() {
-      const words = this.pickRandomWordDuo()
+      const words = this.getRandomAllWords()
       if (Math.random() > 0.5) {
         this.undercoversWord = words[0]
         this.civilianWord = words[1]
@@ -306,13 +298,13 @@ export const useUndercoverStore = defineStore('undercover', {
     printGameState() {
       console.log('='.repeat(40))
       console.log('Game state:')
-      console.log('  - distribution:', this.distribution)
-      console.log('  - players:', this.players)
-      console.log('  - currentPlayer:', this.currentPlayer)
-      console.log('  - currentRound:', this.currentRound)
-      console.log('  - isGameRunning:', this.isGameRunning)
-      console.log('  - undercoversWord:', this.undercoversWord)
-      console.log('  - civilianWord:', this.civilianWord)
+      console.log('distribution:', this.distribution)
+      console.log('players:', this.players)
+      console.log('currentPlayer:', this.currentPlayer)
+      console.log('currentRound:', this.currentRound)
+      console.log('isGameRunning:', this.isGameRunning)
+      console.log('undercoversWord:', this.undercoversWord)
+      console.log('civilianWord:', this.civilianWord)
       console.log('='.repeat(40))
     }
   },
@@ -336,6 +328,5 @@ export const useUndercoverStore = defineStore('undercover', {
     isGameOver() {
       return this.numberOfPlayersUndercovers === 0 || this.numberOfPlayersCivilians === 0
     },
-  },
-})
-
+  }
+});

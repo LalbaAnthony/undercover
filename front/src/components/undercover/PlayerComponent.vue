@@ -5,7 +5,7 @@
     <div
       v-if="props.removeButton"
       class="cursor-pointer rounded-full p-0.5 hover:scale-105 transition-transform duration-200"
-      @click="undercoverStore.removePlayer(props.player.id)">
+      @click="undercoverStore.deletePlayer(props.player.id)">
       <TrashIcon class="size-6 text-primary" />
     </div>
   </div>

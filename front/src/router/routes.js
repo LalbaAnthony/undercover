@@ -5,7 +5,7 @@ const routes = [
     name: 'setup',
     component: () => import('../pages/SetupPage.vue'),
     meta: {
-      title: 'Initialisation du jeu',
+      title: 'Initialisation',
       private: false,
     },
   },
