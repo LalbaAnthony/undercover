@@ -1,3 +1,4 @@
+- [ ] Add diabbled button on répartition des roles
 - [ ] Remove all hardcoded rules keys
 - [ ] Chg naming conventions in undercover
 - [ ] Decrease number of verif function

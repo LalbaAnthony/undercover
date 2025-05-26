@@ -2,7 +2,7 @@ import { useToast } from 'vue-toastification';
 
 const toast = useToast();
 
-const MAX_NOTIFICATIONS = 2;
+const MAX_NOTIFICATIONS = 1;
 
 let activeNotifications = 0;
 

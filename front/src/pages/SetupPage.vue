@@ -17,22 +17,22 @@
       </Bento>
 
       <Bento title="Répartition des rôles">
-        <div>
+        <div class="flex flex-col gap-2">
           <div v-for="(role, key) in undercoverStore.allRoles" :key="key"
-            class="flex justify-center items-center gap-4">
+            class="flex justify-between items-center gap-4">
             <button
-              class="cursor-pointer rounded-full bg-primary text-white p-0.5 hover:scale-105 transition-transform duration-200"
+              class="cursor-pointer rounded-lg bg-primary text-white p-1 hover:scale-105 transition-transform duration-200"
               @click="undercoverStore.decrementDistribution(key)">
-              <MinusIcon class="size-5 text-light" />
+              <MinusIcon class="size-6 text-light" />
             </button>
             <div>
               {{ undercoverStore.distribution[key] }}&nbsp;
               <span class="text-xl">{{ role.name }}</span>
             </div>
             <button
-              class="cursor-pointer rounded-full bg-primary text-white p-0.5 hover:scale-105 transition-transform duration-200"
+              class="cursor-pointer rounded-lg bg-primary text-white p-1 hover:scale-105 transition-transform duration-200"
               @click="undercoverStore.incrementDistribution(key)">
-              <PlusIcon class="size-5 text-light" />
+              <PlusIcon class="size-6 text-light" />
             </button>
           </div>
         </div>
