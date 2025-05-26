@@ -179,18 +179,32 @@ export const useUndercoverStore = defineStore('undercover', {
       this.fillDistributionWithSuggestion()
     },
 
-    decrementDistribution(role) {
+    canDecrementDistribution(role) {
       if (this.distribution[role] > 0) {
+        return true
+      }
+
+      return false
+    },
+
+    canIncrementDistribution() {
+      if (this.numberOfPlayers === 0) {
+        return false
+      } else if (this.distribution.civilian + this.distribution.undercover + this.distribution.white + 1 > this.numberOfPlayers) {
+        return false
+      }
+
+      return true
+    },
+
+    decrementDistribution(role) {
+      if (this.canDecrementDistribution(role)) {
         this.distribution[role]--
       }
     },
 
     incrementDistribution(role) {
-      if (this.numberOfPlayers === 0) {
-        notif.notify('Ajoutez d\'abord des joueurs', 'error')
-      } else if (this.distribution.civilian + this.distribution.undercover + this.distribution.white + 1 > this.numberOfPlayers) {
-        notif.notify('Tout le monde a déjà un rôle', 'error')
-      } else {
+      if (this.canIncrementDistribution()) {
         this.distribution[role]++
       }
     },

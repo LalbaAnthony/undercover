@@ -21,7 +21,8 @@
           <div v-for="(role, key) in undercoverStore.allRoles" :key="key"
             class="flex justify-between items-center gap-4">
             <button
-              class="cursor-pointer rounded-lg bg-primary text-white p-1 hover:scale-105 transition-transform duration-200"
+              class="cursor-pointer rounded-lg disabled:cursor-not-allowed disabled:bg-gray bg-primary text-white p-1 hover:scale-105 transition-transform duration-200"
+              :disabled="!undercoverStore.canDecrementDistribution(key)"
               @click="undercoverStore.decrementDistribution(key)">
               <MinusIcon class="size-6 text-light" />
             </button>
@@ -30,7 +31,8 @@
               <span class="text-xl">{{ role.name }}</span>
             </div>
             <button
-              class="cursor-pointer rounded-lg bg-primary text-white p-1 hover:scale-105 transition-transform duration-200"
+              class="cursor-pointer rounded-lg disabled:cursor-not-allowed disabled:bg-gray bg-primary text-white p-1 hover:scale-105 transition-transform duration-200"
+              :disabled="!undercoverStore.canIncrementDistribution(key)"
               @click="undercoverStore.incrementDistribution(key)">
               <PlusIcon class="size-6 text-light" />
             </button>
