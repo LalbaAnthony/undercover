@@ -7,7 +7,7 @@
       <ChevronLeftIcon class="size-8" />
     </button>
     <h1 class="text-center text-4xl my-4">{{ VITE_APP_NAME }}</h1>
-    <div>&nbsp;</div>
+    <div class="size-8 p-2">&nbsp;</div>
   </header>
 </template>
 

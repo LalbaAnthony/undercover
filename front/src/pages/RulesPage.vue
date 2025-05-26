@@ -7,7 +7,7 @@
       </div>
       <p class="text-sm">{{ role.description }}</p>
       <div class="flex flex-row flex-wrap gap-2 my-4">
-        <h4 class="text-xl bg-primary rounded-xl px-1 py-0.5">Objectif ? </h4>
+        <h4 class="text-xl bg-primary rounded-xl px-2 py-0.5">Objectif ? </h4>
         <h4 class="text-xl">{{ role.goal }}</h4>
       </div>
     </Bento>
