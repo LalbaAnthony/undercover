@@ -47,7 +47,7 @@
           class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 hover:bg-light-dark"
           @click="resetAll()">Réinitialiser</button>
         <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 bg-primary"
-          @click="startGame()">Commencer</button>
+          @click="undercoverStore.startGame()">Jouer</button>
       </div>
     </Bento>
   </div>
@@ -77,10 +77,6 @@ function resetAll() {
     undercoverStore.resetGame()
     undercoverStore.initSetup()
   }
-}
-
-function startGame() {
-  undercoverStore.startGame()
 }
 
 onMounted(() => {
