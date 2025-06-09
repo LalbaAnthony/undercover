@@ -1,4 +1,3 @@
-- [ ] Ranger ordre fonction dans store undercover.js
 - [ ] Remove all hardcoded roles keys
 - [ ] Make users dragable so it changes their order
 - [ ] Refaire inté avec bento boxes et plus d'affordance

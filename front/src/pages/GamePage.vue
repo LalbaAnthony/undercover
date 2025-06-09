@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="custom-grid">
-      <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :displayRole="true" />
+      <Player v-for="player in undercoverStore.players" :key="player.id" :player="player"
+        :seeButton="true" />
     </div>
   </div>
 </template>

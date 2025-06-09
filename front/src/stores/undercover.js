@@ -4,9 +4,8 @@ import { ucfirst } from '@/composables/helpers.js'
 import router from '@/router'
 
 export const useUndercoverStore = defineStore('undercover', {
+  persist: true,
   state: () => ({
-    persist: true,
-
     // * Constants
     NUMBER_MIN_OF_PLAYERS: 3,
     NUMBER_MAX_OF_PLAYERS: 20,
@@ -24,8 +23,8 @@ export const useUndercoverStore = defineStore('undercover', {
     isGameRunning: false,
     undercoversWord: '',
     civilianWord: '',
+    mrWhiteGuess: '',
   }),
-
   actions: {
     async fetchAllWords() {
       if (this.allWords.length > 0) return
@@ -147,6 +146,7 @@ export const useUndercoverStore = defineStore('undercover', {
         name,
         role: null,
         eliminated: false,
+        haveSeenWord: false,
       })
 
       this.fillDistribution()
@@ -264,8 +264,6 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
-      console.log(this.distribution.undercover)
-      console.log(this.getRole('undercover')?.numberMinPlayerRequired)
       if (this.distribution.undercover < this.getRole('undercover')?.numberMinPlayerRequired) {
         notif.notify('Il faut au moins un undercover pour commencer une partie', 'error')
         return false
@@ -326,7 +324,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     isGameOver() {
-      return this.numberOfPlayersUndercovers === 0 || this.numberOfPlayersCivilians === 0
+      return this.numberOfPlayersUndercovers === 0 || this.numberOfPlayersCivilians === 0 || this.mrWhiteGuess === this.civilianWord
     },
   }
 });
