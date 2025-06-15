@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="md:grid md:grid-cols-2 md:gap-6">
-      <Bento :title="`Joueurs ${undercoverStore.numberOfPlayers ? `(${undercoverStore.numberOfPlayers})` : ''}`">
+      <Bento :title="undercoverStore.numberOfPlayers ? `${undercoverStore.numberOfPlayers} joueur${undercoverStore.numberOfPlayers > 1 ? 's' : ''}` : 'Joueurs'">
         <div class="my-4 custom-grid">
           <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :removeButton="true" />
         </div>
