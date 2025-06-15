@@ -10,7 +10,9 @@
     <button v-if="undercoverStore.DEBUG" class="rounded-full p-2 bg-primary" @click="undercoverStore.printGameState()">
       <BugAntIcon class="size-8" />
     </button>
-    <div v-else class="size-8 p-2" @click="incrementCounter()">&nbsp;</div>
+    <button v-else class="rounded-full p-2 bg-dark" @click="incrementDebugCounter()">
+      <BugAntIcon class="size-8 text-dark" />
+    </button>
   </header>
 </template>
 
@@ -28,15 +30,15 @@ const undercoverStore = useUndercoverStore()
 const route = useRoute()
 const router = useRouter()
 
-const count = ref(0)
-const COUNT_GOAL = 5
+const debugCount = ref(0)
+const DEBUG_COUNT_GOAL = 5
 
-function incrementCounter() {
-  count.value++
-  if (count.value === COUNT_GOAL) {
+function incrementDebugCounter() {
+  debugCount.value++
+  if (debugCount.value === DEBUG_COUNT_GOAL) {
     alert('Debug mode toggled')
     undercoverStore.DEBUG = !undercoverStore.DEBUG
-    count.value = 0
+    debugCount.value = 0
   }
 }
 
