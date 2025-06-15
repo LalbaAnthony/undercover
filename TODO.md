@@ -1,5 +1,4 @@
-- [ ] tAPPER HUIT FOIS A  l'endroit du bouton debug pour rentrer en mode debug
-
+- [ ] Bug: cannot click outside panel to close it
 - [ ] Implement round and round increment
 - [ ] Add a password to the player creation
 - [ ] Remove all hardcoded roles keys

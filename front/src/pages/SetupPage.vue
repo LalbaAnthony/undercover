@@ -3,7 +3,7 @@
     <div class="md:grid md:grid-cols-2 md:gap-6">
       <Bento :title="undercoverStore.numberOfPlayers ? `${undercoverStore.numberOfPlayers} joueur${undercoverStore.numberOfPlayers > 1 ? 's' : ''}` : 'Joueurs'">
         <div class="my-4 custom-grid">
-          <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :removeButton="true" />
+          <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :deleteButton="true" />
         </div>
 
         <div class="flex justify-between items-center gap-2 p-2 border-b-2 border-dark-gray">

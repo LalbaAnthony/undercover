@@ -4,7 +4,7 @@
       <TransitionChild @click="emit('hide', true)" as="template" enter="transition ease-in-out duration-300"
         enter-from="opacity-0" enter-to="opacity-100" leave="transition ease-in-out duration-300"
         leave-from="opacity-100" leave-to="opacity-0">
-        <div class="fixed inset-0 bg-dark bg-opacity-0 blur-xs transition-opacity"></div>
+        <div class="fixed inset-0 bg-dark bg-opacity-90 blur-xs transition-opacity"></div>
       </TransitionChild>
       <TransitionChild as="template" enter="transition ease-in-out duration-300 transform" enter-from="translate-y-full"
         enter-to="translate-y-0" leave="transition ease-in-out duration-300 transform" leave-from="translate-y-0"

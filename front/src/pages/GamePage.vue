@@ -2,7 +2,7 @@
   <div>
     <Bento>
       <div class="custom-grid">
-        <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :seeButton="true" />
+        <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :seeButton="true" :eliminateButton="true" />
       </div>
     </Bento>
     <Actions :actions="[

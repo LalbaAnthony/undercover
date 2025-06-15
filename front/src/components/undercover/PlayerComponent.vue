@@ -7,16 +7,21 @@
         {{ undercoverStore.getRole(props.player.role).name }}
       </div>
       <div class="flex items-center justify-end gap-2">
-        <div v-if="props.seeButton"
-          class="cursor-pointer rounded-full p-0.5 hover:scale-105 transition-transform duration-200"
+        <button v-if="props.seeButton"
+          class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200"
           @click="toggleShowInfo()">
           <EyeIcon class="size-6 text-primary" />
-        </div>
-        <div v-if="props.removeButton"
-          class="cursor-pointer rounded-full p-0.5 hover:scale-105 transition-transform duration-200"
+        </button>
+        <button v-if="props.eliminateButton"
+          class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200 bg-primary"
+          @click="console.log(props.player.id)">
+          <UserMinusIcon class="size-6 text-light" />
+        </button>
+        <button v-if="props.deleteButton"
+          class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200"
           @click="undercoverStore.deletePlayer(props.player.id)">
           <TrashIcon class="size-6 text-primary" />
-        </div>
+        </button>
       </div>
     </div>
 
@@ -33,6 +38,7 @@ import Word from '@/components/undercover/WordComponent.vue'
 import Role from '@/components/undercover/RoleComponent.vue'
 import { EyeIcon } from '@heroicons/vue/24/outline'
 import { TrashIcon } from '@heroicons/vue/24/outline'
+import { UserMinusIcon } from '@heroicons/vue/24/outline'
 import { useUndercoverStore } from '@/stores/undercover'
 import { ref } from 'vue'
 import Panel from '@/components/PanelComponent.vue'
@@ -54,7 +60,12 @@ const props = defineProps({
     default: false,
     required: false,
   },
-  removeButton: {
+  deleteButton: {
+    type: Boolean,
+    default: false,
+    required: false,
+  },
+  eliminateButton: {
     type: Boolean,
     default: false,
     required: false,

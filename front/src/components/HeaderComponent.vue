@@ -36,6 +36,7 @@ function incrementCounter() {
   if (count.value === COUNT_GOAL) {
     alert('Debug mode toggled')
     undercoverStore.DEBUG = !undercoverStore.DEBUG
+    count.value = 0
   }
 }
 
