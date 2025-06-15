@@ -22,7 +22,6 @@
 
     <!-- Role popup -->
     <Panel v-if="showInfo" :show="showInfo" @hide="showInfo = false">
-      <span class="text-sm text-dark">{{ props.player.id }}</span>
       <Word :word="undercoverStore.getPlayerWord(props.player.id)" />
       <Role :role="undercoverStore.getRole(props.player.role)" />
     </Panel>
@@ -79,11 +78,11 @@ function toggleShowInfo() {
         showInfo.value = true
         return true
       } else {
-        alert('Wrong password!')
+        alert('Mot de passe incorrect.')
         return false
       }
     }
-    if (confirm(`Are you really ${props.player.name} ? You will see it's role.`)) {
+    if (confirm(`Est-ce que tu veux vraiment voir le rôle de ${props.player.name} ?`)) {
       showInfo.value = true
       return true
     }
