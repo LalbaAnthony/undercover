@@ -1,3 +1,7 @@
+- [ ] tAPPER HUIT FOIS A  l'endroit du bouton debug pour rentrer en mode debug
+
+- [ ] Implement round and round increment
+- [ ] Add a password to the player creation
 - [ ] Remove all hardcoded roles keys
 - [ ] Make users dragable so it changes their order
 - [ ] Refaire inté avec bento boxes et plus d'affordance

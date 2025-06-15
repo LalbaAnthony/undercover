@@ -7,7 +7,10 @@
       <ChevronLeftIcon class="size-8" />
     </button>
     <h1 class="text-center text-4xl my-4">{{ VITE_APP_NAME }}</h1>
-    <div class="size-8 p-2">&nbsp;</div>
+    <button v-if="undercoverStore.DEBUG" class="rounded-full p-2 bg-primary" @click="undercoverStore.printGameState()">
+      <BugAntIcon class="size-8" />
+    </button>
+    <div v-else class="size-8 p-2" @click="incrementCounter()">&nbsp;</div>
   </header>
 </template>
 
@@ -15,16 +18,33 @@
 import { VITE_APP_NAME } from '@/config';
 import { ChevronLeftIcon } from '@heroicons/vue/24/outline'
 import { NewspaperIcon } from '@heroicons/vue/24/outline'
-import { useRoute } from 'vue-router'
+import { BugAntIcon } from '@heroicons/vue/24/outline'
+import { useUndercoverStore } from '@/stores/undercover'
+import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue';
+
+const undercoverStore = useUndercoverStore()
 
 const route = useRoute()
+const router = useRouter()
+
+const count = ref(0)
+const COUNT_GOAL = 5
+
+function incrementCounter() {
+  count.value++
+  if (count.value === COUNT_GOAL) {
+    alert('Debug mode toggled')
+    undercoverStore.DEBUG = !undercoverStore.DEBUG
+  }
+}
 
 function goBack() {
   window.history.back()
 }
 
 function goToRules() {
-  window.location.href = '/rules'
+  router.push({ name: 'rules' })
 }
 
 </script>

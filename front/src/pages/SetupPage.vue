@@ -7,7 +7,7 @@
         </div>
 
         <div class="flex justify-between items-center gap-2 p-2 border-b-2 border-dark-gray">
-          <input class="py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
+          <input class="w-full py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
             v-model="name" @keyup.enter="addPlayer()">
           <button class="cursor-pointer rounded-full p-0.5 hover:scale-105 transition-transform duration-200"
             @click="addPlayer()">
@@ -21,7 +21,7 @@
           <div v-for="(role, key) in undercoverStore.allRoles" :key="key"
             class="flex justify-between items-center gap-4">
             <button
-              class="cursor-pointer rounded-lg disabled:cursor-not-allowed disabled:bg-gray bg-primary text-white p-1 hover:scale-105 transition-all duration-200"
+              class="cursor-pointer rounded-lg disabled:cursor-not-allowed disabled:bg-dark-gray bg-primary text-white p-1 hover:scale-105 transition-all duration-200"
               :disabled="!undercoverStore.canDecrementDistribution(key)"
               @click="undercoverStore.decrementDistribution(key)">
               <MinusIcon class="size-6 text-light" />
@@ -31,7 +31,7 @@
               <span class="text-xl">{{ role.name }}</span>
             </div>
             <button
-              class="cursor-pointer rounded-lg disabled:cursor-not-allowed disabled:bg-gray bg-primary text-white p-1 hover:scale-105 transition-all duration-200"
+              class="cursor-pointer rounded-lg disabled:cursor-not-allowed disabled:bg-dark-gray bg-primary text-white p-1 hover:scale-105 transition-all duration-200"
               :disabled="!undercoverStore.canIncrementDistribution(key)"
               @click="undercoverStore.incrementDistribution(key)">
               <PlusIcon class="size-6 text-light" />
@@ -41,21 +41,17 @@
       </Bento>
     </div>
 
-    <Bento>
-      <div class="flex justify-center items-center gap-4">
-        <button
-          class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 hover:bg-light-dark"
-          @click="resetAll()">Réinitialiser</button>
-        <button class="text-light py-1.5 px-3 rounded-lg cursor-pointer transition-colors	duration-300 bg-primary"
-          @click="undercoverStore.startGame()">Jouer</button>
-      </div>
-    </Bento>
+    <Actions :actions="[
+      { name: 'Réinitialiser', type: 'secondary', callback: () => resetAll() },
+      { name: 'Jouer', type: 'primary', callback: () => undercoverStore.startGame() }
+    ]" />
   </div>
 </template>
 
 <script setup>
 import Player from '@/components/undercover/PlayerComponent.vue'
 import Bento from '@/components/BentoComponent.vue'
+import Actions from '@/components/ActionsComponent.vue'
 import { MinusIcon } from '@heroicons/vue/24/solid'
 import { PlusIcon } from '@heroicons/vue/24/solid'
 import { onMounted, ref } from 'vue'
@@ -72,10 +68,8 @@ function addPlayer() {
 }
 
 function resetAll() {
-  if (confirm('Es-tu sûûûr de vouloir réinitialiser la partie ?')) {
-    undercoverStore.clearPlayers()
-    undercoverStore.resetGame()
-    undercoverStore.initSetup()
+  if (confirm('Es-tu sûr de vouloir réinitialiser la partie ?')) {
+    undercoverStore.resetAll()
   }
 }
 

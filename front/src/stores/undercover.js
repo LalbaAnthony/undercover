@@ -1,14 +1,18 @@
 import { defineStore } from 'pinia'
 import { notif } from '@/composables/notif.js'
 import { ucfirst } from '@/composables/helpers.js'
+import { VITE_DEBUG } from '@/config';
 import router from '@/router'
 
 export const useUndercoverStore = defineStore('undercover', {
   persist: true,
   state: () => ({
     // * Constants
-    NUMBER_MIN_OF_PLAYERS: 3,
-    NUMBER_MAX_OF_PLAYERS: 20,
+    DEBUG: VITE_DEBUG || VITE_DEBUG == 'true' || VITE_DEBUG === '1' || false,
+    NUMBER_ROUNDS_MIN: 1,
+    NUMBER_ROUNDS_MAX: 10,
+    NUMBER_PLAYERS_MIN: 3,
+    NUMBER_PLAYERS_MAX: 20,
 
     // * Game data
     allWords: [],
@@ -97,9 +101,15 @@ export const useUndercoverStore = defineStore('undercover', {
       this.clearPalyersRoles()
     },
 
+    deleteAll() {
+      localStorage.clear()
+      sessionStorage.clear()
+    },
+
     resetAll() {
-      this.resetGame()
       this.clearPlayers()
+      this.resetGame()
+      this.initSetup()
     },
 
     endGame() {
@@ -114,8 +124,13 @@ export const useUndercoverStore = defineStore('undercover', {
       this.fillDistribution()
     },
 
-    addPlayer(name) {
+    generateId() {
+      return parseInt(new Date().getTime()) // Unsecure as hell, but enough for this game
+    },
+
+    addPlayer(name, password = '') {
       name = ucfirst(name.trim()) || ''
+      password = (password?.length > 0) ? password.trim() : null
 
       if (name.length === 0) {
         notif.notify('Le nom du joueur ne peut pas être vide', 'error')
@@ -129,24 +144,24 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
+      if (password && password.length > 20) {
+        notif.notify('La t\'abuse sur la longueur du mot de passe', 'error')
+        console.error('The player password cannot be longer than 20 characters')
+        return false
+      }
+
       if (this.nameExistInPlayers(name)) {
         notif.notify('Ce nom de joueur est déjà pris', 'error')
         console.error('Name already exists')
         return false
       }
 
-      if (this.numberOfPlayers > this.NUMBER_MAX_OF_PLAYERS) {
-        notif.notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
-        console.error('Too many players')
-        return false
-      }
-
       this.players.push({
-        id: new Date().getTime(),
+        id: this.generateId(),
         name,
+        password,
         role: null,
         eliminated: false,
-        haveSeenWord: false,
       })
 
       this.fillDistribution()
@@ -155,6 +170,36 @@ export const useUndercoverStore = defineStore('undercover', {
     deletePlayer(id) {
       this.players = this.players.filter((player) => player.id !== id);
       this.fillDistribution()
+    },
+
+    getPlayer(id) {
+      return this.players.find((player) => player.id === id)
+    },
+
+    getPlayerWord(id) {
+      const role = this.getPlayer(id)?.role || ''
+      let word = ''
+
+      if (role === 'civilian') {
+        word = this.civilianWord
+      } else if (role === 'undercover') {
+        word = this.undercoversWord
+      } else if (role === 'white') {
+        // Mr White does not have a word
+      }
+
+      return ucfirst(word)
+    },
+
+    incrementRound() {
+      if (this.currentRound >= this.NUMBER_ROUNDS_MAX) {
+        console.error('Maximum number of rounds reached')
+        notif.notify('Nombre maximum de tours atteint', 'error')
+        return false
+      }
+
+      this.currentRound++
+      return true
     },
 
     canDecrementDistribution(role) {
@@ -168,7 +213,7 @@ export const useUndercoverStore = defineStore('undercover', {
     canIncrementDistribution() {
       if (this.numberOfPlayers === 0) {
         return false
-      } else if (this.distribution.civilian + this.distribution.undercover + this.distribution.white + 1 > this.numberOfPlayers) {
+      } else if (this.numberDistribution + 1 > this.numberOfPlayers) {
         return false
       }
 
@@ -188,11 +233,17 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     fillDistribution() {
-      if (this.numberOfPlayers >= this.NUMBER_MIN_OF_PLAYERS && this.numberOfPlayers <= this.NUMBER_MAX_OF_PLAYERS) {
+      if (this.numberOfPlayers >= this.NUMBER_PLAYERS_MIN && this.numberOfPlayers <= this.NUMBER_PLAYERS_MAX) {
         this.distribution = {
           civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
           undercover: this.allDistributions[String(this.numberOfPlayers)].undercover,
           white: this.allDistributions[String(this.numberOfPlayers)].white
+        }
+      } else {
+        this.distribution = {
+          civilian: 0,
+          undercover: 0,
+          white: 0
         }
       }
     },
@@ -222,7 +273,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     distributionMatchPlayersNumber() {
-      if (this.distribution.civilian + this.distribution.undercover + this.distribution.white !== this.numberOfPlayers) {
+      if (this.numberDistribution !== this.numberOfPlayers) {
         return true
       }
 
@@ -230,7 +281,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     async assignRoles() {
-      if (this.distribution.civilian + this.distribution.undercover + this.distribution.white !== this.numberOfPlayers) {
+      if (this.numberDistribution !== this.numberOfPlayers) {
         console.error('Number of roles does not match the number of players')
         return false
       }
@@ -241,13 +292,13 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     startGame() {
-      if (this.numberOfPlayers < this.NUMBER_MIN_OF_PLAYERS) {
+      if (this.numberOfPlayers < this.NUMBER_PLAYERS_MIN) {
         notif.notify('Il faut au moins 3 joueurs pour commencer une partie', 'error')
         console.error('Not enough players to start the game')
         return false
       }
 
-      if (this.numberOfPlayers > this.NUMBER_MAX_OF_PLAYERS) {
+      if (this.numberOfPlayers > this.NUMBER_PLAYERS_MAX) {
         notif.notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
         console.error('Too many players to start the game')
         return false
@@ -295,20 +346,46 @@ export const useUndercoverStore = defineStore('undercover', {
 
     printGameState() {
       console.log('='.repeat(40))
-      console.log('Game state:')
-      console.log('distribution:', this.distribution)
-      console.log('players:', this.players)
-      console.log('currentPlayer:', this.currentPlayer)
-      console.log('currentRound:', this.currentRound)
-      console.log('isGameRunning:', this.isGameRunning)
-      console.log('undercoversWord:', this.undercoversWord)
-      console.log('civilianWord:', this.civilianWord)
+      console.log('DEBUG', this.DEBUG)
+      console.log('NUMBER_ROUNDS_MIN', this.NUMBER_ROUNDS_MIN)
+      console.log('NUMBER_ROUNDS_MAX', this.NUMBER_ROUNDS_MAX)
+      console.log('NUMBER_PLAYERS_MIN', this.NUMBER_PLAYERS_MIN)
+      console.log('NUMBER_PLAYERS_MAX', this.NUMBER_PLAYERS_MAX)
+      console.log('-'.repeat(40))
+      console.log('undercoversWord', this.undercoversWord)
+      console.log('civilianWord', this.civilianWord)
+      console.log('-'.repeat(40))
+      console.table(this.players)
+      console.log('-'.repeat(40))
+      console.log('distribution', this.distribution)
+      console.log('currentPlayer', this.currentPlayer)
+      console.log('currentRound', this.currentRound)
+      console.log('isGameRunning', this.isGameRunning)
       console.log('='.repeat(40))
     }
   },
   getters: {
     numberOfPlayers() {
       return this.players.length
+    },
+
+    numberOfPlayersEliminated() {
+      return this.players.filter((player) => player.eliminated).length
+    },
+
+    numberOfPlayersRemaining() {
+      return this.players.filter((player) => !player.eliminated).length
+    },
+
+    numberDistribution() {
+      let total = 0;
+      for (const role in this.distribution) {
+        if (Object.prototype.hasOwnProperty.call(this.distribution, role)) {
+          total += this.distribution[role];
+        }
+      }
+
+      return total;
     },
 
     numberOfPlayersCivilians() {
@@ -319,12 +396,17 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.players.filter((player) => player.role === 'undercover').length
     },
 
-    numberOfPlayerswhite() {
+    numberOfPlayersMrWhite() {
       return this.players.filter((player) => player.role === 'white').length
     },
 
     isGameOver() {
-      return this.numberOfPlayersUndercovers === 0 || this.numberOfPlayersCivilians === 0 || this.mrWhiteGuess === this.civilianWord
+      const hasMrWhiteWon = (this.numberOfPlayersMrWhite > 0) && (this.mrWhiteGuess === this.civilianWord)
+      const hasUndercoverWon = (this.numberOfPlayersCivilians === 0)
+      const hasCivilianWon = (this.numberOfPlayersUndercovers === 0)
+      const roundOver = (this.currentRound > this.NUMBER_ROUNDS_MAX)
+
+      return hasMrWhiteWon || hasUndercoverWon || hasCivilianWon || roundOver;
     },
   }
 });
