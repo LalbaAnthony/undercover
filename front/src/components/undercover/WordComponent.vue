@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row gap-2 items-center">
+  <div class="flex flex-row gap-4 items-center">
     <ChatBubbleLeftEllipsisIcon class="text-primary size-7" />
     <h4 class="text-3xl my-4">{{ props.word }}</h4>
   </div>

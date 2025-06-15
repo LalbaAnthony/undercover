@@ -6,7 +6,7 @@
     <button v-else class="rounded-full p-2 hover:bg-light-dark" @click="goBack">
       <ChevronLeftIcon class="size-8" />
     </button>
-    <h1 class="text-center text-4xl my-4">{{ VITE_APP_NAME }}</h1>
+    <h1 class="text-center text-4xl my-4">{{ route?.meta?.title || VITE_APP_NAME }}</h1>
     <button v-if="undercoverStore.DEBUG" class="rounded-full p-2 bg-primary" @click="undercoverStore.printGameState()">
       <BugAntIcon class="size-8" />
     </button>

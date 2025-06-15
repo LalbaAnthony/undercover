@@ -16,8 +16,14 @@ router.beforeEach((to, from, next) => {
     undercoverStore.resetGame()
   }
 
-  if (to.name === 'game' && undercoverStore.isGameRunning !== true) {
-    next({path: '/'})
+  if (to.name === 'game' && !undercoverStore.isGameRunning) {
+    next({ name: 'setup' })
+    return;
+  }
+
+  if (to.name === 'setup' && undercoverStore.isGameRunning) {
+    next({ name: 'game' })
+    return;
   }
 
   document.title = VITE_APP_NAME;

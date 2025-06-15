@@ -22,7 +22,7 @@
 
     <!-- Role popup -->
     <Panel v-if="showInfo" :show="showInfo" @hide="showInfo = false">
-      <Word :word="undercoverStore.getPlayerWord(props.player.id)" />
+      <Word v-if="props.player.role !== 'white'" :word="undercoverStore?.getPlayerWord(props.player.id)" />
       <Role :role="undercoverStore.getRole(props.player.role)" />
     </Panel>
   </div>
