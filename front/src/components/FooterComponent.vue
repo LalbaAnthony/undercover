@@ -4,10 +4,12 @@
       Version {{ VITE_APP_VERSION }}</p>
     <div class="text-center text-light-gray text-sm p-2">
       <button class="text-primary hover:underline" @click="deleteAll">Supprimer toutes les données</button>
-      <span> | <a :href="VITE_GIT_REPO + '/issues'" target="_blank" class="text-primary hover:underline"
-          @click="undercoverStore.printGameState()">Signaler un bug</a></span>
-      <span v-if="undercoverStore.DEBUG"> | <button class="text-primary hover:underline"
-          @click="undercoverStore.printGameState()">Debug</button></span>
+      <span class="text-gray">&nbsp;|&nbsp;</span>
+      <a :href="VITE_GIT_REPO + '/issues'" target="_blank" class="text-primary hover:underline"
+        @click="undercoverStore.printGameState()">Signaler un bug</a>
+      <span v-if="undercoverStore.DEBUG" class="text-gray">&nbsp;|&nbsp;</span>
+      <button v-if="undercoverStore.DEBUG" class="text-primary hover:underline"
+        @click="undercoverStore.printGameState()">Debug</button>
     </div>
   </footer>
 </template>

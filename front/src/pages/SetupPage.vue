@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="md:grid md:grid-cols-2 md:gap-6">
-      <Bento :title="undercoverStore.numberOfPlayers ? `${undercoverStore.numberOfPlayers} joueur${undercoverStore.numberOfPlayers > 1 ? 's' : ''}` : 'Joueurs'">
+      <Bento
+        :title="undercoverStore.numberOfPlayers ? `${undercoverStore.numberOfPlayers} joueur${undercoverStore.numberOfPlayers > 1 ? 's' : ''}` : 'Joueurs'">
         <div class="my-4 custom-grid">
           <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :deleteButton="true" />
         </div>
@@ -9,7 +10,7 @@
         <div class="flex justify-between items-center gap-2 p-2 border-b-2 border-dark-gray">
           <input class="w-full py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
             v-model="name" @keyup.enter="addPlayer()">
-          <button class="cursor-pointer rounded-full p-0.5 hover:scale-105 transition-transform duration-200"
+          <button class="cursor-pointer rounded-full p-0.5 pr-3 hover:scale-105 transition-transform duration-200"
             @click="addPlayer()">
             <PlusIcon class="size-6 text-primary" />
           </button>
@@ -40,6 +41,10 @@
         </div>
       </Bento>
     </div>
+
+    <Bento title="Paramètres">
+      WIP
+    </Bento>
 
     <Actions :actions="[
       { name: 'Réinitialiser', type: 'secondary', callback: () => resetAll() },
