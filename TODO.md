@@ -1,4 +1,3 @@
-- [ ] Use grid-template-areas on setup page
 - [ ] Add params where can config srating round with a random player, ...
 - [ ] Bug: cannot click outside panel to close it
 - [ ] Implement round and round increment, (mrWhite cannot start a new round, ...)

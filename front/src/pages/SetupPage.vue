@@ -1,52 +1,50 @@
 <template>
-  <div>
-    <div class="md:grid md:grid-cols-2 md:gap-6">
-      <Bento
-        :title="undercoverStore.numberOfPlayers ? `${undercoverStore.numberOfPlayers} joueur${undercoverStore.numberOfPlayers > 1 ? 's' : ''}` : 'Joueurs'">
-        <div class="my-4 custom-grid">
-          <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :deleteButton="true" />
-        </div>
+  <div class="setup">
+    <Bento
+      :title="undercoverStore.numberOfPlayers ? `${undercoverStore.numberOfPlayers} joueur${undercoverStore.numberOfPlayers > 1 ? 's' : ''}` : 'Joueurs'"
+      class="a">
+      <div class="my-4 custom-grid">
+        <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :deleteButton="true" />
+      </div>
 
-        <div class="flex justify-between items-center gap-2 p-2 border-b-2 border-dark-gray">
-          <input class="w-full py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
-            v-model="name" @keyup.enter="addPlayer()">
-          <button class="cursor-pointer rounded-full p-0.5 pr-3 hover:scale-105 transition-transform duration-200"
-            @click="addPlayer()">
-            <PlusIcon class="size-6 text-primary" />
+      <div class="flex justify-between items-center gap-2 p-2 border-b-2 border-dark-gray">
+        <input class="w-full py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
+          v-model="name" @keyup.enter="addPlayer()">
+        <button class="cursor-pointer rounded-full p-0.5 pr-3 hover:scale-105 transition-transform duration-200"
+          @click="addPlayer()">
+          <PlusIcon class="size-6 text-primary" />
+        </button>
+      </div>
+    </Bento>
+
+    <Bento title="Répartition des rôles" class="b">
+      <div class="flex flex-col gap-2">
+        <div v-for="(role, key) in undercoverStore.allRoles" :key="key" class="flex justify-between items-center gap-4">
+          <button
+            class="cursor-pointer rounded-lg disabled:cursor-not-allowed disabled:bg-dark-gray bg-primary text-white p-1 hover:scale-105 transition-all duration-200"
+            :disabled="!undercoverStore.canDecrementDistribution(key)"
+            @click="undercoverStore.decrementDistribution(key)">
+            <MinusIcon class="size-6 text-light" />
+          </button>
+          <div>
+            {{ undercoverStore.distribution[key] }}&nbsp;
+            <span class="text-xl">{{ role.name }}</span>
+          </div>
+          <button
+            class="cursor-pointer rounded-lg disabled:cursor-not-allowed disabled:bg-dark-gray bg-primary text-white p-1 hover:scale-105 transition-all duration-200"
+            :disabled="!undercoverStore.canIncrementDistribution(key)"
+            @click="undercoverStore.incrementDistribution(key)">
+            <PlusIcon class="size-6 text-light" />
           </button>
         </div>
-      </Bento>
+      </div>
+    </Bento>
 
-      <Bento title="Répartition des rôles">
-        <div class="flex flex-col gap-2">
-          <div v-for="(role, key) in undercoverStore.allRoles" :key="key"
-            class="flex justify-between items-center gap-4">
-            <button
-              class="cursor-pointer rounded-lg disabled:cursor-not-allowed disabled:bg-dark-gray bg-primary text-white p-1 hover:scale-105 transition-all duration-200"
-              :disabled="!undercoverStore.canDecrementDistribution(key)"
-              @click="undercoverStore.decrementDistribution(key)">
-              <MinusIcon class="size-6 text-light" />
-            </button>
-            <div>
-              {{ undercoverStore.distribution[key] }}&nbsp;
-              <span class="text-xl">{{ role.name }}</span>
-            </div>
-            <button
-              class="cursor-pointer rounded-lg disabled:cursor-not-allowed disabled:bg-dark-gray bg-primary text-white p-1 hover:scale-105 transition-all duration-200"
-              :disabled="!undercoverStore.canIncrementDistribution(key)"
-              @click="undercoverStore.incrementDistribution(key)">
-              <PlusIcon class="size-6 text-light" />
-            </button>
-          </div>
-        </div>
-      </Bento>
-    </div>
-
-    <Bento title="Paramètres">
+    <Bento title="Paramètres" class="c">
       WIP
     </Bento>
 
-    <Actions :actions="[
+    <Actions class="d" :actions="[
       { name: 'Réinitialiser', type: 'secondary', callback: () => resetAll() },
       { name: 'Jouer', type: 'primary', callback: () => undercoverStore.startGame() }
     ]" />
@@ -84,4 +82,94 @@ onMounted(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.setup {
+  display: grid;
+  grid-template-rows: auto;
+}
+
+.a {
+  grid-area: a;
+}
+
+.b {
+  grid-area: b;
+}
+
+.c {
+  grid-area: c;
+}
+
+.d {
+  grid-area: d;
+}
+
+@media (min-width: 1536px) {
+  .setup {
+    grid-template-areas:
+      "a b"
+      "c c"
+      "d d";
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem 3rem;
+  }
+}
+
+@media (min-width: 1280px) and (max-width: 1535px) {
+  .setup {
+    grid-template-areas:
+      "a b"
+      "c c"
+      "d d";
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 3rem;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .setup {
+    grid-template-areas:
+      "a b"
+      "c c"
+      "d d";
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 3rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .setup {
+    grid-template-areas:
+      "a"
+      "b"
+      "c"
+      "d";
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem 3rem;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .setup {
+    grid-template-areas:
+      "a"
+      "b"
+      "c"
+      "d";
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .setup {
+    grid-template-areas:
+      "a"
+      "b"
+      "c"
+      "d";
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0rem;
+  }
+}
+</style>
