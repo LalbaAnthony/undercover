@@ -2,4 +2,5 @@
 - [ ] Bug: cannot click outside panel to close it
 - [ ] Implement round and round increment, (mrWhite cannot start a new round, ...)
 - [ ] Add a password to the player creation
+- [ ] Make a prepoduction
 - [ ] Make users dragable so it changes their order
