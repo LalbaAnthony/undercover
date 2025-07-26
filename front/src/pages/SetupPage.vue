@@ -4,10 +4,10 @@
       :title="undercoverStore.numberOfPlayers ? `${undercoverStore.numberOfPlayers} joueur${undercoverStore.numberOfPlayers > 1 ? 's' : ''}` : 'Joueurs'"
       class="a">
 
-      <Draggable v-model="undercoverStore.players" :animation="200" :group="{ name: 'players', pull: true, put: true }"
-        class="custom-grid">
+      <Draggable v-model="undercoverStore.players" :animation="200" :itemKey="'id'"
+        :group="{ name: 'players', pull: true, put: true }" class="custom-grid">
         <template #item="{ element }">
-          <Player :player="element" :deleteButton="true" :dragButton="true" />
+          <Player :player="element" :deleteButton="true" :dragButton="true" :key="element.id" />
         </template>
       </Draggable>
 
