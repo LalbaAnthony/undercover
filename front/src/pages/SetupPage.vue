@@ -3,9 +3,13 @@
     <Bento
       :title="undercoverStore.numberOfPlayers ? `${undercoverStore.numberOfPlayers} joueur${undercoverStore.numberOfPlayers > 1 ? 's' : ''}` : 'Joueurs'"
       class="a">
-      <div class="my-4 custom-grid">
-        <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :deleteButton="true" />
-      </div>
+
+      <Draggable v-model="undercoverStore.players" :animation="200" :group="{ name: 'players', pull: true, put: true }"
+        class="custom-grid">
+        <template #item="{ element }">
+          <Player :player="element" :deleteButton="true" :dragBButton="true" />
+        </template>
+      </Draggable>
 
       <div class="flex justify-between items-center gap-2 p-2 border-b-2 border-dark-gray">
         <input class="w-full py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
@@ -55,6 +59,7 @@
 import Player from '@/components/undercover/PlayerComponent.vue'
 import Bento from '@/components/BentoComponent.vue'
 import Actions from '@/components/ActionsComponent.vue'
+import Draggable from 'vuedraggable'
 import { MinusIcon } from '@heroicons/vue/24/solid'
 import { PlusIcon } from '@heroicons/vue/24/solid'
 import { onMounted, ref } from 'vue'
