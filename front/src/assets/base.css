@@ -35,7 +35,7 @@
 }
 
 .Vue-Toastification__toast--info {
-    background-color: var(--dark) !important;
+    background-color: var(--primary) !important;
     color: var(--light) !important;
 }
 
