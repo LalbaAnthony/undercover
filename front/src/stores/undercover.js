@@ -10,7 +10,7 @@ export const useUndercoverStore = defineStore('undercover', {
     // * Constants
     DEBUG: VITE_DEBUG || VITE_DEBUG == 'true' || VITE_DEBUG === '1' || false,
     NUMBER_ROUNDS_MIN: 1,
-    NUMBER_ROUNDS_MAX: 10,
+    NUMBER_ROUNDS_MAX: 999,
     NUMBER_PLAYERS_MIN: 3,
     NUMBER_PLAYERS_MAX: 20,
 
@@ -167,6 +167,16 @@ export const useUndercoverStore = defineStore('undercover', {
       this.fillDistribution()
     },
 
+    eliminatePlayer(id) {
+      const player = this.getPlayer(id)
+      if (!player || player?.eliminated) {
+        console.error('Player does not exist or is already eliminated')
+        return false
+      }
+
+      player.eliminated = true
+    },
+
     deletePlayer(id) {
       this.players = this.players.filter((player) => player.id !== id);
       this.fillDistribution()
@@ -199,7 +209,6 @@ export const useUndercoverStore = defineStore('undercover', {
       }
 
       this.currentRound++
-      return true
     },
 
     canDecrementDistribution(role) {

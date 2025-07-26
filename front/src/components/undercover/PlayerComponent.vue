@@ -1,9 +1,8 @@
 <template>
   <div>
-    <!-- Card -->
     <div class="flex justify-between items-center gap-2 p-4 rounded-2xl border border-2 border-dark-gray">
       <div class="flex items-center gap-4">
-        <EqualsIcon class="size-6 text-gray" />
+        <EqualsIcon v-if="props.dragButton" class="size-6 text-gray" />
         <div class="overflow-hidden">{{ props.player.name }}</div>
         <div v-if="props.displayRole" class="text-gray overflow-hidden">
           {{ undercoverStore.getRole(props.player.role).name }}
@@ -12,12 +11,12 @@
       <div class="flex items-center justify-end gap-2">
         <button v-if="props.seeButton"
           class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200"
-          @click="toggleShowInfo()">
+          @click="enableShowInfo()">
           <EyeIcon class="size-6 text-primary" />
         </button>
-        <button v-if="props.eliminateButton"
-          class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200 bg-primary"
-          @click="console.log(props.player.id)">
+        <button v-if="props.eliminateButton" :disabled="props.player.eliminated"
+          class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200 bg-primary disabled:bg-dark-gray"
+          @click="eliminatePlayer(props.player.id)">
           <UserMinusIcon class="size-6 text-light" />
         </button>
         <button v-if="props.deleteButton"
@@ -28,7 +27,13 @@
       </div>
     </div>
 
-    <!-- Role popup -->
+    <Panel :show="showReveal" @hide="showReveal = false">
+      <div class="flex flex-col gap-4">
+        <h4 class="text-3xl">{{ props.player.name }} était ...</h4>
+        <Role :role="undercoverStore.getRole(props.player.role)"  :displayGoal="false" />
+      </div>
+    </Panel>
+
     <Panel :show="showInfo" @hide="showInfo = false">
       <div class="flex flex-col gap-4">
         <Word v-if="props.player.role !== 'white'" :word="undercoverStore?.getPlayerWord(props.player.id)" />
@@ -83,32 +88,46 @@ const props = defineProps({
   },
 })
 
+const showReveal = ref(false)
 const showInfo = ref(false)
 
-function toggleShowInfo() {
+function enableReveal() {
+  showReveal.value = true
+}
+
+function enableShowInfo() {
   if (showInfo.value) {
     showInfo.value = false
     return true
-  } else {
-    if (undercoverStore.DEBUG) {
+  }
+
+  if (undercoverStore.DEBUG) {
+    showInfo.value = true
+    return true
+  }
+
+  if (Object.prototype.hasOwnProperty.call(props.player, 'password') && props.player.password) {
+    const password = prompt(`Enter the password for ${props.player.name} to see their role:`, '')
+    if (password === props.player.password) {
       showInfo.value = true
       return true
-    }
-    if (Object.prototype.hasOwnProperty.call(props.player, 'password') && props.player.password) {
-      const password = prompt(`Enter the password for ${props.player.name} to see their role:`, '')
-      if (password === props.player.password) {
-        showInfo.value = true
-        return true
-      } else {
-        alert('Mot de passe incorrect.')
-        return false
-      }
-    }
-    if (confirm(`Est-ce que tu veux vraiment voir le rôle de ${props.player.name} ?`)) {
-      showInfo.value = true
-      return true
+    } else {
+      alert('Mot de passe incorrect.')
+      return false
     }
   }
+
+  if (confirm(`Est-ce que tu veux vraiment voir le rôle de ${props.player.name} ?`)) {
+    showInfo.value = true
+    return true
+  }
+}
+
+function eliminatePlayer() {
+  if (confirm(`Es-tu sûr de vouloir éliminer ${props.player.name} ?`)) {
+    undercoverStore.eliminatePlayer(props.player.id)
+  }
+  enableReveal()
 }
 
 </script>

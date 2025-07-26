@@ -7,11 +7,11 @@
       <Draggable v-model="undercoverStore.players" :animation="200" :group="{ name: 'players', pull: true, put: true }"
         class="custom-grid">
         <template #item="{ element }">
-          <Player :player="element" :deleteButton="true" :dragBButton="true" />
+          <Player :player="element" :deleteButton="true" :dragButton="true" />
         </template>
       </Draggable>
 
-      <div class="flex justify-between items-center gap-2 p-2 border-b-2 border-dark-gray">
+      <div class="flex justify-between items-center gap-2 mt-2 p-2 border-b-2 border-dark-gray">
         <input class="w-full py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
           v-model="name" @keyup.enter="addPlayer()">
         <button class="cursor-pointer rounded-full p-0.5 pr-3 hover:scale-105 transition-transform duration-200"

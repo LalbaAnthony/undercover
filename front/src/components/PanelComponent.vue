@@ -14,7 +14,6 @@
             <XMarkIcon class="size-10 text-gray-light cursor-pointer" @click.stop="emit('hide', true)" />
           </div>
 
-          <!-- Content -->
           <div>
             <slot />
           </div>

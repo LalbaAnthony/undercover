@@ -7,7 +7,6 @@
     </Bento>
     <Actions :actions="[
       { name: 'Arrêter la partie', type: 'secondary', callback: endGame },
-      { name: 'Voter', type: 'primary', callback: () => console.log('WIP') }
     ]" />
   </div>
 </template>
