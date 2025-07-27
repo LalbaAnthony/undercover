@@ -1,7 +1,17 @@
-- [ ] Add params where can config srating round with a random player, ...
-- [ ] Chg description des rôles qui sont fausse: undercovers ne connaissent pas les rôles, ...
-- [ ] Bug: cannot click outside panel to close it
+Must:
+- [ ] System elimination
 - [ ] Implement round and round increment, (mrWhite cannot start a new round, ...)
+- [ ] Implementer rounds et ordre
+- [ ] Add a password to the game creation
+- [ ] MOdal pour saisi du mot secret pr Mr White
+- [ ] Check for any TODO or WIP or console.log
+
+Should
+- [ ] Add params where can config srating round with a random player, ...
+- [ ] Make a preproduction
+
+Could:
 - [ ] Add a password to the player creation
-- [ ] Make a prepoduction
-- [ ] Make users dragable so it changes their order
+
+Won't:
+- [ ] ...
