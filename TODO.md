@@ -1,8 +1,8 @@
 Must:
 - [ ] System elimination
+- [ ] Game over with message
 - [ ] Implement round and round increment, (mrWhite cannot start a new round, ...)
 - [ ] Implementer rounds et ordre
-- [ ] Add a password to the game creation
 - [ ] MOdal pour saisi du mot secret pr Mr White
 - [ ] Check for any TODO or WIP or console.log
 
