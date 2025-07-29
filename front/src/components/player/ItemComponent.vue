@@ -11,17 +11,17 @@
       <div class="flex items-center justify-end gap-2">
         <button v-if="props.seeButton"
           class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200"
-          @click="enableShowInfo()">
+          @click.stop="enableShowInfo()">
           <EyeIcon class="size-6 text-primary" />
         </button>
         <button v-if="props.eliminateButton" :disabled="props.player.eliminated"
           class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200 bg-primary disabled:bg-dark-gray"
-          @click="eliminatePlayer(props.player.id)">
+          @click.stop="eliminatePlayer(props.player.id)">
           <UserMinusIcon class="size-6 text-light" />
         </button>
         <button v-if="props.deleteButton"
           class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200"
-          @click="undercoverStore.deletePlayer(props.player.id)">
+          @click.stop="undercoverStore.deletePlayer(props.player.id)">
           <TrashIcon class="size-6 text-primary" />
         </button>
       </div>
