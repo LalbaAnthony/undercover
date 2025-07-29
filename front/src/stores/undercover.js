@@ -395,13 +395,10 @@ export const useUndercoverStore = defineStore('undercover', {
 
     assignateWords() {
       const words = this.getRandomAllWords()
-      if (Math.random() > 0.5) {
-        this.undercoversWord = words[0]
-        this.civilianWord = words[1]
-      } else {
-        this.undercoversWord = words[1]
-        this.civilianWord = words[0]
-      }
+      const shuffled = words.sort(() => Math.random() - 0.5)
+
+      this.undercoversWord = shuffled[0]
+      this.civilianWord = shuffled[1]
     },
 
     printGameState() {
