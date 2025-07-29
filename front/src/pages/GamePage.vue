@@ -13,7 +13,7 @@
 
 <script setup>
 import Actions from '@/components/ActionsComponent.vue'
-import Player from '@/components/player/PlayerComponent.vue'
+import Player from '@/components/player/ItemComponent.vue'
 import Bento from '@/components/BentoComponent.vue'
 import { useUndercoverStore } from '@/stores/undercover'
 

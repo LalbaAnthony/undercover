@@ -1,5 +1,5 @@
 Must:
-- [ ] Use atomic design for components ?
+- [ ] Make all setup and game bloc a component as Actions
 - [ ] Add params where can config srating round with a random player, if mrwhite can start the game, ...
 - [ ] System elimination
 - [ ] Game over with message

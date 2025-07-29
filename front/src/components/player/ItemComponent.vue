@@ -45,8 +45,8 @@
 </template>
 
 <script setup>
-import PlayerWord from '@/components/player/PlayerWordComponent.vue'
-import PlayerRole from '@/components/player/PlayerRoleComponent.vue'
+import PlayerWord from '@/components/word/ItemComponent.vue'
+import PlayerRole from '@/components/role/ItemComponent.vue'
 import { EyeIcon } from '@heroicons/vue/24/outline'
 import { TrashIcon } from '@heroicons/vue/24/outline'
 import { EqualsIcon } from '@heroicons/vue/24/outline'
