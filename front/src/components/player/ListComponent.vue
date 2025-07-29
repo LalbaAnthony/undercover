@@ -1,8 +1,8 @@
 <template>
   <Bento
     :title="props.title ? undercoverStore.numberOfPlayers ? `${undercoverStore.numberOfPlayers} joueur${undercoverStore.numberOfPlayers > 1 ? 's' : ''}` : 'Joueurs' : ''">
-    <Draggable v-if="props.dragButton" v-model="undercoverStore.players" :animation="200" :itemKey="'id'"
-      :group="{ name: 'players', pull: true, put: true }" class="custom-grid">
+    <Draggable v-if="props.dragButton" v-model="undercoverStore.players" :animation="200" :itemKey="'id'" :delay="200"
+      :delayOnTouchOnly="true" :group="{ name: 'players', pull: true, put: true }" class="custom-grid">
       <template #item="{ element }">
         <Player :player="element" :key="element.id" :displayRole="props.displayRole" :dragButton="props.dragButton"
           :seeButton="props.seeButton" :deleteButton="props.deleteButton" :eliminateButton="props.eliminateButton" />
