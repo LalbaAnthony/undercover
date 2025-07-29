@@ -1,10 +1,6 @@
 <template>
   <div>
-    <Bento>
-      <div class="custom-grid">
-        <Player v-for="player in undercoverStore.players" :key="player.id" :player="player" :seeButton="true" :eliminateButton="true" />
-      </div>
-    </Bento>
+    <Players :title="false" :seeButton="true" :eliminateButton="true" />
     <Actions :actions="[
       { name: 'Arrêter la partie', type: 'secondary', callback: endGame },
     ]" />
@@ -13,8 +9,7 @@
 
 <script setup>
 import Actions from '@/components/ActionsComponent.vue'
-import Player from '@/components/player/ItemComponent.vue'
-import Bento from '@/components/BentoComponent.vue'
+import Players from '@/components/player/ListComponent.vue'
 import { useUndercoverStore } from '@/stores/undercover'
 
 const undercoverStore = useUndercoverStore()

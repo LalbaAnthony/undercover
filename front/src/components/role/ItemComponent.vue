@@ -5,7 +5,7 @@
   </div>
   <p v-if="props.displayDescription" class="text-sm">{{ props.role?.description }}</p>
   <div v-if="props.displayGoal" class="flex flex-row flex-wrap gap-2 my-4">
-    <h4 class="text-xl bg-primary rounded-xl px-2 py-0.5">Objectif ? </h4>
+    <h4 class="text-xl">Objectif ? </h4>
     <h4 class="text-xl">{{ props.role?.goal }}</h4>
   </div>
 </template>
