@@ -7,7 +7,7 @@ Must:
 - [ ] Check for any TODO or WIP or console.log
 
 Should
-- [ ] Add params where can config srating round with a random player, ...
+- [ ] Add params where can config srating round with a random player, if mrwhite can start the game, ...
 - [ ] Make a preproduction
 
 Could:

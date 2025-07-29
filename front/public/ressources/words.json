@@ -282,5 +282,217 @@
     [
         "haut-parleur",
         "enceinte"
+    ],
+    [
+        "route",
+        "autoroute"
+    ],
+    [
+        "pont",
+        "tunnel"
+    ],
+    [
+        "bâtiment",
+        "immeuble"
+    ],
+    [
+        "parc",
+        "jardin"
+    ],
+    [
+        "terrain de sport",
+        "stade"
+    ],
+    [
+        "musée",
+        "galerie d'art"
+    ],
+    [
+        "bibliothèque",
+        "médiathèque"
+    ],
+    [
+        "hôpital",
+        "clinique"
+    ],
+    [
+        "école",
+        "université"
+    ],
+    [
+        "magasin",
+        "supermarché"
+    ],
+    [
+        "restaurant",
+        "café"
+    ],
+    [
+        "cinéma",
+        "théâtre"
+    ],
+    [
+        "salle de concert",
+        "auditorium"
+    ],
+    [
+        "stade",
+        "arène"
+    ],
+    [
+        "aéroport",
+        "gare"
+    ],
+    [
+        "station de métro",
+        "arrêt de bus"
+    ],
+    [
+        "port",
+        "quai"
+    ],
+    [
+        "plage",
+        "bord de mer"
+    ],
+    [
+        "montagne",
+        "sommet"
+    ],
+    [
+        "vallée",
+        "canyon"
+    ],
+    [
+        "forêt",
+        "bois"
+    ],
+    [
+        "désert",
+        "steppe"
+    ],
+    [
+        "île",
+        "archipel"
+    ],
+    [
+        "continent",
+        "pays"
+    ],
+    [
+        "ville",
+        "agglomération"
+    ],
+    [
+        "région",
+        "province"
+    ],
+    [
+        "capitale",
+        "métropole"
+    ],
+    [
+        "quartier",
+        "arrondissement"
+    ],
+    [
+        "rue",
+        "avenue"
+    ],
+    [
+        "boulevard",
+        "allée"
+    ],
+    [
+        "place",
+        "esplanade"
+    ],
+    [
+        "parc d'attractions",
+        "zoo"
+    ],
+    [
+        "jardin botanique",
+        "arboretum"
+    ],
+    [
+        "réserve naturelle",
+        "parc national"
+    ],
+    [
+        "site historique",
+        "monument"
+    ],
+    [
+        "château",
+        "forteresse"
+    ],
+    [
+        "palais",
+        "résidence"
+    ],
+    [
+        "temple",
+        "mosquée"
+    ],
+    [
+        "église",
+        "cathédrale"
+    ],
+    [
+        "synagogue",
+        "chapelle"
+    ],
+    [
+        "monastère",
+        "abbaye"
+    ],
+    [
+        "ruines",
+        "site archéologique"
+    ],
+    [
+        "cimetière",
+        "nécropole"
+    ],
+    [
+        "mémorial",
+        "monument commémoratif"
+    ],
+    [
+        "statue",
+        "sculpture"
+    ],
+    [
+        "fontaine",
+        "bassin"
+    ],
+    [
+        "jardin public",
+        "espace vert"
+    ],
+    [
+        "parc zoologique",
+        "aquarium"
+    ],
+    [
+        "planétarium",
+        "observatoire"
+    ],
+    [
+        "centre commercial",
+        "galerie marchande"
+    ],
+    [
+        "marché",
+        "foire"
+    ],
+    [
+        "bazar",
+        "brocante"
+    ],
+    [
+        "salon de thé",
+        "pâtisserie"
     ]
 ]

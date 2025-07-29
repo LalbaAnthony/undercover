@@ -3,18 +3,21 @@ import { notif } from '@/composables/notif.js'
 import { ucfirst } from '@/composables/helpers.js'
 import { VITE_DEBUG } from '@/config';
 import router from '@/router'
+import md5 from 'crypto-js/md5'
 
 export const useUndercoverStore = defineStore('undercover', {
   persist: true,
   state: () => ({
     // * Constants
-    DEBUG: VITE_DEBUG || VITE_DEBUG == 'true' || VITE_DEBUG === '1' || false,
-    NUMBER_ROUNDS_MIN: 1,
-    NUMBER_ROUNDS_MAX: 999,
-    NUMBER_PLAYERS_MIN: 3,
-    NUMBER_PLAYERS_MAX: 20,
+    DEBUG: VITE_DEBUG || VITE_DEBUG == 'true' || VITE_DEBUG == '1' || false,
+    ROUNDS_NB_MIN: 1,
+    ROUNDS_NB_MAX: 999,
+    PLAYERS_NB_MIN: 3,
+    PLAYERS_NB_MAX: 20,
+    WORDS_ATTEMPTS_NB_MAX: 50,
 
     // * Game data
+    playedWordsHashs: [],
     allWords: [],
     allRoles: {},
     allDistributions: {},
@@ -31,7 +34,7 @@ export const useUndercoverStore = defineStore('undercover', {
   }),
   actions: {
     async fetchAllWords() {
-      if (this.allWords.length > 0) return
+      if (this.allWords && this.allWords.length > 0) return
       fetch('ressources/words.json')
         .then((response) => response.json())
         .then((data) => {
@@ -40,7 +43,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     async fetchAllRoles() {
-      if (this.allRoles.length > 0) return
+      if (this.allRoles && this.allRoles.length > 0) return
       fetch('ressources/roles.json')
         .then((response) => response.json())
         .then((data) => {
@@ -49,7 +52,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     async fetchAllDistributions() {
-      if (this.allDistributions.length > 0) return
+      if (this.allDistributions && this.allDistributions.length > 0) return
       fetch('ressources/distributions.json')
         .then((response) => response.json())
         .then((data) => {
@@ -64,10 +67,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     getRole(role) {
-      if (!this.allRoles[role]) {
-        console.error('Role does not exist')
-        return {}
-      }
+      if (!this.allRoles[role]) return {}
       return this.allRoles[role]
     },
 
@@ -220,7 +220,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     incrementRound() {
-      if (this.currentRound >= this.NUMBER_ROUNDS_MAX) {
+      if (this.currentRound >= this.ROUNDS_NB_MAX) {
         console.error('Maximum number of rounds reached')
         notif.notify('Nombre maximum de tours atteint', 'error')
         return false
@@ -260,7 +260,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     fillDistribution() {
-      if (this.numberOfPlayers >= this.NUMBER_PLAYERS_MIN && this.numberOfPlayers <= this.NUMBER_PLAYERS_MAX) {
+      if (this.numberOfPlayers >= this.PLAYERS_NB_MIN && this.numberOfPlayers <= this.PLAYERS_NB_MAX) {
         this.distribution = {
           civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
           undercover: this.allDistributions[String(this.numberOfPlayers)].undercover,
@@ -319,13 +319,13 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     startGame() {
-      if (this.numberOfPlayers < this.NUMBER_PLAYERS_MIN) {
+      if (this.numberOfPlayers < this.PLAYERS_NB_MIN) {
         notif.notify('Il faut au moins 3 joueurs pour commencer une partie', 'error')
         console.error('Not enough players to start the game')
         return false
       }
 
-      if (this.numberOfPlayers > this.NUMBER_PLAYERS_MAX) {
+      if (this.numberOfPlayers > this.PLAYERS_NB_MAX) {
         notif.notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
         console.error('Too many players to start the game')
         return false
@@ -355,9 +355,31 @@ export const useUndercoverStore = defineStore('undercover', {
       this.assignateWords()
     },
 
+    hasPlayedWords(string1 = '', string2 = '') {
+      if (!string1 || !string2) return true;
+      const hash = md5(string1 + string2).toString()
+      return this.playedWordsHashs.includes(hash)
+    },
+
+    addToPlayedWords(string1 = '', string2 = '') {
+      if (!string1 || !string2) return;
+      const hash = md5(string1 + string2).toString()
+      this.playedWordsHashs.push(hash)
+    },
+
     getRandomAllWords() {
-      const randomIndex = Math.floor(Math.random() * this.allWords.length)
-      return this.allWords[randomIndex]
+      let words = []
+      let i = 0
+
+      while (((!words[0] || !words[1]) || this.hasPlayedWords(words[0], words[1])) && i < this.WORDS_ATTEMPTS_NB_MAX) {
+        const index = Math.floor(Math.random() * this.allWords.length)
+        words = this.allWords[index]
+        i++
+      }
+
+      this.addToPlayedWords(words[0], words[1])
+
+      return words
     },
 
     assignateWords() {
@@ -374,10 +396,10 @@ export const useUndercoverStore = defineStore('undercover', {
     printGameState() {
       console.log('='.repeat(40))
       console.log('DEBUG', this.DEBUG)
-      console.log('NUMBER_ROUNDS_MIN', this.NUMBER_ROUNDS_MIN)
-      console.log('NUMBER_ROUNDS_MAX', this.NUMBER_ROUNDS_MAX)
-      console.log('NUMBER_PLAYERS_MIN', this.NUMBER_PLAYERS_MIN)
-      console.log('NUMBER_PLAYERS_MAX', this.NUMBER_PLAYERS_MAX)
+      console.log('ROUNDS_NB_MIN', this.ROUNDS_NB_MIN)
+      console.log('ROUNDS_NB_MAX', this.ROUNDS_NB_MAX)
+      console.log('PLAYERS_NB_MIN', this.PLAYERS_NB_MIN)
+      console.log('PLAYERS_NB_MAX', this.PLAYERS_NB_MAX)
       console.log('-'.repeat(40))
       console.log('undercoversWord', this.undercoversWord)
       console.log('civilianWord', this.civilianWord)
@@ -452,7 +474,7 @@ export const useUndercoverStore = defineStore('undercover', {
       const hasMrWhiteWon = (this.numberOfMrWhiteRemaining > 0) && (this.mrWhiteGuess === this.civilianWord)
       const hasUndercoverWon = (this.numberOfCiviliansRemaining === 0)
       const hasCivilianWon = (this.numberOfUndercoversRemaining === 0)
-      const roundOver = (this.currentRound > this.NUMBER_ROUNDS_MAX)
+      const roundOver = (this.currentRound > this.ROUNDS_NB_MAX)
 
       return hasMrWhiteWon || hasUndercoverWon || hasCivilianWon || roundOver;
     },

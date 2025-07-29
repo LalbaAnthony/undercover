@@ -82,6 +82,7 @@ function resetAll() {
 }
 
 onMounted(() => {
+  console.log(undercoverStore.getRandomAllWords())
   undercoverStore.initSetup()
 })
 
