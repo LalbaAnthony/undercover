@@ -1,8 +1,7 @@
 Must:
-- [ ] Make all setup and game bloc a component as Actions
-- [ ] Add params where can config srating round with a random player, if mrwhite can start the game, ...
 - [ ] System elimination
 - [ ] Game over with message
+- [ ] Use params in game
 - [ ] Implementer rounds et ordre (order can either be random or not) (mrWhite can/cannot start a new round, ...)
 - [ ] MOdal pour saisi du mot secret pr Mr White
 - [ ] Check for any TODO or WIP or console.log
