@@ -388,6 +388,8 @@ export const useUndercoverStore = defineStore('undercover', {
 
       this.addToPlayedWords(words[0], words[1])
 
+      words = words.map((word) => ucfirst(word.trim()))
+
       return words
     },
 
