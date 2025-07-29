@@ -10,7 +10,7 @@
 import { useUndercoverStore } from '@/stores/undercover'
 import { onMounted } from 'vue';
 import Bento from '@/components/BentoComponent.vue'
-import Role from '@/components/undercover/RoleComponent.vue'
+import Role from '@/components/RoleComponent.vue'
 
 const undercoverStore = useUndercoverStore()
 

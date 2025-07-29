@@ -16,12 +16,21 @@ export const useUndercoverStore = defineStore('undercover', {
     PLAYERS_NB_MAX: 20,
     WORDS_ATTEMPTS_NB_MAX: 50,
 
-    // * Game data
-    playedWordsHashs: [],
+    // * Static data
     allWords: [],
     allRoles: {},
     allDistributions: {},
+    
+    // * Dynamic data
+    playedWordsHashs: [],
 
+    // * Settings
+    settings: {
+      canMrWhiteStart: false, // If Mr White can start the game
+      randomStartingPlayer: true, // If the starting player is random
+      randomOrder: true, // If the order of players is random
+    },
+    
     // * Game state
     distribution: { civilian: 0, undercover: 0, white: 0, },
     players: [],

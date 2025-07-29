@@ -30,23 +30,23 @@
     <Panel :show="showReveal" @hide="showReveal = false">
       <div class="flex flex-col gap-4">
         <h4 class="text-3xl">{{ props.player.name }} était ...</h4>
-        <Role :role="undercoverStore.getRole(props.player.role)" :displayGoal="false" />
+        <PlayerRole :role="undercoverStore.getRole(props.player.role)" :displayGoal="false" />
         <!-- TODO Suite à l'élimination de Mr White, il doit deviner le mot des civils -->
       </div>
     </Panel>
 
     <Panel :show="showInfo" @hide="showInfo = false">
       <div class="flex flex-col gap-4">
-        <Word v-if="props.player.role !== 'white'" :word="undercoverStore?.getPlayerWord(props.player.id)" />
-        <Role :role="undercoverStore.getRole(props.player.role)" />
+        <PlayerWord v-if="props.player.role !== 'white'" :word="undercoverStore?.getPlayerWord(props.player.id)" />
+        <PlayerRole :role="undercoverStore.getRole(props.player.role)" />
       </div>
     </Panel>
   </div>
 </template>
 
 <script setup>
-import Word from '@/components/undercover/WordComponent.vue'
-import Role from '@/components/undercover/RoleComponent.vue'
+import PlayerWord from '@/components/player/PlayerWordComponent.vue'
+import PlayerRole from '@/components/player/PlayerRoleComponent.vue'
 import { EyeIcon } from '@heroicons/vue/24/outline'
 import { TrashIcon } from '@heroicons/vue/24/outline'
 import { EqualsIcon } from '@heroicons/vue/24/outline'

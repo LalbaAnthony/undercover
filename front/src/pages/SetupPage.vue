@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import Player from '@/components/undercover/PlayerComponent.vue'
+import Player from '@/components/player/PlayerComponent.vue'
 import Bento from '@/components/BentoComponent.vue'
 import Actions from '@/components/ActionsComponent.vue'
 import Draggable from 'vuedraggable'
@@ -76,13 +76,12 @@ function addPlayer() {
 }
 
 function resetAll() {
-  if (confirm('Es-tu sûr de vouloir réinitialiser la partie ?')) {
+  if (confirm('Es-tu sûr de vouloir réinitialiser la configuration ?')) {
     undercoverStore.resetAll()
   }
 }
 
 onMounted(() => {
-  console.log(undercoverStore.getRandomAllWords())
   undercoverStore.initSetup()
 })
 
