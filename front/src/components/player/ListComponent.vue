@@ -18,7 +18,7 @@
       <input class="w-full py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
         v-model="name" @keyup.enter="addPlayer()">
       <button
-        class="cursor-pointer rounded-lg bg-primary text-white p-0.5 mr-3 hover:scale-105 transition-all duration-200"
+        class="cursor-pointer rounded-lg bg-primary text-white p-0.5 mr-[11px] hover:scale-105 transition-all duration-200"
         @click="addPlayer()">
         <PlusIcon class="size-6 text-light" />
       </button>

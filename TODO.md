@@ -1,5 +1,5 @@
 Must:
-- [ ] System elimination
+- [ ] Rename debug undercover
 - [ ] Game over with message
 - [ ] Use params in game
 - [ ] Implementer rounds et ordre (order can either be random or not) (mrWhite can/cannot start a new round, ...)

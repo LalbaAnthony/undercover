@@ -102,7 +102,7 @@ function enableShowInfo() {
     return true
   }
 
-  if (undercoverStore.DEBUG) {
+  if (undercoverStore.DEBUG_ACTIVE) {
     showInfo.value = true
     return true
   }

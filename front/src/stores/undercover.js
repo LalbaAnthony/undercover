@@ -9,7 +9,7 @@ export const useUndercoverStore = defineStore('undercover', {
   persist: true,
   state: () => ({
     // * Constants
-    DEBUG: VITE_DEBUG || VITE_DEBUG == 'true' || VITE_DEBUG == '1' || false,
+    DEBUG_ACTIVE: VITE_DEBUG || VITE_DEBUG == 'true' || VITE_DEBUG == '1' || false,
     ROUNDS_NB_MIN: 1,
     ROUNDS_NB_MAX: 999,
     PLAYERS_NB_MIN: 3,
@@ -27,8 +27,8 @@ export const useUndercoverStore = defineStore('undercover', {
     // * Settings
     settings: {
       canMrWhiteStart: false, // If Mr White can start the game
-      randomStartingPlayer: true, // If the starting player is random
-      randomOrder: true, // If the order of players is random
+      randomStartingPlayer: false, // If the starting player is random
+      randomOrder: false, // If the order of players is random
     },
     
     // * Game state
@@ -95,6 +95,14 @@ export const useUndercoverStore = defineStore('undercover', {
       this.players = []
     },
 
+    resetSettings() {
+      for (const key in this.settings) {
+        if (Object.prototype.hasOwnProperty.call(this.settings, key)) {
+          this.settings[key] = false
+        }
+      }
+    },
+
     clearPlayersRoles() {
       for (const player of this.players) {
         player.role = null
@@ -124,6 +132,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     resetAll() {
       this.clearPlayers()
+      this.resetSettings()
       this.resetGame()
       this.initSetup()
     },
@@ -403,7 +412,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     printGameState() {
       console.log('='.repeat(40))
-      console.log('DEBUG', this.DEBUG)
+      console.log('DEBUG_ACTIVE', this.DEBUG_ACTIVE)
       console.log('ROUNDS_NB_MIN', this.ROUNDS_NB_MIN)
       console.log('ROUNDS_NB_MAX', this.ROUNDS_NB_MAX)
       console.log('PLAYERS_NB_MIN', this.PLAYERS_NB_MIN)

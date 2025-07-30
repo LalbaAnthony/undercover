@@ -3,13 +3,12 @@
     <p class="text-center text-light-gray text-sm p-2">{{ VITE_APP_NAME }} par {{ VITE_APP_AUTHOR_NAME }}<br>
       Version {{ VITE_APP_VERSION }}</p>
     <div class="text-center text-light-gray text-sm p-2">
-      <button class="text-primary hover:underline" @click="deleteAll">Supprimer toutes les données</button>
-      <span class="text-gray">&nbsp;|&nbsp;</span>
+      <router-link to="/rules" class="text-primary hover:underline">Règles</router-link>
+      <span class="text-gray">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
       <a :href="VITE_GIT_REPO + '/issues'" target="_blank" class="text-primary hover:underline"
-        @click="undercoverStore.printGameState()">Signaler un bug</a>
-      <span v-if="undercoverStore.DEBUG" class="text-gray">&nbsp;|&nbsp;</span>
-      <button v-if="undercoverStore.DEBUG" class="text-primary hover:underline"
-        @click="undercoverStore.printGameState()">Debug</button>
+      @click="undercoverStore.printGameState()">Signaler un bug</a>
+      <span class="text-gray">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+      <button class="text-primary hover:underline" @click="deleteAll">Supprimer tout</button>
     </div>
   </footer>
 </template>

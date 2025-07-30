@@ -99,7 +99,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="checkbox"] {
   accent-color: var(--primary);
   color: var(--primary);
-  width: 1rem;
+  width: 1.1rem;
 }
 
 input[type="range"] {
