@@ -1,5 +1,5 @@
 <template>
-  <header class="flex justify-between items-center p-2 gap-3">
+  <header class="flex justify-between items-center py-2 px-4 gap-3">
     <button v-if="route.name !== 'rules'" class="rounded-full p-2 hover:bg-light-dark" @click="goToRules">
       <NewspaperIcon class="size-8" />
     </button>

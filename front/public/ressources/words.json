@@ -806,5 +806,77 @@
     [
         "Amitié",
         "Complicité"
+    ],
+    [
+        "Solidarité",
+        "Entraide"
+    ],
+    [
+        "Respect",
+        "Tolérance"
+    ],
+    [
+        "Justice",
+        "Équité"
+    ],
+    [
+        "Vérité",
+        "Authenticité"
+    ],
+    [
+        "Patience",
+        "Persévérance"
+    ],
+    [
+        "Humilité",
+        "Modestie"
+    ],
+    [
+        "Générosité",
+        "Altruisme"
+    ],
+    [
+        "Gratitude",
+        "Reconnaissance"
+    ],
+    [
+        "Trotinette",
+        "Vélo"
+    ],
+    [
+        "Moto",
+        "Scooter"
+    ],
+    [
+        "Bateau",
+        "Yacht"
+    ],
+    [
+        "Avion",
+        "Hélicoptère"
+    ],
+    [
+        "Train",
+        "Tramway"
+    ],
+    [
+        "Bus",
+        "Autocar"
+    ],
+    [
+        "Métro",
+        "Monorail"
+    ],
+    [
+        "Voiture de sport",
+        "Cabriolet"
+    ],
+    [
+        "Camion de livraison",
+        "Fourgon"
+    ],
+    [
+        "Camping-car",
+        "Caravane"
     ]
 ]
