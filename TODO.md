@@ -1,5 +1,6 @@
 Must:
-- [ ] MOdal pour saisi du mot secret pr Mr White
+- [ ] Make atome components (button with icon, ...) and use them everywhere (esp button)
+- [ ] Modal pour saisi du mot secret pr Mr White
 - [ ] Game over with message
 - [ ] Implementer rounds et ordre (order can either be random or not) (mrWhite can/cannot start a new round, ...)
 - [ ] Check for any TODO or WIP or console.log
