@@ -1,5 +1,5 @@
 <template>
-    <Bento title="Répartition des rôles" class="b">
+    <Bento title="Répartition des rôles" >
         <div class="flex flex-col gap-2">
             <div v-for="(role, key) in undercoverStore.allRoles" :key="key"
                 class="flex justify-between items-center gap-4">

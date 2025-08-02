@@ -126,9 +126,10 @@ function enableShowInfo() {
 
 function eliminatePlayer() {
   if (undercoverStore.DEBUG_ACTIVE || confirm(`Es-tu sûr de vouloir éliminer ${props.player.name} ?`)) {
-    undercoverStore.eliminatePlayer(props.player.id)
+    if (undercoverStore.eliminatePlayer(props.player.id)) {
+      enableReveal()
+    }
   }
-  enableReveal()
 }
 
 </script>

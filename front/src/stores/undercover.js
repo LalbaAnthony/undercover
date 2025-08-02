@@ -26,7 +26,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     // * Settings
     settings: {
-      canMrWhiteStart: false, // If Mr White can start the game
+      canWhiteStart: false, // If Mr White can start the game
       randomStartingPlayer: false, // If the starting player is random
       randomOrder: false, // If the order of players is random
     },
@@ -39,7 +39,7 @@ export const useUndercoverStore = defineStore('undercover', {
     isGameRunning: false,
     undercoversWord: '',
     civilianWord: '',
-    mrWhiteGuess: '',
+    whiteGuess: '',
   }),
   actions: {
     async fetchAllWords() {
@@ -198,12 +198,9 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
-      player.eliminated = true
-
-      if (player.role === 'mrWhite') {
-        this.mrWhiteGuess = prompt('Entrez le mot supposé de Mr White') || ''
-        this.mrWhiteGuess = beautify(this.mrWhiteGuess)
-        if (this.mrWhiteGuess.length === 0) {
+      if (player.role === 'white') {
+        this.whiteGuess = beautify(prompt('Entrez le mot que Mr White pense être le bon', ''))
+        if (this.whiteGuess.length === 0) {
           notif.notify('Le mot de Mr White ne peut pas être vide', 'error')
           console.error('Mr White word cannot be empty')
           return false
@@ -214,7 +211,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
       if (isGameOver) {
         let message = 'La partie est terminée'
-        if (this.hasMrWhiteWon) message = 'Mr White a gagné !'
+        if (this.hasWhiteWon) message = 'Mr White a gagné !'
         if (this.hasUndercoverWon) message = 'Les Undercover ont gagné !'
         if (this.hasCivilianWon) message = 'Les Civils ont gagné !'
         if (this.roundOver) message = 'La partie est terminée, le nombre de tours maximum a été atteint'
@@ -222,6 +219,8 @@ export const useUndercoverStore = defineStore('undercover', {
         notif.notify(message, 'info')
         this.endGame()
       }
+
+      player.eliminated = true
 
       return true
     },
@@ -446,11 +445,11 @@ export const useUndercoverStore = defineStore('undercover', {
       console.log('numberOfPlayersRemaining', this.numberOfPlayersRemaining)
       console.log('numberOfCivilians', this.numberOfCivilians)
       console.log('numberOfUndercovers', this.numberOfUndercovers)
-      console.log('numberOfMrWhite', this.numberOfMrWhite)
+      console.log('numberOfWhite', this.numberOfWhite)
       console.log('numberOfCiviliansRemaining', this.numberOfCiviliansRemaining)
       console.log('numberOfUndercoversRemaining', this.numberOfUndercoversRemaining)
-      console.log('numberOfMrWhiteRemaining', this.numberOfMrWhiteRemaining)
-      console.log('hasMrWhiteWon', this.hasMrWhiteWon)
+      console.log('numberOfWhiteRemaining', this.numberOfWhiteRemaining)
+      console.log('hasWhiteWon', this.hasWhiteWon)
       console.log('hasUndercoverWon', this.hasUndercoverWon)
       console.log('hasCivilianWon', this.hasCivilianWon)
       console.log('roundOver', this.roundOver)
@@ -490,7 +489,7 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.players.filter((player) => player.role === 'undercover').length
     },
 
-    numberOfMrWhite() {
+    numberOfWhite() {
       return this.players.filter((player) => player.role === 'white').length
     },
 
@@ -502,14 +501,14 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.players.filter((player) => player.role === 'undercover' && !player.eliminated).length
     },
 
-    numberOfMrWhiteRemaining() {
+    numberOfWhiteRemaining() {
       return this.players.filter((player) => player.role === 'white' && !player.eliminated).length
     },
 
-    hasMrWhiteWon() {
-      const mrWhiteGuessCorrect = this.mrWhiteGuess === this.civilianWord
-      const atLeastOneMrWhiteRemaining = this.numberOfMrWhiteRemaining > 0
-      return (mrWhiteGuessCorrect && atLeastOneMrWhiteRemaining) || (this.numberOfCiviliansRemaining === 0 && this.numberOfUndercoversRemaining === 0)
+    hasWhiteWon() {
+      const whiteGuessCorrect = this.whiteGuess === this.civilianWord
+      const atLeastOneWhiteRemaining = this.numberOfWhiteRemaining > 0
+      return (whiteGuessCorrect && atLeastOneWhiteRemaining) || (this.numberOfCiviliansRemaining === 0 && this.numberOfUndercoversRemaining === 0)
     },
 
     hasUndercoverWon() {
@@ -521,9 +520,9 @@ export const useUndercoverStore = defineStore('undercover', {
     hasCivilianWon() {
       const atLeastOneCivilianRemaining = this.numberOfCiviliansRemaining > 0
       const moreCiviliansThanUndercovers = this.numberOfCiviliansRemaining > this.numberOfUndercoversRemaining
-      const everyMrWhiteEliminated = this.numberOfMrWhiteRemaining === 0
+      const everyWhiteEliminated = this.numberOfWhiteRemaining === 0
       const everyUndercoversEliminated = this.numberOfUndercoversRemaining === 0
-      return atLeastOneCivilianRemaining && moreCiviliansThanUndercovers && everyMrWhiteEliminated && everyUndercoversEliminated
+      return atLeastOneCivilianRemaining && moreCiviliansThanUndercovers && everyWhiteEliminated && everyUndercoversEliminated
     },
 
     roundOver() {
@@ -532,7 +531,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     isGameOver() {
       const noPlayersRemaining = this.numberOfPlayersRemaining === 0
-      return this.hasMrWhiteWon || this.hasUndercoverWon || this.hasCivilianWon || this.roundOver || noPlayersRemaining
+      return this.hasWhiteWon || this.hasUndercoverWon || this.hasCivilianWon || this.roundOver || noPlayersRemaining
     },
   },
 });
