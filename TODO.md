@@ -6,6 +6,7 @@ Should
 - [ ] Uncomment settings block on setup page + Use params in game behavior
 - [ ] Implementer rounds et ordre (order can either be random or not) (white can/cannot start a new round, ...)
 - [ ] Check for any TODO or WIP or console.log
+- [ ] Faire en sorte qu'on puisse désactiver débug en tapotant sur le même button
 
 Could:
 - [ ] Make atome components (button with icon, ...) and use them everywhere (esp button)
