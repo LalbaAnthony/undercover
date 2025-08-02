@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { notif } from '@/composables/notif.js'
-import { ucfirst } from '@/composables/helpers.js'
+import { beautify } from '@/composables/helpers.js'
 import { VITE_DEBUG } from '@/config';
 import router from '@/router'
 import md5 from 'crypto-js/md5'
@@ -20,7 +20,7 @@ export const useUndercoverStore = defineStore('undercover', {
     allWords: [],
     allRoles: {},
     allDistributions: {},
-    
+
     // * Dynamic data
     playedWordsHashs: [],
 
@@ -30,7 +30,7 @@ export const useUndercoverStore = defineStore('undercover', {
       randomStartingPlayer: false, // If the starting player is random
       randomOrder: false, // If the order of players is random
     },
-    
+
     // * Game state
     distribution: { civilian: 0, undercover: 0, white: 0, },
     players: [],
@@ -154,7 +154,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     addPlayer(name, password = '') {
-      name = ucfirst(name.trim()) || ''
+      name = beautify(name)
       password = (password?.length > 0) ? password.trim() : null
 
       if (name.length === 0) {
@@ -202,15 +202,29 @@ export const useUndercoverStore = defineStore('undercover', {
       player.eliminated = true
 
       if (player.role === 'mrWhite') {
-        // TODO Suite à l'élimination de Mr White, il doit deviner le mot des civils
+        this.mrWhiteGuess = prompt('Entrez le mot supposé de Mr White') || ''
+        this.mrWhiteGuess = beautify(this.mrWhiteGuess)
+        if (this.mrWhiteGuess.length === 0) {
+          notif.notify('Le mot de Mr White ne peut pas être vide', 'error')
+          console.error('Mr White word cannot be empty')
+          return false
+        }
       }
 
       const isGameOver = this.isGameOver
 
       if (isGameOver) {
-        notif.notify('La partie est terminée', 'info')
+        let message = 'La partie est terminée'
+        if (this.hasMrWhiteWon) message = 'Mr White a gagné !'
+        if (this.hasUndercoverWon) message = 'Les Undercover ont gagné !'
+        if (this.hasCivilianWon) message = 'Les Civils ont gagné !'
+        if (this.roundOver) message = 'La partie est terminée, le nombre de tours maximum a été atteint'
+
+        notif.notify(message, 'info')
         this.endGame()
       }
+
+      return true
     },
 
     deletePlayer(id) {
@@ -234,17 +248,18 @@ export const useUndercoverStore = defineStore('undercover', {
         // Mr White does not have a word
       }
 
-      return ucfirst(word)
+      return beautify(word)
     },
 
     incrementRound() {
       if (this.currentRound >= this.ROUNDS_NB_MAX) {
         console.error('Maximum number of rounds reached')
-        notif.notify('Nombre maximum de tours atteint', 'error')
         return false
       }
 
       this.currentRound++
+
+      return true
     },
 
     canDecrementDistribution(role) {
@@ -397,7 +412,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
       this.addToPlayedWords(words[0], words[1])
 
-      words = words.map((word) => ucfirst(word.trim()))
+      words = words.map(word => beautify(word))
 
       return words
     },
@@ -428,13 +443,20 @@ export const useUndercoverStore = defineStore('undercover', {
       console.log('currentRound', this.currentRound)
       console.log('isGameRunning', this.isGameRunning)
       console.log('-'.repeat(40))
+      console.log('numberDistribution', this.numberDistribution)
       console.log('numberOfPlayers', this.numberOfPlayers)
       console.log('numberOfPlayersEliminated', this.numberOfPlayersEliminated)
       console.log('numberOfPlayersRemaining', this.numberOfPlayersRemaining)
-      console.log('numberDistribution', this.numberDistribution)
       console.log('numberOfCivilians', this.numberOfCivilians)
       console.log('numberOfUndercovers', this.numberOfUndercovers)
       console.log('numberOfMrWhite', this.numberOfMrWhite)
+      console.log('numberOfCiviliansRemaining', this.numberOfCiviliansRemaining)
+      console.log('numberOfUndercoversRemaining', this.numberOfUndercoversRemaining)
+      console.log('numberOfMrWhiteRemaining', this.numberOfMrWhiteRemaining)
+      console.log('hasMrWhiteWon', this.hasMrWhiteWon)
+      console.log('hasUndercoverWon', this.hasUndercoverWon)
+      console.log('hasCivilianWon', this.hasCivilianWon)
+      console.log('roundOver', this.roundOver)
       console.log('isGameOver', this.isGameOver)
       console.log('='.repeat(40))
     }
@@ -487,13 +509,32 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.players.filter((player) => player.role === 'white' && !player.eliminated).length
     },
 
-    isGameOver() {
-      const hasMrWhiteWon = (this.numberOfMrWhiteRemaining > 0) && (this.mrWhiteGuess === this.civilianWord)
-      const hasUndercoverWon = (this.numberOfCiviliansRemaining === 0)
-      const hasCivilianWon = (this.numberOfUndercoversRemaining === 0)
-      const roundOver = (this.currentRound > this.ROUNDS_NB_MAX)
-
-      return hasMrWhiteWon || hasUndercoverWon || hasCivilianWon || roundOver;
+    hasMrWhiteWon() {
+      const mrWhiteGuessCorrect = this.mrWhiteGuess === this.civilianWord
+      const atLeastOneMrWhiteRemaining = this.numberOfMrWhiteRemaining > 0
+      return (mrWhiteGuessCorrect && atLeastOneMrWhiteRemaining) || (this.numberOfCiviliansRemaining === 0 && this.numberOfUndercoversRemaining === 0)
     },
-  }
+
+    hasUndercoverWon() {
+      const atLeastOneUndercoverRemaining = this.numberOfUndercoversRemaining > 0
+      const moreUndercoversThanCivilians = this.numberOfUndercoversRemaining > this.numberOfCiviliansRemaining
+      return atLeastOneUndercoverRemaining && moreUndercoversThanCivilians
+    },
+
+    hasCivilianWon() {
+      const atLeastOneCivilianRemaining = this.numberOfCiviliansRemaining > 0
+      const moreCiviliansThanUndercovers = this.numberOfCiviliansRemaining > this.numberOfUndercoversRemaining
+      const everyMrWhiteEliminated = this.numberOfMrWhiteRemaining === 0
+      return atLeastOneCivilianRemaining && moreCiviliansThanUndercovers && everyMrWhiteEliminated
+    },
+
+    roundOver() {
+      return (this.currentRound > this.ROUNDS_NB_MAX);
+    },
+
+    isGameOver() {
+      const noPlayersRemaining = this.numberOfPlayersRemaining === 0
+      return this.hasMrWhiteWon || this.hasUndercoverWon || this.hasCivilianWon || this.roundOver() || noPlayersRemaining
+    },
+  },
 });
