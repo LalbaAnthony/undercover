@@ -4,24 +4,24 @@
       <div class="flex items-center gap-4">
         <EqualsIcon v-if="props.dragButton" class="size-6 text-gray" />
         <div class="overflow-hidden">{{ props.player.name }}</div>
-        <div v-if="undercoverStore.DEBUG_ACTIVE || props.displayRole" class="text-gray overflow-hidden">
+        <div v-if="props.displayRole" class="text-gray overflow-hidden">
           {{ undercoverStore.getRole(props.player.role).name }}
         </div>
       </div>
       <div class="flex items-center justify-end gap-2">
         <button v-if="props.seeButton"
           class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200"
-          @click.stop="enableShowInfo()">
+          @click="enableShowInfo()">
           <EyeIcon class="size-6 text-primary" />
         </button>
         <button v-if="props.eliminateButton" :disabled="props.player.eliminated"
           class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200 bg-primary disabled:bg-dark-gray"
-          @click.stop="eliminatePlayer(props.player.id)">
+          @click="eliminatePlayer(props.player.id)">
           <UserMinusIcon class="size-6 text-light" />
         </button>
         <button v-if="props.deleteButton"
           class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200"
-          @click.stop="undercoverStore.deletePlayer(props.player.id)">
+          @click="undercoverStore.deletePlayer(props.player.id)">
           <TrashIcon class="size-6 text-primary" />
         </button>
       </div>
@@ -45,8 +45,8 @@
 </template>
 
 <script setup>
-import Word from '@/components/word/ItemComponent.vue'
-import Role from '@/components/role/ItemComponent.vue'
+import Word from '@/components/undercover/WordComponent.vue'
+import Role from '@/components/undercover/RoleComponent.vue'
 import { EyeIcon } from '@heroicons/vue/24/outline'
 import { TrashIcon } from '@heroicons/vue/24/outline'
 import { EqualsIcon } from '@heroicons/vue/24/outline'
@@ -102,14 +102,14 @@ function enableShowInfo() {
     return true
   }
 
-  if (undercoverStore.DEBUG_ACTIVE) {
+  if (undercoverStore.DEBUG) {
     showInfo.value = true
     return true
   }
 
   if (Object.prototype.hasOwnProperty.call(props.player, 'password') && props.player.password) {
     const password = prompt(`Enter the password for ${props.player.name} to see their role:`, '')
-    if (undercoverStore.DEBUG_ACTIVE || password === props.player.password) {
+    if (password === props.player.password) {
       showInfo.value = true
       return true
     } else {
@@ -118,14 +118,14 @@ function enableShowInfo() {
     }
   }
 
-  if (undercoverStore.DEBUG_ACTIVE || confirm(`Est-ce que tu veux vraiment voir le rôle de ${props.player.name} ?`)) {
+  if (confirm(`Est-ce que tu veux vraiment voir le rôle de ${props.player.name} ?`)) {
     showInfo.value = true
     return true
   }
 }
 
 function eliminatePlayer() {
-  if (undercoverStore.DEBUG_ACTIVE || confirm(`Es-tu sûr de vouloir éliminer ${props.player.name} ?`)) {
+  if (confirm(`Es-tu sûr de vouloir éliminer ${props.player.name} ?`)) {
     undercoverStore.eliminatePlayer(props.player.id)
   }
   enableReveal()

@@ -4,7 +4,7 @@ Must:
 
 Should
 - [ ] Uncomment settings block on setup page + Use params in game behavior
-- [ ] Implementer rounds et ordre (order can either be random or not) (mrWhite can/cannot start a new round, ...)
+- [ ] Implementer rounds et ordre (order can either be random or not) (white can/cannot start a new round, ...)
 - [ ] Check for any TODO or WIP or console.log
 
 Could:

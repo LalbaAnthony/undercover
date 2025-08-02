@@ -15,7 +15,7 @@ import { useUndercoverStore } from '@/stores/undercover'
 const undercoverStore = useUndercoverStore()
 
 function endGame() {
-  if (confirm('Es-tu sûr de vouloir arrêter la partie ?')) {
+  if (undercoverStore.DEBUG_ACTIVE || confirm('Es-tu sûr de vouloir arrêter la partie ?')) {
     undercoverStore.endGame()
   }
 }

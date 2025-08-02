@@ -21,7 +21,7 @@ import { useUndercoverStore } from '@/stores/undercover'
 const undercoverStore = useUndercoverStore()
 
 function resetAll() {
-  if (confirm('Es-tu sûr de vouloir réinitialiser la configuration ?')) {
+  if (undercoverStore.DEBUG_ACTIVE || confirm('Es-tu sûr de vouloir réinitialiser la configuration ?')) {
     undercoverStore.resetAll()
   }
 }

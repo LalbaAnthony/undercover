@@ -91,6 +91,12 @@ export const useUndercoverStore = defineStore('undercover', {
       return false
     },
 
+    areAllNamesUnique() {
+      const names = this.players.map(player => player.name)
+      const uniqueNames = new Set(names)
+      return names.length === uniqueNames.size
+    },
+
     clearPlayers() {
       this.players = []
     },
@@ -125,11 +131,6 @@ export const useUndercoverStore = defineStore('undercover', {
       this.clearPlayersRoles()
     },
 
-    deleteAll() {
-      localStorage.clear()
-      sessionStorage.clear()
-    },
-
     resetAll() {
       this.clearPlayers()
       this.resetSettings()
@@ -143,10 +144,8 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     initSetup() {
-      this.fetchAllWords()
-      this.fetchAllRoles()
-      this.fetchAllDistributions()
-      this.fillDistribution()
+      this.fetchEverything()
+      this.autofillDistribution()
     },
 
     generateId() {
@@ -157,7 +156,7 @@ export const useUndercoverStore = defineStore('undercover', {
       name = beautify(name)
       password = (password?.length > 0) ? password.trim() : null
 
-      if (name.length === 0) {
+      if (!name || name.length === 0) {
         notif.notify('Le nom du joueur ne peut pas être vide', 'error')
         console.error('The player name cannot be empty')
         return false
@@ -189,7 +188,7 @@ export const useUndercoverStore = defineStore('undercover', {
         eliminated: false,
       })
 
-      this.fillDistribution()
+      this.autofillDistribution()
     },
 
     eliminatePlayer(id) {
@@ -229,7 +228,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     deletePlayer(id) {
       this.players = this.players.filter((player) => player.id !== id);
-      this.fillDistribution()
+      this.autofillDistribution()
     },
 
     getPlayer(id) {
@@ -273,7 +272,7 @@ export const useUndercoverStore = defineStore('undercover', {
     canIncrementDistribution() {
       if (this.numberOfPlayers === 0) {
         return false
-      } else if (this.numberDistribution + 1 > this.numberOfPlayers) {
+      } else if (this.numberOfInDistribution + 1 > this.numberOfPlayers) {
         return false
       }
 
@@ -292,7 +291,7 @@ export const useUndercoverStore = defineStore('undercover', {
       }
     },
 
-    fillDistribution() {
+    autofillDistribution() {
       if (this.numberOfPlayers >= this.PLAYERS_NB_MIN && this.numberOfPlayers <= this.PLAYERS_NB_MAX) {
         this.distribution = {
           civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
@@ -332,16 +331,8 @@ export const useUndercoverStore = defineStore('undercover', {
       // Assignate the words to the roles
     },
 
-    distributionMatchPlayersNumber() {
-      if (this.numberDistribution !== this.numberOfPlayers) {
-        return true
-      }
-
-      return false
-    },
-
     async assignRoles() {
-      if (this.numberDistribution !== this.numberOfPlayers) {
+      if (this.numberOfInDistribution !== this.numberOfPlayers) {
         console.error('Number of roles does not match the number of players')
         return false
       }
@@ -364,9 +355,15 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
-      if (this.distributionMatchPlayersNumber()) {
+      if (this.numberOfInDistribution !== this.numberOfPlayers) {
         notif.notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
         console.error('Number of roles does not match the number of players')
+        return false
+      }
+
+      if (!this.areAllNamesUnique) {
+        notif.notify('Tous les noms de joueurs doivent être uniques', 'error')
+        console.error('All player names must be unique')
         return false
       }
 
@@ -443,7 +440,7 @@ export const useUndercoverStore = defineStore('undercover', {
       console.log('currentRound', this.currentRound)
       console.log('isGameRunning', this.isGameRunning)
       console.log('-'.repeat(40))
-      console.log('numberDistribution', this.numberDistribution)
+      console.log('numberOfInDistribution', this.numberOfInDistribution)
       console.log('numberOfPlayers', this.numberOfPlayers)
       console.log('numberOfPlayersEliminated', this.numberOfPlayersEliminated)
       console.log('numberOfPlayersRemaining', this.numberOfPlayersRemaining)
@@ -462,7 +459,7 @@ export const useUndercoverStore = defineStore('undercover', {
     }
   },
   getters: {
-    numberDistribution() {
+    numberOfInDistribution() {
       let total = 0;
       for (const role in this.distribution) {
         if (Object.prototype.hasOwnProperty.call(this.distribution, role)) {
@@ -525,7 +522,8 @@ export const useUndercoverStore = defineStore('undercover', {
       const atLeastOneCivilianRemaining = this.numberOfCiviliansRemaining > 0
       const moreCiviliansThanUndercovers = this.numberOfCiviliansRemaining > this.numberOfUndercoversRemaining
       const everyMrWhiteEliminated = this.numberOfMrWhiteRemaining === 0
-      return atLeastOneCivilianRemaining && moreCiviliansThanUndercovers && everyMrWhiteEliminated
+      const everyUndercoversEliminated = this.numberOfUndercoversRemaining === 0
+      return atLeastOneCivilianRemaining && moreCiviliansThanUndercovers && everyMrWhiteEliminated && everyUndercoversEliminated
     },
 
     roundOver() {
@@ -534,7 +532,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     isGameOver() {
       const noPlayersRemaining = this.numberOfPlayersRemaining === 0
-      return this.hasMrWhiteWon || this.hasUndercoverWon || this.hasCivilianWon || this.roundOver() || noPlayersRemaining
+      return this.hasMrWhiteWon || this.hasUndercoverWon || this.hasCivilianWon || this.roundOver || noPlayersRemaining
     },
   },
 });

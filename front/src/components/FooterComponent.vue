@@ -6,7 +6,7 @@
       <router-link to="/rules" class="text-primary hover:underline">Règles</router-link>
       <span class="text-gray">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
       <a :href="VITE_GIT_REPO + '/issues'" target="_blank" class="text-primary hover:underline"
-      @click="undercoverStore.printGameState()">Signaler un bug</a>
+        @click="undercoverStore.printGameState()">Signaler un bug</a>
       <span class="text-gray">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
       <button class="text-primary hover:underline" @click="deleteAll">Supprimer tout</button>
     </div>
@@ -27,8 +27,10 @@ function deleteAll() {
     if (undercoverStore.isGameRunning && !confirm('La partie en cours sera perdue. Es-tu sûr de vouloir continuer ?')) {
       return;
     }
-    undercoverStore.deleteAll()
-    window.location.reload()
+
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.reload();
   }
 }
 
