@@ -1,6 +1,7 @@
 Must:
 - [ ] Game over with message
 - [ ] Modal pour saisi du mot secret pr Mr White
+- [ ] Remaining roles counters in /game
 
 Should
 - [ ] Uncomment settings block on setup page + Use params in game behavior
