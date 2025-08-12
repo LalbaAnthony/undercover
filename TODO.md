@@ -1,13 +1,13 @@
 Must:
+- [x] Faire en sorte qu'on puisse désactiver débug en tapotant sur le même button
 - [ ] Game over with message
 - [ ] Modal pour saisi du mot secret pr Mr White
-- [ ] Remaining roles counters in /game
+- [x] Remaining roles counters in /game
 
 Should
-- [ ] Uncomment settings block on setup page + Use params in game behavior
 - [ ] Implementer rounds et ordre (order can either be random or not) (white can/cannot start a new round, ...)
+- [ ] Use settings in game behavior
 - [ ] Check for any TODO or WIP or console.log
-- [ ] Faire en sorte qu'on puisse désactiver débug en tapotant sur le même button
 
 Could:
 - [ ] Make atome components (button with icon, ...) and use them everywhere (esp button)

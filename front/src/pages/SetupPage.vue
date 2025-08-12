@@ -2,9 +2,9 @@
   <div class="setup">
     <Players :deleteButton="true" :dragButton="true" :addButton="true" class="a" />
     <Roles class="b" />
-    <!-- <Settings class="c" /> -->
+    <Settings class="c" />
     <Actions class="d" :actions="[
-      { name: 'Réinitialiser', type: 'secondary', callback: () => resetAll() },
+      { name: 'Réinitialiser', type: 'dark', callback: () => resetAll() },
       { name: 'Jouer', type: 'primary', callback: () => undercoverStore.startGame() }
     ]" />
   </div>
@@ -13,7 +13,7 @@
 <script setup>
 import Players from '@/components/player/ListComponent.vue'
 import Roles from '@/components/role/RepartitionComponent.vue'
-// import Settings from '@/components/setting/ListComponent.vue'
+import Settings from '@/components/setting/ListComponent.vue'
 import Actions from '@/components/ActionsComponent.vue'
 import { onMounted } from 'vue'
 import { useUndercoverStore } from '@/stores/undercover'

@@ -7,11 +7,9 @@
       <ChevronLeftIcon class="size-8" />
     </button>
     <h1 class="text-center text-4xl my-4">{{ route?.meta?.title || VITE_APP_NAME }}</h1>
-    <button v-if="undercoverStore.DEBUG_ACTIVE" class="rounded-full p-2 bg-primary" @click="undercoverStore.printGameState()">
-      <BugAntIcon class="size-8" />
-    </button>
-    <button v-else class="rounded-full p-2 bg-dark" @click="incrementDebugCounter()">
-      <BugAntIcon class="size-8 text-dark" />
+    <button :class="['rounded-full p-2', undercoverStore.DEBUG_ACTIVE ? 'bg-primary' : 'bg-dark']"
+      @click="handleDebug()">
+      <BugAntIcon :class="['size-8', undercoverStore.DEBUG_ACTIVE ? 'text-light' : 'text-dark']" />
     </button>
   </header>
 </template>
@@ -31,14 +29,18 @@ const route = useRoute()
 const router = useRouter()
 
 const debugCount = ref(0)
-const DEBUG_COUNT_GOAL = 5
+const DEBUG_GOAL_PRINT = 1
+const DEBUG_GOAL_TOGGLE = 5
 
-function incrementDebugCounter() {
+function handleDebug() {
   debugCount.value++
-  if (debugCount.value === DEBUG_COUNT_GOAL) {
+
+  if (debugCount.value % DEBUG_GOAL_TOGGLE === 0) {
     alert('Debug mode toggled')
     undercoverStore.DEBUG_ACTIVE = !undercoverStore.DEBUG_ACTIVE
-    debugCount.value = 0
+  }
+  if (debugCount.value % DEBUG_GOAL_PRINT === 0) {
+    if (undercoverStore.DEBUG_ACTIVE) undercoverStore.printGameState()
   }
 }
 

@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { notif } from '@/composables/notif.js'
 import { beautify } from '@/composables/helpers.js'
-import { VITE_DEBUG } from '@/config';
 import router from '@/router'
 import md5 from 'crypto-js/md5'
 
@@ -9,7 +8,7 @@ export const useUndercoverStore = defineStore('undercover', {
   persist: true,
   state: () => ({
     // * Constants
-    DEBUG_ACTIVE: VITE_DEBUG || VITE_DEBUG == 'true' || VITE_DEBUG == '1' || false,
+    DEBUG_ACTIVE: false,
     ROUNDS_NB_MIN: 1,
     ROUNDS_NB_MAX: 999,
     PLAYERS_NB_MIN: 3,
