@@ -4,7 +4,7 @@
       <div class="flex items-center gap-4">
         <EqualsIcon v-if="props.dragButton" class="size-6 text-gray" />
         <div class="overflow-hidden">{{ props.player.name }}</div>
-        <div v-if="undercoverStore.DEBUG_ACTIVE || props.displayRole" class="text-gray overflow-hidden">
+        <div v-if="undercoverStore.DEBUG_ACTIVE || props.displayRole" class="text-secondary font-bold overflow-hidden">
           {{ undercoverStore.getRole(props.player.role).name }}
         </div>
       </div>
