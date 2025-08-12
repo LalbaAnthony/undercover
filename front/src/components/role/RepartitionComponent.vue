@@ -7,8 +7,8 @@
                     @click="undercoverStore.decrementDistribution(key)">
                 </Button>
                 <div>
-                    {{ undercoverStore.distribution[key] }}&nbsp;
-                    <span class="text-xl">{{ role.name }}</span>
+                    <span class="text-xl">{{ undercoverStore.distribution[key] }}&nbsp;&nbsp;{{
+                        undercoverStore.distribution[key] > 1 ? role.labels.plural : role.labels.singular }}</span>
                 </div>
                 <Button icon="plus" :disabled="!undercoverStore.canIncrementDistribution(key)"
                     @click="undercoverStore.incrementDistribution(key)">

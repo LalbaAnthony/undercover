@@ -2,27 +2,17 @@
   <div>
     <Bento>
       <div class="flex items-center justify-evenly flex-wrap gap-x-6 gap-y-4">
-        <div v-if="undercoverStore.numberOfCivilians > 0">
-          <span :class="['text-xl font-bold', undercoverStore.numberOfCiviliansRemaining > 0 ? 'text-primary' : '']">{{
-            undercoverStore.numberOfCiviliansRemaining }}</span>
-          <span>&nbsp;/&nbsp;</span>
-          <span class="text-xl font-bold">{{ undercoverStore.numberOfCivilians }}</span>
-          <span>&nbsp;&nbsp; civils</span>
-        </div>
-        <div v-if="undercoverStore.numberOfUndercovers > 0">
-          <span
-            :class="['text-xl font-bold', undercoverStore.numberOfUndercoversRemaining > 0 ? 'text-primary' : '']">{{
-              undercoverStore.numberOfUndercoversRemaining }}</span>
-          <span>&nbsp;/&nbsp;</span>
-          <span class="text-xl font-bold">{{ undercoverStore.numberOfUndercovers }}</span>
-          <span>&nbsp;&nbsp; undercovers</span>
-        </div>
-        <div v-if="undercoverStore.numberOfWhite > 0">
-          <span :class="['text-xl font-bold', undercoverStore.numberOfWhiteRemaining > 0 ? 'text-primary' : '']">{{
-            undercoverStore.numberOfWhiteRemaining }}</span>
-          <span>&nbsp;/&nbsp;</span>
-          <span class="text-xl font-bold">{{ undercoverStore.numberOfWhite }}</span>
-          <span>&nbsp;&nbsp; Mr. White</span>
+        <div v-for="(role, key) in undercoverStore.allRoles" :key="key">
+          <div v-if="undercoverStore.numberOfPlayersByRole(key) > 0">
+            <span
+              :class="['text-xl font-bold', undercoverStore.numberOfPlayersRemainingByRole(key) > 0 ? 'text-primary' : '']">{{
+                undercoverStore.numberOfPlayersRemainingByRole(key) }}</span>
+            <span>&nbsp;/&nbsp;</span>
+            <span class="text-xl font-bold">{{ undercoverStore.numberOfPlayersByRole(key) }}</span>
+            <span>&nbsp;&nbsp; {{
+              undercoverStore.numberOfPlayersRemainingByRole(key) > 1 ? role.labels.plural : role.labels.singular
+            }}</span>
+          </div>
         </div>
       </div>
     </Bento>

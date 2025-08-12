@@ -79,6 +79,18 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.allRoles[role]
     },
 
+    numberOfPlayersByRole(role) {
+      return this.players.filter((player) => player.role === role).length
+    },
+
+    numberOfPlayersEliminatedByRole(role) {
+      return this.players.filter((player) => player.role === role && player.eliminated).length
+    },
+
+    numberOfPlayersRemainingByRole(role) {
+      return this.players.filter((player) => player.role === role && !player.eliminated).length
+    },
+
     nameExistInPlayers(name) {
       if (!name || name.length === 0) return false
       if (this.players.length === 0) return false
