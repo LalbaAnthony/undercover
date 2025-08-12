@@ -9,12 +9,12 @@
         </div>
       </div>
       <div class="flex items-center justify-end gap-2">
+        <Button v-if="props.deleteButton" type="dark" icon="trash" class="text-primary"
+          @click.stop="undercoverStore.deletePlayer(props.player.id)">
+        </Button>
         <Button v-if="props.seeButton" type="secondary" icon="eye" @click.stop="enableShowInfo()"> </Button>
         <Button v-if="props.eliminateButton" type="primary" :disabled="props.player.eliminated" icon="userMinus"
           @click.stop="eliminatePlayer()"> </Button>
-        <Button v-if="props.deleteButton" type="secondary" icon="trash"
-          @click.stop="undercoverStore.deletePlayer(props.player.id)">
-        </Button>
       </div>
     </div>
 
