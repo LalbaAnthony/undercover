@@ -6,7 +6,7 @@
     classes[props.type],
     props.class
   ]" :disabled="props.disabled" @click="props.callback">
-    <component v-if="props.icon" :is="icons[props.icon]" class="size-6" />
+    <component v-if="props.icon" :is="icons[props.icon]" :class="[`size-${props.iconSize}`]" />
     <slot></slot>
     <span v-if="props.text">{{ props.text }}</span>
   </button>
@@ -39,6 +39,11 @@ const props = defineProps({
   icon: {
     type: String,
     default: null,
+    required: false,
+  },
+  iconSize: {
+    type: Number,
+    default: 6,
     required: false,
   },
   class: {

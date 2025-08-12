@@ -21,9 +21,18 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  modelValue: { type: Boolean, default: false },
-  label: { type: String, default: '' },
-  disabled: { type: Boolean, default: false },
+  modelValue: {
+    type: Boolean,
+    default: false
+  },
+  label: {
+    type: String,
+    default: ''
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -42,5 +51,3 @@ function onChange(e) {
   localValue.value = e.target.checked
 }
 </script>
-
-<!-- No extra styles needed — styling done with Tailwind classes -->
