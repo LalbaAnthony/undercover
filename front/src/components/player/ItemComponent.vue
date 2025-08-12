@@ -9,29 +9,22 @@
         </div>
       </div>
       <div class="flex items-center justify-end gap-2">
-        <button v-if="props.seeButton"
-          class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200"
-          @click.stop="enableShowInfo()">
-          <EyeIcon class="size-6 text-primary" />
-        </button>
-        <button v-if="props.eliminateButton" :disabled="props.player.eliminated"
-          class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200 bg-primary disabled:bg-dark-gray"
-          @click.stop="eliminatePlayer(props.player.id)">
-          <UserMinusIcon class="size-6 text-light" />
-        </button>
-        <button v-if="props.deleteButton"
-          class="cursor-pointer rounded-full p-1 hover:scale-105 transition-transform duration-200"
+        <Button v-if="props.seeButton" type="secondary" icon="eye" @click.stop="enableShowInfo()"> </Button>
+        <Button v-if="props.eliminateButton" type="primary" :disabled="props.player.eliminated" icon="userMinus"
+          @click.stop="eliminatePlayer()"> </Button>
+        <Button v-if="props.deleteButton" type="secondary" icon="trash"
           @click.stop="undercoverStore.deletePlayer(props.player.id)">
-          <TrashIcon class="size-6 text-primary" />
-        </button>
+        </Button>
       </div>
     </div>
 
     <Panel :show="showReveal" @hide="showReveal = false">
       <div class="flex flex-col gap-4">
         <h4 class="text-3xl">{{ props.player.name }} était ...</h4>
-        <Role :role="undercoverStore.getRole(props.player.role)" :displayGoal="false" />
-        <!-- TODO Suite à l'élimination de Mr White, il doit deviner le mot des civils -->
+        <Role :role="undercoverStore.getRole(props.player.role)" :displayGoal="false" :displayDescription="false" />
+        <div v-if="props.player.role === 'white'">
+          <!-- TODO Suite à l'élimination de Mr White, il doit deviner le mot des civils -->
+        </div>
       </div>
     </Panel>
 
@@ -45,12 +38,10 @@
 </template>
 
 <script setup>
+import Button from '@/components/ButtonComponent.vue'
 import Word from '@/components/word/ItemComponent.vue'
 import Role from '@/components/role/ItemComponent.vue'
-import { EyeIcon } from '@heroicons/vue/24/outline'
-import { TrashIcon } from '@heroicons/vue/24/outline'
 import { EqualsIcon } from '@heroicons/vue/24/outline'
-import { UserMinusIcon } from '@heroicons/vue/24/outline'
 import { useUndercoverStore } from '@/stores/undercover'
 import { ref } from 'vue'
 import Panel from '@/components/PanelComponent.vue'

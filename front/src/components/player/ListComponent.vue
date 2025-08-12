@@ -14,25 +14,21 @@
         :deleteButton="props.deleteButton" :eliminateButton="props.eliminateButton" />
     </div>
 
-    <div v-if="props.addButton" class="flex justify-between items-center gap-2 mt-2 p-2 border-b-2 border-dark-gray">
+    <div v-if="props.addButton" class="flex justify-between items-center gap-2 mt-2 p-2 pr-4 border-b-2 border-dark-gray">
       <input class="w-full py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
         v-model="name" @keyup.enter="addPlayer()">
-      <button
-        class="cursor-pointer rounded-lg bg-primary text-white p-0.5 mr-[11px] hover:scale-105 transition-all duration-200"
-        @click="addPlayer()">
-        <PlusIcon class="size-6 text-light" />
-      </button>
+      <Button type="primary" icon="plus" @click="addPlayer"></Button>
     </div>
   </Bento>
 </template>
 
 <script setup>
+import Button from '@/components/ButtonComponent.vue'
 import { ref } from 'vue'
 import Player from '@/components/player/ItemComponent.vue'
 import Bento from '@/components/BentoComponent.vue'
 import { useUndercoverStore } from '@/stores/undercover'
 import Draggable from 'vuedraggable'
-import { PlusIcon } from '@heroicons/vue/24/solid'
 
 const undercoverStore = useUndercoverStore()
 

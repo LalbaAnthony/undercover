@@ -2,6 +2,7 @@
   <div>
     <Roles />
     <Actions :actions="[
+      { name: 'Retour', type: 'dark', callback: goBack },
       { name: 'Copier', type: 'primary', callback: copyRules },
     ]" />
   </div>
@@ -14,6 +15,10 @@ import { notif } from '@/composables/notif.js'
 import { useUndercoverStore } from '@/stores/undercover'
 
 const undercoverStore = useUndercoverStore()
+
+function goBack() {
+  window.history.back()
+}
 
 function copyRules() {
   let rules = 'Règles du jeu Undercover :\n\n'

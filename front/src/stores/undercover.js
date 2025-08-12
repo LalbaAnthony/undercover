@@ -126,6 +126,7 @@ export const useUndercoverStore = defineStore('undercover', {
       this.isGameRunning = false
       this.undercoversWord = ''
       this.civilianWord = ''
+      this.whiteGuess = ''
       this.reviveAllPlayers()
       this.clearPlayersRoles()
     },
@@ -198,7 +199,9 @@ export const useUndercoverStore = defineStore('undercover', {
       }
 
       if (player.role === 'white') {
-        this.whiteGuess = beautify(prompt('Entrez le mot que Mr White pense être le bon', ''))
+        while (this.whiteGuess.length === 0) {
+          this.whiteGuess = beautify(prompt('Entrez le mot que Mr White pense être le bon', ''))
+        }
         if (this.whiteGuess.length === 0) {
           notif.notify('Le mot de Mr White ne peut pas être vide', 'error')
           console.error('Mr White word cannot be empty')
@@ -430,8 +433,11 @@ export const useUndercoverStore = defineStore('undercover', {
       console.log('-'.repeat(40))
       console.log('undercoversWord', this.undercoversWord)
       console.log('civilianWord', this.civilianWord)
+      console.log('whiteGuess', this.whiteGuess)
       console.log('-'.repeat(40))
       console.table(this.players)
+      console.log('-'.repeat(40))
+      console.table(this.settings)
       console.log('-'.repeat(40))
       console.log('distribution', this.distribution)
       console.log('currentPlayer', this.currentPlayer)
