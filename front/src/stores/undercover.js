@@ -174,25 +174,13 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
-      const numberMinPlayerRequiredToPlayWithCivilian = this.getRole('civilian')?.numberMinPlayerRequired
-      if (this.numberOfPlayers < numberMinPlayerRequiredToPlayWithCivilian && this.distribution.civilian > 0) {
-        notif.notify(`Il faut au moins ${numberMinPlayerRequiredToPlayWithCivilian} joueurs pour jouer avec un civil`, 'error')
-        console.error('Not enough players to play with a civilian')
-        return false
-      }
-
-      const numberMinPlayerRequiredToPlayWithUndercover = this.getRole('undercover')?.numberMinPlayerRequired
-      if (this.numberOfPlayers < numberMinPlayerRequiredToPlayWithUndercover && this.distribution.undercover > 0) {
-        notif.notify(`Il faut au moins ${numberMinPlayerRequiredToPlayWithUndercover} joueurs pour jouer avec un undercover`, 'error')
-        console.error('Not enough players to play with an undercover')
-        return false
-      }
-
-      const numberMinPlayerRequiredToPlayWithWhite = this.getRole('white')?.numberMinPlayerRequired
-      if (this.numberOfPlayers < numberMinPlayerRequiredToPlayWithWhite && this.distribution.white > 0) {
-        notif.notify(`Il faut au moins ${numberMinPlayerRequiredToPlayWithWhite} joueurs pour jouer avec Mr White`, 'error')
-        console.error('Not enough players to play with Mr White')
-        return false
+      for (const [key, value] of Object.entries(this.allRoles)) {
+        const numberMinPlayerRequiredToPlayWith = this.getRole(key)?.numberMinPlayerRequired
+        if (this.numberOfPlayers < numberMinPlayerRequiredToPlayWith && this.distribution[key] > 0) {
+          notif.notify(`Il faut au moins ${numberMinPlayerRequiredToPlayWith} joueurs pour jouer avec un ${value.name}`, 'error')
+          console.error(`Not enough players to play with a ${value.name}`)
+          return false
+        }
       }
 
       if (this.distribution.civilian <= (this.distribution.undercover + this.distribution.white)) {
