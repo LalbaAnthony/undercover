@@ -16,12 +16,17 @@ router.beforeEach((to, from, next) => {
     undercoverStore.resetGame()
   }
 
+  if (to.name === 'setup' && undercoverStore.isGameRunning) {
+    next({ name: 'game' })
+    return;
+  }
+
   if (to.name === 'game' && !undercoverStore.isGameRunning) {
     next({ name: 'setup' })
     return;
   }
 
-  if (to.name === 'setup' && undercoverStore.isGameRunning) {
+  if (to.name === 'over' && !undercoverStore.isGameRunning) {
     next({ name: 'game' })
     return;
   }

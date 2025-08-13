@@ -2,33 +2,18 @@
   <div>
     <Bento>
       <div class="flex flex-col flex-wrap gap-4">
-        <h4 class="text-xl font-bold">Nous en somme au tour numéro <span class="text-primary font-bold">{{
+        <h4 class="text-lg">Nous en sommes au tour numéro <span class="text-primary font-bold">{{
           undercoverStore.currentRound }}</span>
         </h4>
-        <h4 class="text-xl font-bold">Et c'est à <span class="text-primary font-bold">{{
+        <h4 class="text-lg">Et c'est à <span class="text-primary font-bold">{{
           undercoverStore.getPlayerMustBegin()?.name }}</span> de commencer !
         </h4>
       </div>
     </Bento>
-    <Bento>
-      <div class="flex items-center justify-evenly flex-wrap gap-x-6 gap-y-4">
-        <div v-for="(role, key) in undercoverStore.allRoles" :key="key">
-          <div v-if="undercoverStore.numberOfPlayersByRole(key) > 0">
-            <span
-              :class="['text-xl font-bold', undercoverStore.numberOfPlayersRemainingByRole(key) > 0 ? 'text-primary' : '']">{{
-                undercoverStore.numberOfPlayersRemainingByRole(key) }}</span>
-            <span>&nbsp;/&nbsp;</span>
-            <span class="text-xl font-bold">{{ undercoverStore.numberOfPlayersByRole(key) }}</span>
-            <span>&nbsp;&nbsp; {{
-              undercoverStore.numberOfPlayersRemainingByRole(key) > 1 ? role.labels.plural : role.labels.singular
-            }}</span>
-          </div>
-        </div>
-      </div>
-    </Bento>
+    <Remainings />
     <Players :title="false" :seeButton="true" :eliminateButton="true" />
     <Actions :actions="[
-      { name: 'Arrêter la partie', type: 'dark', callback: endGame },
+      { name: 'Arrêter la partie', type: 'dark', callback: undercoverStore.restartGame },
     ]" />
   </div>
 </template>
@@ -37,15 +22,10 @@
 import Bento from '@/components/BentoComponent.vue'
 import Actions from '@/components/ActionsComponent.vue'
 import Players from '@/components/player/ListComponent.vue'
+import Remainings from '@/components/role/RemainingsComponent.vue'
 import { useUndercoverStore } from '@/stores/undercover'
 
 const undercoverStore = useUndercoverStore()
-
-function endGame() {
-  if (undercoverStore.DEBUG_ACTIVE || confirm('Es-tu sûr de vouloir arrêter la partie ?')) {
-    undercoverStore.endGame()
-  }
-}
 
 </script>
 

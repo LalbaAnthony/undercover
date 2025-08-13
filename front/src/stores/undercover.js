@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia'
 import { notif } from '@/composables/notif.js'
 import { beautify } from '@/composables/helpers.js'
+import { randomInt } from '@/composables/helpers.js'
 import { shuffle } from '@/composables/helpers.js'
 import { hasInternetConnection } from '@/composables/helpers.js'
+import { nextTick } from 'vue'
 import router from '@/router'
 import md5 from 'crypto-js/md5'
 
@@ -70,7 +72,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     async fetchEverything(force = false) {
-      if (!hasInternetConnection()) { 
+      if (!hasInternetConnection()) {
         console.error('Cannot fetch data, no internet connection')
         return
       }
@@ -138,6 +140,57 @@ export const useUndercoverStore = defineStore('undercover', {
       }
     },
 
+    startGame() {
+      if (this.numberOfPlayers < this.PLAYERS_NB_MIN) {
+        notif.notify('Il faut au moins 3 joueurs pour commencer une partie', 'error')
+        console.error('Not enough players to start the game')
+        return false
+      }
+
+      if (this.numberOfPlayers > this.PLAYERS_NB_MAX) {
+        notif.notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
+        console.error('Too many players to start the game')
+        return false
+      }
+
+      if (this.numberOfInDistribution !== this.numberOfPlayers) {
+        notif.notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
+        console.error('Number of roles does not match the number of players')
+        return false
+      }
+
+      if (!this.areAllNamesUnique) {
+        notif.notify('Tous les noms de joueurs doivent être uniques', 'error')
+        console.error('All player names must be unique')
+        return false
+      }
+
+      if (this.distribution.civilian < this.getRole('civilian')?.numberMinPlayerRequired) {
+        notif.notify('Il faut au moins un civil pour commencer une partie', 'error')
+        return false
+      }
+
+      if (this.distribution.undercover < this.getRole('undercover')?.numberMinPlayerRequired) {
+        notif.notify('Il faut au moins un undercover pour commencer une partie', 'error')
+        return false
+      }
+
+      this.resetGame()
+      this.isGameRunning = true
+
+      if (this.settings.randomOrder) this.shufflePlayers()
+
+      router.push({ name: 'game' })
+      this.setRolesFromDistribution()
+      this.assignateWords()
+    },
+
+    async stopGame() {
+      this.isGameRunning = false
+      await nextTick()
+      router.push({ name: 'over' })
+    },
+
     resetGame() {
       this.currentRound = 1
       this.isGameRunning = false
@@ -155,7 +208,7 @@ export const useUndercoverStore = defineStore('undercover', {
       this.fetchEverything(false)
     },
 
-    endGame() {
+    restartGame() {
       this.resetGame()
       router.push({ name: 'setup' })
     },
@@ -221,20 +274,13 @@ export const useUndercoverStore = defineStore('undercover', {
         }
       }
 
-      const isGameOver = this.isGameOver
-
-      if (isGameOver) {
-        let message = 'La partie est terminée'
-        if (this.hasWhiteWon) message = 'Mr White a gagné !'
-        if (this.hasUndercoverWon) message = 'Les Undercover ont gagné !'
-        if (this.hasCivilianWon) message = 'Les Civils ont gagné !'
-        if (this.roundOver) message = 'La partie est terminée, le nombre de tours maximum a été atteint'
-
-        notif.notify(message, 'info')
-        this.endGame()
-      }
-
       player.eliminated = true
+
+      // TODO Issue decomenting here
+      // if (this.isGameOver) {
+      //   this.stopGame()
+      //   return true
+      // }
 
       this.nextRound()
 
@@ -271,7 +317,7 @@ export const useUndercoverStore = defineStore('undercover', {
     getRandomPlayer(rolesToExclude = []) {
       const filteredPlayers = this.players.filter((player) => !rolesToExclude.includes(player.role))
       if (filteredPlayers.length === 0) return null
-      return filteredPlayers[Math.floor(Math.random() * filteredPlayers.length)]
+      return filteredPlayers[randomInt(0, filteredPlayers.length - 1)];
     },
 
     getPlayerWord(id) {
@@ -301,8 +347,8 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     nextRound() {
-      this.incrementRound()
       if (this.settings.randomOrder) this.shufflePlayers()
+      this.incrementRound()
     },
 
     canDecrementDistribution(role) {
@@ -386,51 +432,6 @@ export const useUndercoverStore = defineStore('undercover', {
       return true
     },
 
-    startGame() {
-      if (this.numberOfPlayers < this.PLAYERS_NB_MIN) {
-        notif.notify('Il faut au moins 3 joueurs pour commencer une partie', 'error')
-        console.error('Not enough players to start the game')
-        return false
-      }
-
-      if (this.numberOfPlayers > this.PLAYERS_NB_MAX) {
-        notif.notify('Il y a clairement trop de joueurs pour jouer à ce jeu, faites un match de foot', 'error')
-        console.error('Too many players to start the game')
-        return false
-      }
-
-      if (this.numberOfInDistribution !== this.numberOfPlayers) {
-        notif.notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
-        console.error('Number of roles does not match the number of players')
-        return false
-      }
-
-      if (!this.areAllNamesUnique) {
-        notif.notify('Tous les noms de joueurs doivent être uniques', 'error')
-        console.error('All player names must be unique')
-        return false
-      }
-
-      if (this.distribution.civilian < this.getRole('civilian')?.numberMinPlayerRequired) {
-        notif.notify('Il faut au moins un civil pour commencer une partie', 'error')
-        return false
-      }
-
-      if (this.distribution.undercover < this.getRole('undercover')?.numberMinPlayerRequired) {
-        notif.notify('Il faut au moins un undercover pour commencer une partie', 'error')
-        return false
-      }
-
-      this.resetGame()
-      this.isGameRunning = true
-
-      if (this.settings.randomOrder) this.shufflePlayers()
-
-      router.push({ name: 'game' })
-      this.setRolesFromDistribution()
-      this.assignateWords()
-    },
-
     shufflePlayers() {
       this.players = shuffle(this.players)
     },
@@ -452,7 +453,7 @@ export const useUndercoverStore = defineStore('undercover', {
       let i = 0
 
       while (((!words[0] || !words[1]) || this.hasPlayedWords(words[0], words[1])) && i < this.WORDS_ATTEMPTS_NB_MAX) {
-        const index = Math.floor(Math.random() * this.allWords.length)
+        const index = randomInt(0, this.allWords.length - 1)
         words = this.allWords[index]
         i++
       }
@@ -472,7 +473,7 @@ export const useUndercoverStore = defineStore('undercover', {
       this.civilianWord = shuffled[1]
     },
 
-    printGameState() {
+    debugGameState() {
       console.log('-'.repeat(40))
       console.log('undercoversWord', this.undercoversWord)
       console.log('civilianWord', this.civilianWord)

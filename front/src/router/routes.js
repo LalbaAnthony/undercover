@@ -27,6 +27,15 @@ const routes = [
       private: false,
     },
   },
+  {
+    path: '/over',
+    name: 'over',
+    component: () => import('../pages/OverPage.vue'),
+    meta: {
+      title: 'Terminé',
+      private: false,
+    },
+  },
   // ==================== CATCH ====================
   {
     path: '/:catchAll(.*)*',

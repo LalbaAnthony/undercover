@@ -6,7 +6,7 @@
       <router-link to="/rules" class="text-secondary text-md hover:underline">Règles</router-link>
       <span class="text-gray">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
       <a :href="VITE_GIT_REPO + '/issues'" target="_blank" class="text-secondary text-md hover:underline"
-        @click="undercoverStore.printGameState()">Signaler un bug</a>
+        @click="undercoverStore.debugGameState()">Signaler un bug</a>
       <span class="text-gray">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
       <span class="text-secondary text-md hover:underline" @click="deleteAll">Supprimer tout</span>
     </div>

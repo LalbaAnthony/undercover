@@ -1,11 +1,11 @@
 Must:
-- [ ] Game over with message
 - [ ] Modal pour saisi du mot secret pr Mr White
+- [ ] Game over with message
+- [ ] Handle la situation ou il reste un joueur de chaque équipe
+- [ ] Check for any TODO or WIP or console.log
 
 Should
-- [ ] Implémenter rounds et ordre (order can either be random or not) (white can/cannot start a new round, ...)
-- [ ] Use settings in game behavior
-- [ ] Check for any TODO or WIP or console.log
+- [ ] ...
 
 Could:
 - [ ] Add a password to the player creation

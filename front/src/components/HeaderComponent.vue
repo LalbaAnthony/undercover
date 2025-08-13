@@ -22,6 +22,7 @@ const router = useRouter()
 const debugCount = ref(0)
 const DEBUG_GOAL_PRINT = 1
 const DEBUG_GOAL_TOGGLE = 5
+const DEBUG_CLICKSPAN_TOGGLE = 5000
 
 function handleDebug() {
   debugCount.value++
@@ -31,14 +32,14 @@ function handleDebug() {
     undercoverStore.DEBUG_ACTIVE = !undercoverStore.DEBUG_ACTIVE
   }
   if (debugCount.value % DEBUG_GOAL_PRINT === 0) {
-    if (undercoverStore.DEBUG_ACTIVE) undercoverStore.printGameState()
+    if (undercoverStore.DEBUG_ACTIVE) undercoverStore.debugGameState()
   }
 }
 
 // Reset debug count every 10 seconds: so user must press DEBUG_GOAL* times in 10 seconds to toggle trigger the event
 setInterval(() => {
   debugCount.value = 0
-}, 10000)
+}, DEBUG_CLICKSPAN_TOGGLE)
 
 function goBack() {
   window.history.back()
