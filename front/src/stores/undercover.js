@@ -153,7 +153,7 @@ export const useUndercoverStore = defineStore('undercover', {
       }
 
       if (this.numberOfInDistribution !== this.numberOfPlayers) {
-        notif.notify('Le nombre de rôles ne correspond pas au nombre de joueurs', 'error')
+        notif.notify('Les nombres des rôles ne correspondent pas au nombre de joueurs', 'error')
         console.error('Number of roles does not match the number of players')
         return false
       }
@@ -164,13 +164,40 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
-      if (this.distribution.civilian < this.getRole('civilian')?.numberMinPlayerRequired) {
+      if (this.distribution.civilian < 1) {
         notif.notify('Il faut au moins un civil pour commencer une partie', 'error')
         return false
       }
 
-      if (this.distribution.undercover < this.getRole('undercover')?.numberMinPlayerRequired) {
+      if (this.distribution.undercover < 1) {
         notif.notify('Il faut au moins un undercover pour commencer une partie', 'error')
+        return false
+      }
+
+      const numberMinPlayerRequiredToPlayWithCivilian = this.getRole('civilian')?.numberMinPlayerRequired
+      if (this.numberOfPlayers < numberMinPlayerRequiredToPlayWithCivilian && this.distribution.civilian > 0) {
+        notif.notify(`Il faut au moins ${numberMinPlayerRequiredToPlayWithCivilian} joueurs pour jouer avec un civil`, 'error')
+        console.error('Not enough players to play with a civilian')
+        return false
+      }
+
+      const numberMinPlayerRequiredToPlayWithUndercover = this.getRole('undercover')?.numberMinPlayerRequired
+      if (this.numberOfPlayers < numberMinPlayerRequiredToPlayWithUndercover && this.distribution.undercover > 0) {
+        notif.notify(`Il faut au moins ${numberMinPlayerRequiredToPlayWithUndercover} joueurs pour jouer avec un undercover`, 'error')
+        console.error('Not enough players to play with an undercover')
+        return false
+      }
+
+      const numberMinPlayerRequiredToPlayWithWhite = this.getRole('white')?.numberMinPlayerRequired
+      if (this.numberOfPlayers < numberMinPlayerRequiredToPlayWithWhite && this.distribution.white > 0) {
+        notif.notify(`Il faut au moins ${numberMinPlayerRequiredToPlayWithWhite} joueurs pour jouer avec Mr White`, 'error')
+        console.error('Not enough players to play with Mr White')
+        return false
+      }
+
+      if (this.distribution.civilian <= (this.distribution.undercover + this.distribution.white)) {
+        notif.notify('Il faut plus de civils que d\'undercover et de Mr White', 'error')
+        console.error('Not enough civilians compared to undercovers and Mr White')
         return false
       }
 
@@ -545,23 +572,20 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     hasWhiteWon() {
-      const whiteGuessCorrect = this.whiteGuess === this.civilianWord
-      const atLeastOneWhiteRemaining = this.numberOfWhiteRemaining > 0
-      return (whiteGuessCorrect && atLeastOneWhiteRemaining) || (this.numberOfCiviliansRemaining === 0 && this.numberOfUndercoversRemaining === 0)
+      const correctGuess = this.whiteGuess === this.civilianWord
+      return correctGuess || (this.numberOfWhiteRemaining >= this.numberOfCiviliansRemaining)
     },
 
     hasUndercoverWon() {
-      const atLeastOneUndercoverRemaining = this.numberOfUndercoversRemaining > 0
-      const moreUndercoversThanCivilians = this.numberOfUndercoversRemaining > this.numberOfCiviliansRemaining
-      return atLeastOneUndercoverRemaining && moreUndercoversThanCivilians
+      return (this.numberOfUndercoversRemaining >= this.numberOfCiviliansRemaining)
+    },
+
+    hasWhiteAndUndercoverWon() {
+      return this.hasWhiteWon && this.hasUndercoverWon
     },
 
     hasCivilianWon() {
-      const atLeastOneCivilianRemaining = this.numberOfCiviliansRemaining > 0
-      const moreCiviliansThanUndercovers = this.numberOfCiviliansRemaining > this.numberOfUndercoversRemaining
-      const everyWhiteEliminated = this.numberOfWhiteRemaining === 0
-      const everyUndercoversEliminated = this.numberOfUndercoversRemaining === 0
-      return atLeastOneCivilianRemaining && moreCiviliansThanUndercovers && everyWhiteEliminated && everyUndercoversEliminated
+      return this.numberOfUndercoversRemaining === 0 && this.numberOfWhiteRemaining === 0 && this.numberOfCiviliansRemaining > 0;
     },
 
     roundOver() {

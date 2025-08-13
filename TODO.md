@@ -5,7 +5,7 @@ Must:
 - [ ] Check for any TODO or WIP or console.log
 
 Should
-- [ ] ...
+- [ ] Hide empty roles in `<Remainings />`
 
 Could:
 - [ ] Add a password to the player creation
