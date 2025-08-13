@@ -3,7 +3,8 @@
     <div class="flex justify-between items-center gap-2 p-4 rounded-2xl border border-2 border-dark-gray">
       <div class="flex items-center gap-4">
         <EqualsIcon v-if="props.dragButton" class="size-6 text-gray" />
-        <div class="overflow-hidden">{{ props.player.name }}</div>
+        <div :class="['overflow-hidden', props.player.eliminated ? ' text-gray line-through' : 'text-white']">{{
+          props.player.name }}</div>
         <div v-if="undercoverStore.DEBUG_ACTIVE || props.displayRole" class="text-secondary font-bold overflow-hidden">
           {{ undercoverStore.getRole(props.player.role).name }}
         </div>
@@ -12,8 +13,9 @@
         <Button v-if="props.deleteButton" type="dark" icon="trash" class="text-primary"
           @click.stop="undercoverStore.deletePlayer(props.player.id)">
         </Button>
-        <Button v-if="props.seeButton" type="secondary" icon="eye" @click.stop="enableShowInfo()"> </Button>
-        <Button v-if="props.eliminateButton" type="primary" :disabled="props.player.eliminated" icon="userMinus"
+        <Button v-if="props.seeButton" type="secondary" icon="eye" :disabled="props.player.eliminated"
+          @click.stop="enableShowInfo()"> </Button>
+        <Button v-if="props.eliminateButton" type="primary" icon="userMinus" :disabled="props.player.eliminated"
           @click.stop="eliminatePlayer()"> </Button>
       </div>
     </div>

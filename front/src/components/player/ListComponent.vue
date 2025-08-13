@@ -14,7 +14,8 @@
         :deleteButton="props.deleteButton" :eliminateButton="props.eliminateButton" />
     </div>
 
-    <div v-if="props.addButton" class="flex justify-between items-center gap-2 mt-2 p-2 pr-4 border-b-2 border-dark-gray">
+    <div v-if="props.addButton"
+      class="flex justify-between items-center gap-2 mt-2 p-2 pr-4 border-b-2 border-dark-gray">
       <input class="w-full py-1.5 px-2 bg-light-dark text-white" type="text" id="name" placeholder="Nom du joueur"
         v-model="name" @keyup.enter="addPlayer()">
       <Button type="primary" icon="plus" @click="addPlayer"></Button>

@@ -2,15 +2,17 @@
   <div>
     <Bento>
       <div class="flex flex-col flex-wrap gap-4">
-        <h4 class="text-lg">La partie est terminée</h4>
-        <h4 class="text-lg">Les&nbsp;
+        <h1 class="text-3xl text-center mb-6">La partie est terminée !</h1>
+        <p class="text-lg">Les&nbsp;
           <span v-if="undercoverStore.hasWhiteAndUndercoverWon" class="text-primary font-bold">undercovers et Mr
             White</span>
           <span v-else-if="undercoverStore.hasCivilianWon" class="text-primary font-bold">civils</span>
           <span v-else-if="undercoverStore.hasUndercoverWon" class="text-primary font-bold">undercovers</span>
-          <span v-if="undercoverStore.hasWhiteWon" class="text-primary font-bold">Mr White</span>
-          <span v-else class="text-primary font-bold">joueurs</span>&nbsp;ont gagnés la partie !
-        </h4>
+          <span v-else-if="undercoverStore.hasWhiteWon" class="text-primary font-bold">Mr White</span>
+          <span v-else class="text-primary font-bold">joueurs</span>&nbsp;ont gagnés la partie.
+        </p>
+        <p>Mot des civils: <span class="text-secondary font-bold">{{ undercoverStore.civilianWord }}</span></p>
+        <p>Mot des undercovers: <span class="text-secondary font-bold">{{ undercoverStore.undercoversWord }}</span></p>
       </div>
     </Bento>
     <RemainingsComponent />
