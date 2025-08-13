@@ -11,11 +11,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const undercoverStore = useUndercoverStore()
-
-  if (from.name === 'game' && to.name !== 'game') {
-    undercoverStore.resetGame()
-  }
-
+  
   if (to.name === 'setup' && undercoverStore.isGameRunning) {
     next({ name: 'game' })
     return;
@@ -23,11 +19,6 @@ router.beforeEach((to, from, next) => {
 
   if (to.name === 'game' && !undercoverStore.isGameRunning) {
     next({ name: 'setup' })
-    return;
-  }
-
-  if (to.name === 'over' && !undercoverStore.isGameRunning) {
-    next({ name: 'game' })
     return;
   }
 

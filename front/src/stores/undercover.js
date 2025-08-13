@@ -4,7 +4,6 @@ import { beautify } from '@/composables/helpers.js'
 import { randomInt } from '@/composables/helpers.js'
 import { shuffle } from '@/composables/helpers.js'
 import { hasInternetConnection } from '@/composables/helpers.js'
-import { nextTick } from 'vue'
 import router from '@/router'
 import md5 from 'crypto-js/md5'
 
@@ -186,9 +185,8 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     async stopGame() {
-      this.isGameRunning = false
-      await nextTick()
       router.push({ name: 'over' })
+      this.isGameRunning = false
     },
 
     resetGame() {
@@ -264,23 +262,16 @@ export const useUndercoverStore = defineStore('undercover', {
       }
 
       if (player.role === 'white') {
-        while (this.whiteGuess.length === 0) {
-          this.whiteGuess = beautify(prompt('Entrez le mot que Mr White pense être le bon', ''))
-        }
-        if (this.whiteGuess.length === 0) {
-          notif.notify('Le mot de Mr White ne peut pas être vide', 'error')
-          console.error('Mr White word cannot be empty')
-          return false
-        }
+        this.whiteGuess = beautify(prompt('Entrez le mot que Mr White pense être le bon', ''))
       }
 
       player.eliminated = true
 
-      // TODO Issue decomenting here
-      // if (this.isGameOver) {
-      //   this.stopGame()
-      //   return true
-      // }
+      console.log('isGameOver', this.isGameOver)
+      if (this.isGameOver) {
+        this.stopGame()
+        return false
+      }
 
       this.nextRound()
 

@@ -1,8 +1,7 @@
 <template>
   <label class="inline-flex items-center cursor-pointer select-none"
     :class="{ 'opacity-50 cursor-not-allowed': disabled }">
-    <input type="checkbox" class="sr-only" :checked="localValue" @change="onChange" :disabled="disabled"
-      aria-hidden="true" />
+    <input type="checkbox" class="sr-only" :checked="localValue" @change="onChange" :disabled="disabled" />
 
     <span role="switch" :aria-checked="String(localValue)" :aria-label="label || 'switch'" tabindex="0"
       @keydown.space.prevent="toggle" @keydown.enter.prevent="toggle"
