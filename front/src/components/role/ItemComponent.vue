@@ -3,11 +3,8 @@
     <UserIcon class="text-primary size-7" />
     <h4 class="text-3xl my-4">{{ props.role?.name }}</h4>
   </div>
-  <p v-if="props.displayDescription" class="text-sm">{{ props.role?.description }}</p>
-  <div v-if="props.displayGoal" class="flex flex-row flex-wrap gap-2 my-4">
-    <h4 class="text-xl">Objectif ? </h4>
-    <h4 class="text-xl">{{ props.role?.goal }}</h4>
-  </div>
+  <p class="text-sm" v-if="props.displayDescription">{{ props.role?.description }}</p>
+  <p class="text-sm" v-if="props.displayGoal">Objectif ? {{ props.role?.goal }}</p>
 </template>
 
 <script setup>

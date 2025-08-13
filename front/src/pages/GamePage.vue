@@ -1,6 +1,16 @@
 <template>
   <div>
     <Bento>
+      <div class="flex flex-col flex-wrap gap-4">
+        <h4 class="text-xl font-bold">Nous en somme au tour numéro <span class="text-primary font-bold">{{
+          undercoverStore.currentRound }}</span>
+        </h4>
+        <h4 class="text-xl font-bold">Et c'est à <span class="text-primary font-bold">{{
+          undercoverStore.getPlayerMustBegin()?.name }}</span> de commencer !
+        </h4>
+      </div>
+    </Bento>
+    <Bento>
       <div class="flex items-center justify-evenly flex-wrap gap-x-6 gap-y-4">
         <div v-for="(role, key) in undercoverStore.allRoles" :key="key">
           <div v-if="undercoverStore.numberOfPlayersByRole(key) > 0">

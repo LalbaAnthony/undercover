@@ -3,10 +3,10 @@
     'text-lg rounded-lg cursor-pointer disabled:cursor-not-allowed transition-colors duration-300',
     props.text ? 'py-1.5 px-3' : 'p-1.5',
     props.visible ? '' : 'opacity-0',
-    classes[props.type],
+    typeToClasses[props.type],
     props.class
   ]" :disabled="props.disabled" @click="props.callback">
-    <component v-if="props.icon" :is="icons[props.icon]" :class="[`size-${props.iconSize}`]" />
+    <component v-if="props.icon" :is="iconsCompMap[props.icon]" :class="[`${iconSizeMap[props.size]}`]" />
     <slot></slot>
     <span v-if="props.text">{{ props.text }}</span>
   </button>
@@ -41,9 +41,10 @@ const props = defineProps({
     default: null,
     required: false,
   },
-  iconSize: {
-    type: Number,
-    default: 6,
+  size: {
+    type: String,
+    possibleValues: ['xs', 'sm', 'md', 'lg'],
+    default: 'md',
     required: false,
   },
   class: {
@@ -67,13 +68,13 @@ const props = defineProps({
   },
 })
 
-const classes = ref({
+const typeToClasses = ref({
   primary: 'text-light bg-primary disabled:bg-dark-gray',
   secondary: 'text-light bg-secondary disabled:bg-dark-gray',
   dark: 'text-light bg-light-dark disabled:bg-dark-gray',
 })
 
-const icons = ref({
+const iconsCompMap = ref({
   minus: shallowRef(MinusIcon),
   plus: shallowRef(PlusIcon),
   chevronLeft: shallowRef(ChevronLeftIcon),
@@ -84,5 +85,12 @@ const icons = ref({
   equals: shallowRef(EqualsIcon),
   userMinus: shallowRef(UserMinusIcon),
 })
+
+const iconSizeMap = {
+  xs: 'size-4',
+  sm: 'size-5',
+  md: 'size-6',
+  lg: 'size-8',
+}
 
 </script>

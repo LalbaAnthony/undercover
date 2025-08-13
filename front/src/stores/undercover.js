@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { notif } from '@/composables/notif.js'
 import { beautify } from '@/composables/helpers.js'
+import { shuffle } from '@/composables/helpers.js'
+import { hasInternetConnection } from '@/composables/helpers.js'
 import router from '@/router'
 import md5 from 'crypto-js/md5'
 
@@ -33,7 +35,6 @@ export const useUndercoverStore = defineStore('undercover', {
     // * Game state
     distribution: { civilian: 0, undercover: 0, white: 0, },
     players: [],
-    currentPlayer: 0,
     currentRound: 1,
     isGameRunning: false,
     undercoversWord: '',
@@ -41,8 +42,8 @@ export const useUndercoverStore = defineStore('undercover', {
     whiteGuess: '',
   }),
   actions: {
-    async fetchAllWords() {
-      if (this.allWords && this.allWords.length > 0) return
+    async fetchAllWords(force = false) {
+      if (this.allWords && this.allWords.length > 0 && !force) return
       fetch('ressources/words.json')
         .then((response) => response.json())
         .then((data) => {
@@ -50,8 +51,8 @@ export const useUndercoverStore = defineStore('undercover', {
         })
     },
 
-    async fetchAllRoles() {
-      if (this.allRoles && this.allRoles.length > 0) return
+    async fetchAllRoles(force = false) {
+      if (this.allRoles && this.allRoles.length > 0 && !force) return
       fetch('ressources/roles.json')
         .then((response) => response.json())
         .then((data) => {
@@ -59,8 +60,8 @@ export const useUndercoverStore = defineStore('undercover', {
         })
     },
 
-    async fetchAllDistributions() {
-      if (this.allDistributions && this.allDistributions.length > 0) return
+    async fetchAllDistributions(force = false) {
+      if (this.allDistributions && this.allDistributions.length > 0 && !force) return
       fetch('ressources/distributions.json')
         .then((response) => response.json())
         .then((data) => {
@@ -68,10 +69,15 @@ export const useUndercoverStore = defineStore('undercover', {
         })
     },
 
-    async fetchEverything() {
-      await this.fetchAllWords()
-      await this.fetchAllRoles()
-      await this.fetchAllDistributions()
+    async fetchEverything(force = false) {
+      if (!hasInternetConnection()) { 
+        console.error('Cannot fetch data, no internet connection')
+        return
+      }
+
+      await this.fetchAllWords(force)
+      await this.fetchAllRoles(force)
+      await this.fetchAllDistributions(force)
     },
 
     getRole(role) {
@@ -133,7 +139,6 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     resetGame() {
-      this.currentPlayer = 0
       this.currentRound = 1
       this.isGameRunning = false
       this.undercoversWord = ''
@@ -147,17 +152,12 @@ export const useUndercoverStore = defineStore('undercover', {
       this.clearPlayers()
       this.resetSettings()
       this.resetGame()
-      this.initSetup()
+      this.fetchEverything(false)
     },
 
     endGame() {
       this.resetGame()
       router.push({ name: 'setup' })
-    },
-
-    initSetup() {
-      this.fetchEverything()
-      this.autofillDistribution()
     },
 
     generateId() {
@@ -236,8 +236,11 @@ export const useUndercoverStore = defineStore('undercover', {
 
       player.eliminated = true
 
+      this.nextRound()
+
       return true
     },
+
 
     deletePlayer(id) {
       this.players = this.players.filter((player) => player.id !== id);
@@ -246,6 +249,29 @@ export const useUndercoverStore = defineStore('undercover', {
 
     getPlayer(id) {
       return this.players.find((player) => player.id === id)
+    },
+
+    getPlayerMustBegin() {
+      if (this.settings.randomStartingPlayer) {
+        let rolesToExclude = []
+        if (!this.settings.canWhiteStart && this.currentRound <= 1) {
+          rolesToExclude.push('white')
+        }
+        return this.getRandomPlayer(rolesToExclude)
+      }
+
+      return this.getFirstPlayer() // Default to the first player
+    },
+
+    getFirstPlayer() {
+      if (this.players.length === 0) return null
+      return this.players[0]
+    },
+
+    getRandomPlayer(rolesToExclude = []) {
+      const filteredPlayers = this.players.filter((player) => !rolesToExclude.includes(player.role))
+      if (filteredPlayers.length === 0) return null
+      return filteredPlayers[Math.floor(Math.random() * filteredPlayers.length)]
     },
 
     getPlayerWord(id) {
@@ -257,14 +283,14 @@ export const useUndercoverStore = defineStore('undercover', {
       } else if (role === 'undercover') {
         word = this.undercoversWord
       } else if (role === 'white') {
-        // Mr White does not have a word
+        word = ''
       }
 
       return beautify(word)
     },
 
     incrementRound() {
-      if (this.currentRound >= this.ROUNDS_NB_MAX) {
+      if (this.roundOver) {
         console.error('Maximum number of rounds reached')
         return false
       }
@@ -272,6 +298,11 @@ export const useUndercoverStore = defineStore('undercover', {
       this.currentRound++
 
       return true
+    },
+
+    nextRound() {
+      this.incrementRound()
+      if (this.settings.randomOrder) this.shufflePlayers()
     },
 
     canDecrementDistribution(role) {
@@ -393,9 +424,15 @@ export const useUndercoverStore = defineStore('undercover', {
       this.resetGame()
       this.isGameRunning = true
 
+      if (this.settings.randomOrder) this.shufflePlayers()
+
       router.push({ name: 'game' })
       this.setRolesFromDistribution()
       this.assignateWords()
+    },
+
+    shufflePlayers() {
+      this.players = shuffle(this.players)
     },
 
     hasPlayedWords(string1 = '', string2 = '') {
@@ -436,12 +473,6 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     printGameState() {
-      console.log('='.repeat(40))
-      console.log('DEBUG_ACTIVE', this.DEBUG_ACTIVE)
-      console.log('ROUNDS_NB_MIN', this.ROUNDS_NB_MIN)
-      console.log('ROUNDS_NB_MAX', this.ROUNDS_NB_MAX)
-      console.log('PLAYERS_NB_MIN', this.PLAYERS_NB_MIN)
-      console.log('PLAYERS_NB_MAX', this.PLAYERS_NB_MAX)
       console.log('-'.repeat(40))
       console.log('undercoversWord', this.undercoversWord)
       console.log('civilianWord', this.civilianWord)
@@ -452,7 +483,6 @@ export const useUndercoverStore = defineStore('undercover', {
       console.table(this.settings)
       console.log('-'.repeat(40))
       console.log('distribution', this.distribution)
-      console.log('currentPlayer', this.currentPlayer)
       console.log('currentRound', this.currentRound)
       console.log('isGameRunning', this.isGameRunning)
       console.log('-'.repeat(40))

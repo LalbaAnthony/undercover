@@ -18,7 +18,7 @@ import { useUndercoverStore } from './stores/undercover'
 const undercoverStore = useUndercoverStore()
 
 onMounted(() => {
-  undercoverStore.fetchEverything()
+  undercoverStore.fetchEverything(false)
 })
 
 </script>

@@ -15,7 +15,6 @@ import Players from '@/components/player/ListComponent.vue'
 import Roles from '@/components/role/RepartitionComponent.vue'
 import Settings from '@/components/setting/ListComponent.vue'
 import Actions from '@/components/ActionsComponent.vue'
-import { onMounted } from 'vue'
 import { useUndercoverStore } from '@/stores/undercover'
 
 const undercoverStore = useUndercoverStore()
@@ -25,10 +24,6 @@ function resetAll() {
     undercoverStore.resetAll()
   }
 }
-
-onMounted(() => {
-  undercoverStore.initSetup()
-})
 
 </script>
 

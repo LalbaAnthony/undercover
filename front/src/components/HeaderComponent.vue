@@ -1,9 +1,9 @@
 <template>
   <header class="flex justify-between items-center py-2 px-4 gap-3">
-    <Button type="dark" v-if="route.name !== 'rules'" icon="newspaper" :icon-size="8" @click="goToRules" />
-    <Button type="dark" v-else icon="chevronLeft" :icon-size="8" @click="goBack" />
+    <Button type="dark" v-if="route.name !== 'rules'" icon="newspaper" size="lg" @click="goToRules"></Button>
+    <Button type="dark" v-else icon="chevronLeft" size="lg" @click="goBack"></Button>
     <h1 class="text-center text-4xl my-4">{{ route?.meta?.title || VITE_APP_NAME }}</h1>
-    <Button :visible="undercoverStore.DEBUG_ACTIVE" type="primary" icon="bug" :icon-size="8" @click="handleDebug" />
+    <Button :visible="undercoverStore.DEBUG_ACTIVE" type="primary" icon="bug" size="lg" @click="handleDebug"></Button>
   </header>
 </template>
 
