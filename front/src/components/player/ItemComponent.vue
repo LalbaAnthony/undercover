@@ -5,7 +5,8 @@
         <EqualsIcon v-if="props.dragButton" class="size-6 text-gray" />
         <div :class="['overflow-hidden', props.player.eliminated ? ' text-gray line-through' : 'text-white']">{{
           props.player.name }}</div>
-        <div v-if="undercoverStore.DEBUG_ACTIVE || props.displayRole" class="text-secondary font-bold overflow-hidden">
+        <div v-if="undercoverStore.DEBUG_ACTIVE || props.displayRole"
+          :class="['font-bold overflow-hidden', props.player.eliminated ? ' text-gray' : 'text-secondary']">
           {{ undercoverStore.getRole(props.player.role).name }}
         </div>
       </div>
