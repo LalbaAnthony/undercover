@@ -1,7 +1,5 @@
 Must:
 - [ ] Modal pour saisi du mot secret pr Mr White
-- [ ] Game over with message
-- [ ] Handle la situation ou il reste un joueur de chaque équipe
 - [ ] Check for any TODO or WIP or console.log
 
 Should

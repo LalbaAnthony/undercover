@@ -16,6 +16,7 @@ import Roles from '@/components/role/RepartitionComponent.vue'
 import Settings from '@/components/setting/ListComponent.vue'
 import Actions from '@/components/ActionsComponent.vue'
 import { useUndercoverStore } from '@/stores/undercover'
+import { onMounted } from 'vue'
 
 const undercoverStore = useUndercoverStore()
 
@@ -24,6 +25,10 @@ function resetAll() {
     undercoverStore.resetAll()
   }
 }
+
+onMounted(() => {
+  undercoverStore.resetGame()
+})
 
 </script>
 

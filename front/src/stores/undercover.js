@@ -4,6 +4,7 @@ import { beautify } from '@/composables/helpers.js'
 import { randomInt } from '@/composables/helpers.js'
 import { shuffle } from '@/composables/helpers.js'
 import { hasInternetConnection } from '@/composables/helpers.js'
+import { useRoute } from 'vue-router'
 import router from '@/router'
 import md5 from 'crypto-js/md5'
 
@@ -194,14 +195,14 @@ export const useUndercoverStore = defineStore('undercover', {
 
       if (this.settings.randomOrder) this.shufflePlayers()
 
-      router.push({ name: 'game' })
+      if (useRoute().name !== 'game') router.push({ name: 'game' })
       this.setRolesFromDistribution()
       this.assignateWords()
     },
 
     async stopGame() {
-      router.push({ name: 'over' })
       this.isGameRunning = false
+      if (useRoute().name !== 'over') router.push({ name: 'over' })
     },
 
     resetGame() {
@@ -223,7 +224,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     restartGame() {
       this.resetGame()
-      router.push({ name: 'setup' })
+      if (useRoute().name !== 'setup') router.push({ name: 'setup' })
     },
 
     generateId() {
@@ -282,7 +283,6 @@ export const useUndercoverStore = defineStore('undercover', {
 
       player.eliminated = true
 
-      console.log('isGameOver', this.isGameOver)
       if (this.isGameOver) {
         this.stopGame()
         return false

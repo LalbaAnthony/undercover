@@ -29,6 +29,7 @@ import Actions from '@/components/ActionsComponent.vue'
 import Players from '@/components/player/ListComponent.vue'
 import RemainingsComponent from '@/components/role/RemainingsComponent.vue'
 import { useUndercoverStore } from '@/stores/undercover'
+import { onMounted } from 'vue'
 
 const undercoverStore = useUndercoverStore()
 
@@ -37,6 +38,10 @@ function restartGame() {
     undercoverStore.restartGame()
   }
 }
+
+onMounted(() => {
+  undercoverStore.stopGame()
+})
 
 </script>
 

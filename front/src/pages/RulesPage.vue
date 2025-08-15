@@ -20,15 +20,20 @@ function goBack() {
   window.history.back()
 }
 
-function copyRules() {
+function getRules() {
   let rules = 'Règles du jeu Undercover :\n\n'
 
   for (const role of Object.values(undercoverStore.allRoles)) {
     rules += `**${role.name}**\n`
-    rules += `Description : ${role.description}\n`
+    rules += `${role.description}\n`
     rules += `Objectif : ${role.goal}\n\n`
   }
 
+  return rules
+}
+
+function copyRules() {
+  let rules = getRules()
   navigator.clipboard.writeText(rules)
 
   notif.notify('Les règles ont été copiées dans le presse-papiers', 'info')

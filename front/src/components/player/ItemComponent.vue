@@ -22,7 +22,7 @@
     </div>
 
     <Panel :show="showReveal" @hide="showReveal = false">
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-4"> 
         <h4 class="text-3xl">{{ props.player.name }} était ...</h4>
         <Role :role="undercoverStore.getRole(props.player.role)" :displayGoal="false" :displayDescription="true" />
         <div v-if="props.player.role === 'white'">
