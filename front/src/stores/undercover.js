@@ -348,7 +348,7 @@ export const useUndercoverStore = defineStore('undercover', {
         return true
       }
 
-      notif.notify('Le mot saisi par Mr White n\'est pas le bon, cheh.', 'error')
+      notif.notify('Le mot saisi par Mr White n\'est pas le bon, cheh.', 'info')
 
       this.eliminatePlayer(id)
 
