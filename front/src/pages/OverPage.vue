@@ -9,6 +9,7 @@
           <span v-else-if="undercoverStore.hasCivilianWon" class="text-primary font-bold">civils</span>
           <span v-else-if="undercoverStore.hasUndercoverWon" class="text-primary font-bold">undercovers</span>
           <span v-else-if="undercoverStore.hasWhiteWon" class="text-primary font-bold">Mr White</span>
+          <span v-else-if="undercoverStore.hasFoolWon" class="text-primary font-bold">Fools</span>
           <span v-else class="text-primary font-bold">joueurs</span>&nbsp;ont gagnés la partie.
         </p>
         <p>Les civils avaient le mot <span class="text-secondary font-bold">{{ undercoverStore.civilianWord }}</span>.</p>

@@ -35,7 +35,7 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     // * Game state
-    distribution: { civilian: 0, undercover: 0, white: 0, },
+    distribution: { civilian: 0, undercover: 0, white: 0, fool: 0 },
     players: [],
     currentRound: 1,
     isGameRunning: false,
@@ -183,16 +183,34 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
-      if (this.distribution.undercover < 1 && this.distribution.white < 1) {
-        notif.notify('Il faut au moins un undercover ou un Mr White pour commencer une partie', 'error')
+      if (this.distribution.undercover < 1 && this.distribution.white < 1 && this.distribution.fool < 1) {
+        notif.notify('Il faut au moins un undercover ou un Mr White ou un Fool pour commencer une partie', 'error')
         return false
       }
 
       for (const [key, value] of Object.entries(this.allRoles)) {
-        const numberMinPlayerRequiredToPlayWith = this.getRole(key)?.numberMinPlayerRequired
-        if (this.numberOfPlayers < numberMinPlayerRequiredToPlayWith && this.distribution[key] > 0) {
-          notif.notify(`Il faut au moins ${numberMinPlayerRequiredToPlayWith} joueurs pour jouer avec un ${value.name}`, 'error')
-          console.error(`Not enough players to play with a ${value.name}`)
+        const playersRequired = this.getRole(key)?.playersRequired
+        const playersWithThisRole = this.getRole(key)?.playersWithThisRole
+
+        if (playersRequired.min !== -1 && this.numberOfPlayers < playersRequired.min && this.numberOfPlayers > 0) {
+          notif.notify(`Il faut au moins ${playersRequired.min} joueurs pour jouer avec un ${value.name}`, 'error')
+          console.error(`Not enough players to play as ${value.name}`)
+          return false
+        }
+        if (playersRequired.max !== -1 && this.numberOfPlayers > playersRequired.max && this.numberOfPlayers > 0) {
+          notif.notify(`Il faut maximum ${playersRequired.max} joueurs pour jouer avec un ${value.name}`, 'error')
+          console.error(`Too many players to play as ${value.name}`)
+          return false
+        }
+
+        if (playersWithThisRole.min !== -1 && this.distribution[key] < playersWithThisRole.min) {
+          notif.notify(`Il ne peut pas y avoir moins de ${playersWithThisRole.min} ${value.name} dans une partie`, 'error')
+          console.error(`Not enough players with the role ${value.name}`)
+          return false
+        }
+        if (playersWithThisRole.max !== -1 && this.distribution[key] > playersWithThisRole.max) {
+          notif.notify(`Il ne peut pas y avoir plus de ${playersWithThisRole.max} ${value.name} dans une partie`, 'error')
+          console.error(`Too many players with the role ${value.name}`)
           return false
         }
       }
@@ -295,7 +313,7 @@ export const useUndercoverStore = defineStore('undercover', {
           player.eliminated = true
           this.clearWhiteGuess() // Clear the guess after checking in case there is multiple Mr White
         } else {
-          
+
           // Do nothing if Mr White has not made a guess yet, juste display the panel to let him guess
           return true
         }
@@ -316,7 +334,6 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     checkForWhiteGuess(id) {
-
       if (!this.hasWhiteMadeAGuess) {
         notif.notify('La proposition de Mr White n\'est pas valide', 'error')
         console.error('Mr White has not made a guess yet')
@@ -377,9 +394,14 @@ export const useUndercoverStore = defineStore('undercover', {
 
       if (role === 'civilian') {
         word = this.civilianWord
-      } else if (role === 'undercover') {
+      }
+      if (role === 'fool') {
+        word = this.civilianWord
+      }
+      if (role === 'undercover') {
         word = this.undercoversWord
-      } else if (role === 'white') {
+      }
+      if (role === 'white') {
         word = ''
       }
 
@@ -437,13 +459,15 @@ export const useUndercoverStore = defineStore('undercover', {
         this.distribution = {
           civilian: this.allDistributions[String(this.numberOfPlayers)].civilian,
           undercover: this.allDistributions[String(this.numberOfPlayers)].undercover,
-          white: this.allDistributions[String(this.numberOfPlayers)].white
+          white: this.allDistributions[String(this.numberOfPlayers)].white,
+          fool: this.allDistributions[String(this.numberOfPlayers)].fool
         }
       } else {
         this.distribution = {
           civilian: 0,
           undercover: 0,
-          white: 0
+          white: 0,
+          fool: 0
         }
       }
     },
@@ -459,6 +483,9 @@ export const useUndercoverStore = defineStore('undercover', {
       }
       for (let i = 0; i < this.distribution.white; i++) {
         roles.push('white')
+      }
+      for (let i = 0; i < this.distribution.fool; i++) {
+        roles.push('fool')
       }
 
       // Shuffle the roles
@@ -551,6 +578,7 @@ export const useUndercoverStore = defineStore('undercover', {
       console.log('hasWhiteWon', this.hasWhiteWon)
       console.log('hasUndercoverWon', this.hasUndercoverWon)
       console.log('hasCivilianWon', this.hasCivilianWon)
+      console.log('hasFoolWon', this.hasFoolWon)
       console.log('roundOver', this.roundOver)
       console.log('isGameOver', this.isGameOver)
       console.log('='.repeat(40))
@@ -592,6 +620,10 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.players.filter((player) => player.role === 'white').length
     },
 
+    numberOfFools() {
+      return this.players.filter((player) => player.role === 'fool').length
+    },
+
     numberOfCiviliansRemaining() {
       return this.players.filter((player) => player.role === 'civilian' && !player.eliminated).length
     },
@@ -602,6 +634,10 @@ export const useUndercoverStore = defineStore('undercover', {
 
     numberOfWhiteRemaining() {
       return this.players.filter((player) => player.role === 'white' && !player.eliminated).length
+    },
+
+    numberOfFoolsRemaining() {
+      return this.players.filter((player) => player.role === 'fool' && !player.eliminated).length
     },
 
     hasWhiteMadeAGuess() {
@@ -624,6 +660,11 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.numberOfUndercoversRemaining === 0 && this.numberOfWhiteRemaining === 0 && this.numberOfCiviliansRemaining > 0;
     },
 
+    hasFoolWon() {
+      const isThereOnlyOneDeath = this.numberOfPlayersRemaining + 1 === this.numberOfPlayers
+      return this.numberOfFoolsRemaining === 0 && isThereOnlyOneDeath
+    },
+
     hasWhiteAndUndercoverWon() {
       return this.hasWhiteWon && this.hasUndercoverWon
     },
@@ -634,7 +675,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     isGameOver() {
       const noPlayersRemaining = this.numberOfPlayersRemaining === 0
-      return this.hasWhiteWon || this.hasUndercoverWon || this.hasCivilianWon || this.roundOver || noPlayersRemaining
+      return this.hasWhiteWon || this.hasUndercoverWon || this.hasCivilianWon || this.hasFoolWon || this.roundOver || noPlayersRemaining
     },
   },
 });
