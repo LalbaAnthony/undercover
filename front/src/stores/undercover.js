@@ -128,7 +128,6 @@ export const useUndercoverStore = defineStore('undercover', {
       }
     },
 
-
     clearWhiteGuess() {
       this.whiteGuess = ''
     },
