@@ -177,11 +177,6 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
-      if (this.distribution.civilian < 1) {
-        notif.notify('Il faut au moins un civil pour commencer une partie', 'error')
-        return false
-      }
-
       if (this.distribution.undercover < 1 && this.distribution.white < 1 && this.distribution.fool < 1) {
         notif.notify('Il faut au moins un undercover ou un Mr White ou un Fool pour commencer une partie', 'error')
         return false
@@ -191,12 +186,12 @@ export const useUndercoverStore = defineStore('undercover', {
         const playersRequired = this.getRole(key)?.playersRequired
         const playersWithThisRole = this.getRole(key)?.playersWithThisRole
 
-        if (playersRequired.min !== -1 && this.numberOfPlayers < playersRequired.min && this.numberOfPlayers > 0) {
+        if (playersRequired.min !== -1 && this.numberOfPlayers < playersRequired.min && this.distribution[key] > 0) {
           notif.notify(`Il faut au moins ${playersRequired.min} joueurs pour jouer avec un ${value.name}`, 'error')
           console.error(`Not enough players to play as ${value.name}`)
           return false
         }
-        if (playersRequired.max !== -1 && this.numberOfPlayers > playersRequired.max && this.numberOfPlayers > 0) {
+        if (playersRequired.max !== -1 && this.numberOfPlayers > playersRequired.max && this.distribution[key] > 0) {
           notif.notify(`Il faut maximum ${playersRequired.max} joueurs pour jouer avec un ${value.name}`, 'error')
           console.error(`Too many players to play as ${value.name}`)
           return false
@@ -214,7 +209,7 @@ export const useUndercoverStore = defineStore('undercover', {
         }
       }
 
-      if (this.distribution.civilian <= (this.distribution.undercover + this.distribution.white)) {
+      if (this.distribution.civilian < (this.distribution.undercover + this.distribution.white)) {
         notif.notify('Il faut plus de civils que d\'undercover et de Mr White', 'error')
         console.error('Not enough civilians compared to undercovers and Mr White')
         return false

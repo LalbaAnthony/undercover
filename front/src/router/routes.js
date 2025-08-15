@@ -32,7 +32,7 @@ const routes = [
     name: 'over',
     component: () => import('../pages/OverPage.vue'),
     meta: {
-      title: '',
+      title: 'Terminé',
       private: false,
     },
   },
