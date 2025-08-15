@@ -117,7 +117,6 @@ function enableShowInfo() {
 
   if (Object.prototype.hasOwnProperty.call(props.player, 'password') && props.player.password) {
     const password = prompt(`Enter the password for ${props.player.name} to see their role:`, '')
-    console.log(!undercoverStore.isGameRunning)
     if (!undercoverStore.isGameRunning || undercoverStore.DEBUG_ACTIVE || password === props.player.password) {
       showInfo.value = true
       return true

@@ -341,7 +341,7 @@ export const useUndercoverStore = defineStore('undercover', {
       }
 
       if (this.hasWhiteWon) {
-        notif.notify('Mr White a trouvé le mot des civils', 'success')
+        notif.notify('Mr White a trouvé le mot des civils', 'info')
         setTimeout(() => {
           this.stopGame()
         }, 4000)
@@ -565,16 +565,6 @@ export const useUndercoverStore = defineStore('undercover', {
       console.log('currentRound', this.currentRound)
       console.log('isGameRunning', this.isGameRunning)
       console.log('-'.repeat(40))
-      console.log('numberOfInDistribution', this.numberOfInDistribution)
-      console.log('numberOfPlayers', this.numberOfPlayers)
-      console.log('numberOfPlayersEliminated', this.numberOfPlayersEliminated)
-      console.log('numberOfPlayersRemaining', this.numberOfPlayersRemaining)
-      console.log('numberOfCivilians', this.numberOfCivilians)
-      console.log('numberOfUndercovers', this.numberOfUndercovers)
-      console.log('numberOfWhite', this.numberOfWhite)
-      console.log('numberOfCiviliansRemaining', this.numberOfCiviliansRemaining)
-      console.log('numberOfUndercoversRemaining', this.numberOfUndercoversRemaining)
-      console.log('numberOfWhiteRemaining', this.numberOfWhiteRemaining)
       console.log('hasWhiteWon', this.hasWhiteWon)
       console.log('hasUndercoverWon', this.hasUndercoverWon)
       console.log('hasCivilianWon', this.hasCivilianWon)
@@ -608,38 +598,6 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.players.filter((player) => !player.eliminated).length
     },
 
-    numberOfCivilians() {
-      return this.players.filter((player) => player.role === 'civilian').length
-    },
-
-    numberOfUndercovers() {
-      return this.players.filter((player) => player.role === 'undercover').length
-    },
-
-    numberOfWhite() {
-      return this.players.filter((player) => player.role === 'white').length
-    },
-
-    numberOfFools() {
-      return this.players.filter((player) => player.role === 'fool').length
-    },
-
-    numberOfCiviliansRemaining() {
-      return this.players.filter((player) => player.role === 'civilian' && !player.eliminated).length
-    },
-
-    numberOfUndercoversRemaining() {
-      return this.players.filter((player) => player.role === 'undercover' && !player.eliminated).length
-    },
-
-    numberOfWhiteRemaining() {
-      return this.players.filter((player) => player.role === 'white' && !player.eliminated).length
-    },
-
-    numberOfFoolsRemaining() {
-      return this.players.filter((player) => player.role === 'fool' && !player.eliminated).length
-    },
-
     hasWhiteMadeAGuess() {
       return (this.whiteGuess && this.whiteGuess.length > 0)
     },
@@ -649,20 +607,36 @@ export const useUndercoverStore = defineStore('undercover', {
     },
 
     hasWhiteWon() {
-      return this.isWhiteGuessCorrect || (this.numberOfWhiteRemaining > this.numberOfCiviliansRemaining)
+      const hasWhite = this.numberOfPlayersByRole('white') > 0
+      if (!hasWhite) return false
+      const nbOfWhite = this.numberOfPlayersRemainingByRole('white')
+      const nbOfCivilian = this.numberOfPlayersRemainingByRole('civilian')
+      return nbOfWhite > 0 && (this.isWhiteGuessCorrect || (nbOfWhite > nbOfCivilian))
     },
 
     hasUndercoverWon() {
-      return this.numberOfCiviliansRemaining === 0
+      const hasUndercover = this.numberOfPlayersByRole('undercover') > 0
+      if (!hasUndercover) return false
+      const nbOfCivilian = this.numberOfPlayersRemainingByRole('civilian')
+      const nbOfUndercover = this.numberOfPlayersRemainingByRole('undercover')
+      return nbOfUndercover > 0 && (nbOfUndercover >= nbOfCivilian)
     },
 
     hasCivilianWon() {
-      return this.numberOfUndercoversRemaining === 0 && this.numberOfWhiteRemaining === 0 && this.numberOfCiviliansRemaining > 0;
+      const hasCivilian = this.numberOfPlayersByRole('civilian') > 0
+      if (!hasCivilian) return false
+      const nbOfCivilian = this.numberOfPlayersRemainingByRole('civilian')
+      const nbOfUndercover = this.numberOfPlayersRemainingByRole('undercover')
+      const nbOfWhite = this.numberOfPlayersRemainingByRole('white')
+      return nbOfCivilian > 0 && (nbOfUndercover === 0 && nbOfWhite === 0);
     },
 
     hasFoolWon() {
-      const isThereOnlyOneDeath = this.numberOfPlayersRemaining + 1 === this.numberOfPlayers
-      return this.numberOfFoolsRemaining === 0 && isThereOnlyOneDeath
+      const hasFool = this.numberOfPlayersByRole('fool') > 0
+      if (!hasFool) return false
+      const nbOfFool = this.numberOfPlayersRemainingByRole('fool')
+      const onlyOneDeath = this.numberOfPlayersRemaining + 1 === this.numberOfPlayers
+      return nbOfFool === 0 && onlyOneDeath
     },
 
     hasWhiteAndUndercoverWon() {

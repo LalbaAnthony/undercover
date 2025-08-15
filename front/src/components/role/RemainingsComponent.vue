@@ -26,7 +26,6 @@ const undercoverStore = useUndercoverStore()
 const filteredRoles = computed(() => {
     const result = {}
     for (const key in undercoverStore.allRoles) {
-        console.log(undercoverStore.numberOfPlayersByRole(key))
         if (undercoverStore.numberOfPlayersByRole(key) > 0) {
             result[key] = undercoverStore.allRoles[key]
         }
