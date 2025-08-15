@@ -5,7 +5,7 @@ const routes = [
     name: 'setup',
     component: () => import('../pages/SetupPage.vue'),
     meta: {
-      title: Config',
+      title: 'Config',
       private: false,
     },
   },
@@ -32,7 +32,7 @@ const routes = [
     name: 'over',
     component: () => import('../pages/OverPage.vue'),
     meta: {
-      title: Partie terminée',
+      title: 'Partie terminée',
       private: false,
     },
   },
