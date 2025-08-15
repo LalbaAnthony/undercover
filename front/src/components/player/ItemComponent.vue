@@ -3,10 +3,10 @@
     <div class="flex justify-between items-center gap-2 p-4 rounded-2xl border border-2 border-dark-gray">
       <div class="flex items-center gap-4">
         <EqualsIcon v-if="props.dragButton" class="size-6 text-gray" />
-        <div :class="['overflow-hidden', props.player.eliminated ? ' text-gray line-through' : 'text-white']">{{
+        <div :class="['overflow-hidden text-lg', props.player.eliminated ? ' text-gray line-through' : 'text-white']">{{
           props.player.name }}</div>
-        <div v-if="undercoverStore.DEBUG_ACTIVE || props.displayRole"
-          :class="['font-bold overflow-hidden', props.player.eliminated ? ' text-gray' : 'text-secondary']">
+        <div v-if="undercoverStore.DEBUG_ACTIVE || props.displayRole || props.player.eliminated"
+          :class="['overflow-hidden text-lg font-bold', props.player.eliminated ? ' text-gray' : 'text-secondary']">
           {{ undercoverStore.getRole(props.player.role).name }}
         </div>
       </div>
@@ -22,11 +22,20 @@
     </div>
 
     <Panel :show="showReveal" @hide="showReveal = false">
-      <div class="flex flex-col gap-4"> 
+      <div class="flex flex-col gap-4">
         <h4 class="text-3xl">{{ props.player.name }} était ...</h4>
         <Role :role="undercoverStore.getRole(props.player.role)" :displayGoal="false" :displayDescription="true" />
         <div v-if="props.player.role === 'white'">
-          <!-- TODO Suite à l'élimination de Mr White, il doit deviner le mot des civils -->
+          <div class="flex flex-row gap-4 items-center">
+            <QuestionMarkCircleIcon class="text-primary size-7" />
+            <h4 class="text-3xl my-4">Une dernière chance </h4>
+          </div>
+          <p class="text-lg">Mr White, quel est le mot que tu penses être le bon ?</p>
+          <div class="flex justify-between items-center gap-2 mt-2 p-2 pr-4 border-b-2 border-dark-gray">
+            <input class="w-full py-1.5 px-2 bg-light-dark text-white" type="text" id="name"
+              placeholder="Mot de Mr. White" v-model="undercoverStore.whiteGuess" @keyup.enter="checkForWhiteGuess">
+            <Button type="primary" icon="check" @click="checkForWhiteGuess"></Button>
+          </div>
         </div>
       </div>
     </Panel>
@@ -44,6 +53,7 @@
 import Button from '@/components/ButtonComponent.vue'
 import Word from '@/components/word/ItemComponent.vue'
 import Role from '@/components/role/ItemComponent.vue'
+import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline'
 import { EqualsIcon } from '@heroicons/vue/24/outline'
 import { useUndercoverStore } from '@/stores/undercover'
 import { ref } from 'vue'
@@ -90,6 +100,10 @@ function enableReveal() {
   showReveal.value = true
 }
 
+function disableReveal() {
+  showReveal.value = false
+}
+
 function enableShowInfo() {
   if (showInfo.value) {
     showInfo.value = false
@@ -103,7 +117,8 @@ function enableShowInfo() {
 
   if (Object.prototype.hasOwnProperty.call(props.player, 'password') && props.player.password) {
     const password = prompt(`Enter the password for ${props.player.name} to see their role:`, '')
-    if (undercoverStore.DEBUG_ACTIVE || password === props.player.password) {
+    console.log(!undercoverStore.isGameRunning)
+    if (!undercoverStore.isGameRunning || undercoverStore.DEBUG_ACTIVE || password === props.player.password) {
       showInfo.value = true
       return true
     } else {
@@ -112,7 +127,7 @@ function enableShowInfo() {
     }
   }
 
-  if (undercoverStore.DEBUG_ACTIVE || confirm(`Est-ce que tu veux vraiment voir le rôle de ${props.player.name} ?`)) {
+  if (!undercoverStore.isGameRunning || undercoverStore.DEBUG_ACTIVE || confirm(`Est-ce que tu veux vraiment voir le rôle de ${props.player.name} ?`)) {
     showInfo.value = true
     return true
   }
@@ -123,6 +138,14 @@ function eliminatePlayer() {
     if (undercoverStore.eliminatePlayer(props.player.id)) {
       enableReveal()
     }
+  }
+}
+
+function checkForWhiteGuess() {
+  if (undercoverStore.checkForWhiteGuess(props.player.id)) {
+    // If the guess is correct, we keep the reveal open
+  } else {
+    disableReveal()
   }
 }
 

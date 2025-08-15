@@ -1,6 +1,6 @@
 <template>
   <button :class="[
-    'text-lg rounded-lg cursor-pointer disabled:cursor-not-allowed transition-colors duration-300',
+    'text-lg rounded-xl cursor-pointer disabled:cursor-not-allowed transition-colors duration-300',
     props.text ? 'py-1.5 px-3' : 'p-1.5',
     props.visible ? '' : 'opacity-0',
     typeToClasses[props.type],
@@ -23,6 +23,7 @@ import { EyeIcon } from '@heroicons/vue/24/outline'
 import { TrashIcon } from '@heroicons/vue/24/outline'
 import { EqualsIcon } from '@heroicons/vue/24/outline'
 import { UserMinusIcon } from '@heroicons/vue/24/outline'
+import { CheckIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
   type: {
@@ -82,6 +83,7 @@ const iconsCompMap = ref({
   bug: shallowRef(BugAntIcon),
   eye: shallowRef(EyeIcon),
   trash: shallowRef(TrashIcon),
+  check: shallowRef(CheckIcon),
   equals: shallowRef(EqualsIcon),
   userMinus: shallowRef(UserMinusIcon),
 })

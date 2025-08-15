@@ -128,6 +128,11 @@ export const useUndercoverStore = defineStore('undercover', {
       }
     },
 
+
+    clearWhiteGuess() {
+      this.whiteGuess = ''
+    },
+
     clearPlayersRoles() {
       for (const player of this.players) {
         player.role = null
@@ -137,6 +142,14 @@ export const useUndercoverStore = defineStore('undercover', {
     reviveAllPlayers() {
       for (const player of this.players) {
         player.eliminated = false
+      }
+    },
+
+    reviveByRole(role) {
+      for (const player of this.players) {
+        if (player.role === role) {
+          player.eliminated = false
+        }
       }
     },
 
@@ -170,8 +183,8 @@ export const useUndercoverStore = defineStore('undercover', {
         return false
       }
 
-      if (this.distribution.undercover < 1) {
-        notif.notify('Il faut au moins un undercover pour commencer une partie', 'error')
+      if (this.distribution.undercover < 1 && this.distribution.white < 1) {
+        notif.notify('Il faut au moins un undercover ou un Mr White pour commencer une partie', 'error')
         return false
       }
 
@@ -195,14 +208,14 @@ export const useUndercoverStore = defineStore('undercover', {
 
       if (this.settings.randomOrder) this.shufflePlayers()
 
-      if (useRoute().name !== 'game') router.push({ name: 'game' })
+      if (useRoute()?.name !== 'game') router.push({ name: 'game' })
       this.setRolesFromDistribution()
       this.assignateWords()
     },
 
     async stopGame() {
       this.isGameRunning = false
-      if (useRoute().name !== 'over') router.push({ name: 'over' })
+      if (useRoute()?.name !== 'over') router.push({ name: 'over' })
     },
 
     resetGame() {
@@ -224,7 +237,7 @@ export const useUndercoverStore = defineStore('undercover', {
 
     restartGame() {
       this.resetGame()
-      if (useRoute().name !== 'setup') router.push({ name: 'setup' })
+      if (useRoute()?.name !== 'setup') router.push({ name: 'setup' })
     },
 
     generateId() {
@@ -278,21 +291,53 @@ export const useUndercoverStore = defineStore('undercover', {
       }
 
       if (player.role === 'white') {
-        this.whiteGuess = beautify(prompt('Entrez le mot que Mr White pense être le bon', ''))
+        if (this.hasWhiteMadeAGuess) {
+          player.eliminated = true
+          this.clearWhiteGuess() // Clear the guess after checking in case there is multiple Mr White
+        } else {
+          
+          // Do nothing if Mr White has not made a guess yet, juste display the panel to let him guess
+          return true
+        }
+      } else {
+        player.eliminated = true
       }
-
-      player.eliminated = true
 
       if (this.isGameOver) {
-        this.stopGame()
-        return false
+        notif.notify('La partie est terminée', 'info')
+        setTimeout(() => {
+          this.stopGame()
+        }, 4000)
+      } else {
+        this.nextRound()
       }
-
-      this.nextRound()
 
       return true
     },
 
+    checkForWhiteGuess(id) {
+
+      if (!this.hasWhiteMadeAGuess) {
+        notif.notify('La proposition de Mr White n\'est pas valide', 'error')
+        console.error('Mr White has not made a guess yet')
+        return false
+      }
+
+      if (this.hasWhiteWon) {
+        notif.notify('Mr White a trouvé le mot des civils', 'success')
+        setTimeout(() => {
+          this.stopGame()
+        }, 4000)
+
+        return true
+      }
+
+      notif.notify('Le mot saisi par Mr White n\'est pas le bon, cheh.', 'error')
+
+      this.eliminatePlayer(id)
+
+      return false
+    },
 
     deletePlayer(id) {
       this.players = this.players.filter((player) => player.id !== id);
@@ -559,21 +604,28 @@ export const useUndercoverStore = defineStore('undercover', {
       return this.players.filter((player) => player.role === 'white' && !player.eliminated).length
     },
 
+    hasWhiteMadeAGuess() {
+      return (this.whiteGuess && this.whiteGuess.length > 0)
+    },
+
+    isWhiteGuessCorrect() {
+      return (this.hasWhiteMadeAGuess && beautify(this.whiteGuess) === beautify(this.civilianWord))
+    },
+
     hasWhiteWon() {
-      const correctGuess = this.whiteGuess === this.civilianWord
-      return correctGuess || (this.numberOfWhiteRemaining >= this.numberOfCiviliansRemaining)
+      return this.isWhiteGuessCorrect || (this.numberOfWhiteRemaining > this.numberOfCiviliansRemaining)
     },
 
     hasUndercoverWon() {
-      return (this.numberOfUndercoversRemaining >= this.numberOfCiviliansRemaining)
-    },
-
-    hasWhiteAndUndercoverWon() {
-      return this.hasWhiteWon && this.hasUndercoverWon
+      return this.numberOfCiviliansRemaining === 0
     },
 
     hasCivilianWon() {
       return this.numberOfUndercoversRemaining === 0 && this.numberOfWhiteRemaining === 0 && this.numberOfCiviliansRemaining > 0;
+    },
+
+    hasWhiteAndUndercoverWon() {
+      return this.hasWhiteWon && this.hasUndercoverWon
     },
 
     roundOver() {

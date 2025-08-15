@@ -11,8 +11,8 @@
           <span v-else-if="undercoverStore.hasWhiteWon" class="text-primary font-bold">Mr White</span>
           <span v-else class="text-primary font-bold">joueurs</span>&nbsp;ont gagnés la partie.
         </p>
-        <p>Mot des civils: <span class="text-secondary font-bold">{{ undercoverStore.civilianWord }}</span></p>
-        <p>Mot des undercovers: <span class="text-secondary font-bold">{{ undercoverStore.undercoversWord }}</span></p>
+        <p>Les civils avaient le mot <span class="text-secondary font-bold">{{ undercoverStore.civilianWord }}</span>.</p>
+        <p>Les undercovers avaient eux le mot <span class="text-secondary font-bold">{{ undercoverStore.undercoversWord }}</span>.</p>
       </div>
     </Bento>
     <RemainingsComponent />
@@ -34,9 +34,7 @@ import { onMounted } from 'vue'
 const undercoverStore = useUndercoverStore()
 
 function restartGame() {
-  if (undercoverStore.DEBUG_ACTIVE || confirm('Es-tu sûr de vouloir arrêter la partie ?')) {
-    undercoverStore.restartGame()
-  }
+  undercoverStore.restartGame()
 }
 
 onMounted(() => {
