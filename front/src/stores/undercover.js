@@ -166,7 +166,7 @@ export const useUndercoverStore = defineStore('undercover', {
       }
 
       if (this.numberOfInDistribution !== this.numberOfPlayers) {
-        notif.notify('Les nombres des rôles ne correspondent pas au nombre de joueurs', 'error')
+        notif.notify('Le nombre de joueurs ne correspond pas à la distribution des rôles', 'error')
         console.error('Number of roles does not match the number of players')
         return false
       }
