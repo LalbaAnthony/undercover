@@ -5,7 +5,7 @@ const routes = [
     name: 'setup',
     component: () => import('../pages/SetupPage.vue'),
     meta: {
-      title: 'Préparation',
+      title: Config',
       private: false,
     },
   },
@@ -23,7 +23,7 @@ const routes = [
     name: 'game',
     component: () => import('../pages/GamePage.vue'),
     meta: {
-      title: '',
+      title: 'Undercover',
       private: false,
     },
   },
@@ -32,7 +32,7 @@ const routes = [
     name: 'over',
     component: () => import('../pages/OverPage.vue'),
     meta: {
-      title: 'Terminé',
+      title: Partie terminée',
       private: false,
     },
   },
