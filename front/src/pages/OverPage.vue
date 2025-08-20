@@ -6,7 +6,7 @@
           <div v-for="(role, key) in undercoverStore.allRoles" :key="key">
             <div v-if="undercoverStore.hasRoleWon(key)">
               {{ undercoverStore.numberOfPlayersByRole(key) > 1 ? 'Les' : 'Le' }}
-              <span class="text-primary font-bold">{{ role.labels.singular }}</span>
+              <span class="text-primary font-bold">{{  undercoverStore.numberOfPlayersByRole(key) > 1 ? role.labels.plural : role.labels.singular }}</span>
               {{ undercoverStore.numberOfPlayersByRole(key) > 1 ? 'ont gagnés' : 'a gagné' }}
               la partie.
             </div>
