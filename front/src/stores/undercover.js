@@ -545,6 +545,21 @@ export const useUndercoverStore = defineStore('undercover', {
       this.civilianWord = shuffled[1]
     },
 
+    hasRoleWon(role) {
+      switch (role) {
+        case 'undercover':
+          return this.hasUndercoverWon
+        case 'civilian':
+          return this.hasCivilianWon
+        case 'white':
+          return this.hasWhiteWon
+        case 'fool':
+          return this.hasFoolWon
+        default:
+          return false
+      }
+    },
+
     debugGameState() {
       console.log('-'.repeat(40))
       console.log('undercoversWord', this.undercoversWord)

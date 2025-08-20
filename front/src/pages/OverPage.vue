@@ -2,17 +2,20 @@
   <div>
     <Bento>
       <div class="flex flex-col flex-wrap gap-4">
-        <h1 class="text-4xl text-center mb-6">Les&nbsp;
-          <span v-if="undercoverStore.hasWhiteAndUndercoverWon" class="text-primary font-bold">undercovers et Mr
-            White</span>
-          <span v-else-if="undercoverStore.hasCivilianWon" class="text-primary font-bold">civils</span>
-          <span v-else-if="undercoverStore.hasUndercoverWon" class="text-primary font-bold">undercovers</span>
-          <span v-else-if="undercoverStore.hasWhiteWon" class="text-primary font-bold">Mr White</span>
-          <span v-else-if="undercoverStore.hasFoolWon" class="text-primary font-bold">Fools</span>
-          <span v-else class="text-primary font-bold">joueurs</span>&nbsp;ont gagnés la partie.
+        <h1 class="text-4xl text-center mb-6">
+          <div v-for="(role, key) in undercoverStore.allRoles" :key="key">
+            <div v-if="undercoverStore.hasRoleWon(key)">
+              {{ undercoverStore.numberOfPlayersByRole(key) > 1 ? 'Les' : 'Le' }}
+              <span class="text-primary font-bold">{{ role.labels.singular }}</span>
+              {{ undercoverStore.numberOfPlayersByRole(key) > 1 ? 'ont gagnés' : 'a gagné' }}
+              la partie.
+            </div>
+          </div>
         </h1>
-        <p>Les civils avaient le mot <span class="text-secondary font-bold">{{ undercoverStore.civilianWord }}</span>.</p>
-        <p>Les undercovers avaient eux le mot <span class="text-secondary font-bold">{{ undercoverStore.undercoversWord }}</span>.</p>
+        <p>Les civils avaient le mot <span class="text-secondary font-bold">{{ undercoverStore.civilianWord }}</span>.
+        </p>
+        <p>Les undercovers avaient eux le mot <span class="text-secondary font-bold">{{
+          undercoverStore.undercoversWord}}</span>.</p>
       </div>
     </Bento>
     <RemainingsComponent />
