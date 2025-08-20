@@ -2,7 +2,7 @@ Must:
 - [ ] ...
 
 Should
-- [ ] ...
+- [ ] Reprendre animation de loading avant chargement de vuejs depuis MM
 
 Could:
 - [ ] Ajouter service worker pour fetch les données de ressources/ en fond si elles change (vérif deiff avec MD5 ?)
