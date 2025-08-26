@@ -129,11 +129,11 @@ hr {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--light);
+  background: var(--gray);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gray);
+  background: var(--light);
   border-radius: 25px;
 }
 
