@@ -57,14 +57,14 @@
             "plural": "fools"
         },
         "playersRequired": {
-            "min": 6,
+            "min": 4,
             "max": -1
         },
         "playersWithThisRole": {
             "min": -1,
             "max": 1
         },
-        "description": "The Fool est un rôle spécial. Il reçoit le même mot que les civils, mais son objectif est de se faire éliminer le plus rapidement possible.",
+        "description": "The Fool est un rôle spécial. Il reçoit le même mot que les civils, mais il doit se faire éliminer pour gagner.",
         "goal": "Se faire éliminer le plus rapidement possible. Si il est découvert, il rejoint l'équipe des civils."
     }
 }
