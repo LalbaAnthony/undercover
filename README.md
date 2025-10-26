@@ -15,7 +15,7 @@ Create a `.env` file in the project directory. Use the `.env.example` file as a 
 ### Frontend
 
 ```bash
-cd front/ && npm i && npm run dev
+cd front/ ; npm i ; npm run dev
 ```
 
 ## 🚢 Deployment
