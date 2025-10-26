@@ -637,7 +637,7 @@ export const useUndercoverStore = defineStore('undercover', {
       const nbOfCivilian = this.numberOfPlayersRemainingByRole('civilian')
       const nbOfUndercover = this.numberOfPlayersRemainingByRole('undercover')
       const nbOfWhite = this.numberOfPlayersRemainingByRole('white')
-      return nbOfCivilian > 0 && (nbOfUndercover === 0 && nbOfWhite === 0);
+      return nbOfCivilian > 0 && (nbOfUndercover === 0 && (nbOfWhite === 0 || (nbOfCivilian === nbOfWhite)))
     },
 
     hasFoolWon() {
