@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load .env file
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 // Get the version from package.json
 const version = require('./package.json')?.version || '0.0.0';
@@ -27,7 +27,7 @@ export default defineConfig({
         name: process.env.VITE_APP_NAME,
         short_name: process.env.VITE_APP_SHORT_NAME,
         description: process.env.VITE_APP_DESCRIPTION,
-        theme_color: `#${process.env.VITE_APP_THEME_COLOR}`, // Due to the pipe creating front .env file, we cannot use '#'
+        theme_color: `#${process.env.VITE_APP_THEME_COLOR}`, // we cannot use '#'
         background_color: `#${process.env.VITE_APP_BG_COLOR}`,
         icons: [
           {
@@ -65,7 +65,7 @@ export default defineConfig({
       VITE_APP_THEME_COLOR: process.env.VITE_APP_THEME_COLOR,
       VITE_APP_BG_COLOR: process.env.VITE_APP_BG_COLOR,
       VITE_PORT: process.env.VITE_PORT,
-      VITE_FRONT_URL: process.env.VITE_FRONT_URL,
+      VITE_URL: process.env.VITE_URL,
       VITE_GIT_REPO: process.env.VITE_GIT_REPO,
     }
   },

@@ -12,10 +12,8 @@
 
 Create a `.env` file in the project directory. Use the `.env.example` file as a template.
 
-### Frontend
-
 ```bash
-cd front/ ; npm i ; npm run dev
+npm i ; npm run dev
 ```
 
 ## 🚢 Deployment
@@ -44,6 +42,6 @@ npm i -g pm2
 
 ### Web server
 
-Apache is used to serve the frontend. Make sure to install it on the server.
+Apache is used to serve files. Make sure to install it on the server.
 
 Use the `apache.conf` file to configure the virtual host.

@@ -11,6 +11,6 @@ export const VITE_APP_DESCRIPTION = import.meta.env.VITE_APP_DESCRIPTION;
 export const VITE_APP_THEME_COLOR = import.meta.env.VITE_APP_THEME_COLOR;
 export const VITE_APP_BG_COLOR = import.meta.env.VITE_APP_BG_COLOR;
 export const VITE_PORT = import.meta.env.VITE_PORT;
-export const VITE_FRONT_URL = import.meta.env.VITE_FRONT_URL;
+export const VITE_URL = import.meta.env.VITE_URL;
 export const VITE_GIT_REPO = import.meta.env.VITE_GIT_REPO;
 export const VITE_APP_VERSION = import.meta.env.VITE_APP_VERSION;
