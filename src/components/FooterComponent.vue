@@ -14,11 +14,11 @@
 </template>
 
 <script setup>
-import { VITE_APP_NAME } from '@/config';
-import { VITE_APP_AUTHOR_NAME } from '@/config';
-import { VITE_APP_VERSION } from '@/config';
+import { VITE_APP_NAME } from '../../config';
+import { VITE_APP_AUTHOR_NAME } from '../../config';
+import { VITE_APP_VERSION } from '../../config';
 import { useUndercoverStore } from '@/stores/undercover'
-import { VITE_GIT_REPO } from '@/config'
+import { VITE_GIT_REPO } from '../../config'
 
 const undercoverStore = useUndercoverStore()
 

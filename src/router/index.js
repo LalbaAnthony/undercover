@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
 import { useUndercoverStore } from '@/stores/undercover'
-import { VITE_APP_NAME } from '@/config';
+import { VITE_APP_NAME } from '../../config';
 
 const router = createRouter({
   history: createWebHistory(),

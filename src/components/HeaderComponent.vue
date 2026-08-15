@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { VITE_APP_NAME } from '@/config';
+import { VITE_APP_NAME } from '../../config';
 import Button from '@/components/ButtonComponent.vue'
 import { useUndercoverStore } from '@/stores/undercover'
 import { useRoute, useRouter } from 'vue-router'
