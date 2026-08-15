@@ -8,7 +8,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "0 3 10 * *" # Monthly redeploy on the 10th day of each month at 3:00 AM, to ensure that all dependencies are up to date and security patches are applied
+    - cron: '0 3 10 * *' # Monthly redeploy on the 10th day of each month at 3:00 AM, to ensure that all dependencies are up to date and security patches are applied
   workflow_dispatch:
 
 env:
@@ -79,11 +79,15 @@ jobs:
               ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
             "mkdir -p /home/${{ secrets.SSH_USER }}/${{ secrets.FOLDER }}"
 
+      # docker-compose.yml declares no default value for any variable, so every
+      # name it interpolates - including the ones only read by the dev profile -
+      # must be present in the .env shipped to the server.
       - name: Generate .env file
         run: |
           cat <<EOF > .env
           NODE_ENV=production
           PORT=${{ secrets.PORT }}
+          IMAGE=${{ env.IMAGE }}:${{ github.ref_name }}
           EOF
 
       - name: Copy deployment files
@@ -102,10 +106,10 @@ jobs:
             "cd /home/${{ secrets.SSH_USER }}/${{ secrets.FOLDER }} &&
               export COMPOSE_PROJECT_NAME=${{ secrets.FOLDER }} &&
               export IMAGE=${{ env.IMAGE }}:main &&
-              (docker compose --profile production down || true) &&
+              (docker compose --profile prod down || true) &&
               sleep 2 &&
-              docker compose --profile production pull &&
-              docker compose --profile production up -d --remove-orphans &&
+              docker compose --profile prod pull &&
+              docker compose --profile prod up -d --remove-orphans &&
               docker container prune -f --filter \"label=com.docker.compose.project=\$COMPOSE_PROJECT_NAME\" &&
               docker image prune -f"
 

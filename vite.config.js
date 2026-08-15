@@ -57,19 +57,27 @@ export default defineConfig({
   },
   define: {
     'process.env': {
-      VITE_APP_SHORT_NAME: process.env.VITE_APP_SHORT_NAME,
-      VITE_APP_NAME: process.env.VITE_APP_NAME,
-      VITE_APP_COMPANY_NAME: process.env.VITE_APP_COMPANY_NAME,
-      VITE_APP_AUTHOR_NAME: process.env.VITE_APP_AUTHOR_NAME,
-      VITE_APP_DESCRIPTION: process.env.VITE_APP_DESCRIPTION,
-      VITE_APP_THEME_COLOR: process.env.VITE_APP_THEME_COLOR,
-      VITE_APP_BG_COLOR: process.env.VITE_APP_BG_COLOR,
-      VITE_PORT: process.env.VITE_PORT,
-      VITE_URL: process.env.VITE_URL,
-      VITE_GIT_REPO: process.env.VITE_GIT_REPO,
+      VITE_APP_SHORT_NAME: 'Undercover',
+      VITE_APP_NAME: 'Undercover',
+      VITE_APP_COMPANY_NAME: 'Undercover',
+      VITE_APP_AUTHOR_NAME: 'Anthony Lalba',
+      VITE_APP_DESCRIPTION: 'Undercover',
+      VITE_APP_THEME_COLOR: '0E133C',
+      VITE_APP_BG_COLOR: '0E133C',
+      VITE_URL: 'http://localhost:5173',
+      VITE_GIT_REPO: 'https://github.com/LalbaAnthony/undercover',
     }
   },
   server: {
-    port: process.env.VITE_PORT || 5173,
+    // 0.0.0.0 is required for the port to be reachable from outside the container
+    host: true,
+    port: 5173,
+    // The published port is mapped 1:1 by compose; silently picking another one
+    // would break both the HMR websocket and the port mapping.
+    strictPort: true,
+    watch: {
+      // Bind mounts do not propagate inotify events on Docker Desktop
+      usePolling: true,
+    },
   },
 })

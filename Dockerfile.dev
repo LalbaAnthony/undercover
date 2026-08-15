@@ -1,0 +1,29 @@
+# syntax=docker/dockerfile:1
+
+# Development image: full toolchain (Vite, ESLint, Prettier, Tailwind).
+# Sources are bind-mounted by compose, so nothing is minified or pre-built here.
+FROM node:22-alpine
+
+# Keeps devDependencies installed and enables Vite's dev-only behaviour
+ENV NODE_ENV=development \
+    npm_config_update_notifier=false \
+    npm_config_fund=false \
+    npm_config_audit=false
+
+WORKDIR /app
+
+# The node:alpine images already ship an unprivileged `node` user (uid/gid 1000),
+# which matches the default uid on most Linux hosts for bind-mounted sources.
+RUN chown node:node /app
+USER node
+
+# Manifests first: this layer is rebuilt only when dependencies actually change
+COPY --chown=node:node package.json package-lock.json ./
+RUN npm ci
+
+# The sources are overridden by the bind mount at runtime; copying them keeps the
+# image runnable on its own (e.g. `docker run` without compose).
+COPY --chown=node:node . .
+
+# Host/port/watch behaviour comes from vite.config.js, driven by VITE_* env vars
+CMD ["npm", "run", "dev"]

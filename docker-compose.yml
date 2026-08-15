@@ -1,0 +1,57 @@
+name: undercover
+
+# Every variable below is resolved from the .env file sitting next to this file.
+# No inline defaults on purpose: a missing value must fail loudly, never fall
+# back to a silent guess. See .env.example for the exhaustive list.
+
+services:
+  app-dev:
+    profiles: ["dev"]
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: undercover-dev
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+    ports:
+      - "${PORT}:5173"
+    volumes:
+      - .:/app
+      # Anonymous volume: keeps the Linux node_modules built in the image and
+      # prevents the host directory from shadowing it.
+      - /app/node_modules
+    develop:
+      watch:
+        # HMR already covers source files through the bind mount; only a
+        # dependency change requires a fresh `npm ci`.
+        - action: rebuild
+          path: package.json
+        - action: rebuild
+          path: package-lock.json
+    stop_grace_period: 3s
+
+  app-prod:
+    profiles: ["prod"]
+    image: ${IMAGE}
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: undercover-prod
+    restart: unless-stopped
+    ports:
+      # Published on the loopback only: TLS termination is Apache's job
+      - "127.0.0.1:${PORT}:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
